@@ -46,7 +46,7 @@ export default function ParticlesBackground() {
           speed: 1,
         },
         number: {
-          value: 500,
+          value: 150,
         },
         opacity: {
           value: 0.5,
