@@ -1,8 +1,9 @@
 import { Router } from "express";
 
-import { createClient } from "../models/client.js"
+import { singUp, Login } from "../models/client"
 
 
 export const clientRouter = Router()
 
-clientRouter.post("/sing-up", createClient)
+clientRouter.post("/sing-up", singUp)
+clientRouter.get("/login", Login)

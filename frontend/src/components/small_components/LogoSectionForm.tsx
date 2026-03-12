@@ -1,4 +1,4 @@
-import Logo from "../../assets/logo/Logo.png"
+import Logo from "../../assets/logo/Logo_v2.png"
 
 
 export default function LogoSectionForm() {
