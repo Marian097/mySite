@@ -8,16 +8,14 @@ import ForgotPassword from "./small_components/ForgotPassword";
 type Props = {
   email: string;
   password: string;
-  showRuleFields: boolean;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setPassword:React.Dispatch<React.SetStateAction<string>>;
-  login: () => void;
+  login: (e: React.SubmitEvent<HTMLFormElement> ) => void;
 };
 
 export default function FormLogin({
   email,
   password,
-  showRuleFields,
   setEmail,
   setPassword,
   login,
@@ -27,20 +25,14 @@ export default function FormLogin({
       <form
         action=""
         className="bg-black/55 rounded-xl px-10 flex flex-col justify-center gap-2"
+        onSubmit = {login}
       >
         <LogoSectionForm />
         <InputEmail email={email} setEmail={setEmail} />
         <InputPassword password={password} setPassword={setPassword} />
         <ForgotPassword />
-        <BtnLogin login={login} />
+        <BtnLogin/>
         <FreeTrialSection />
-        {showRuleFields ? (
-          <>
-            <p>Toate campurile sunt obligatorii</p>
-          </>
-        ) : (
-          <></>
-        )}
       </form>
     </div>
   );

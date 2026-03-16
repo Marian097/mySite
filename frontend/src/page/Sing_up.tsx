@@ -5,14 +5,14 @@ type Props = {
   name: string;
   email: string;
   password: string;
-  showRulePass: boolean;
-  showRuleFields: boolean;
+  phone: string;
   isSingUp: boolean;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
+  setPhone: React.Dispatch<React.SetStateAction<string>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
-  singUp: () => void;
-  login: () => void;
+  sing_up: (e: React.SubmitEvent<HTMLFormElement> ) => void;
+  login: (e: React.SubmitEvent<HTMLFormElement> ) => void;
 };
 
 export default function Sing_up({
@@ -20,23 +20,23 @@ export default function Sing_up({
   email,
   password,
   name,
-  showRulePass,
-  showRuleFields,
+  phone,
   setEmail,
+  setPhone,
   setName,
   setPassword,
-  singUp,
+  sing_up,
   login,
 }: Props) {
   return (
     <div>
       {isSingUp ? (
         <>
-          <FormSingUp email = {email} password = {password} name = {name} showRulePass = {showRulePass}  showRuleFields = { showRuleFields } setEmail = {setEmail} setName = {setName} setPassword = {setPassword} singUp= {singUp}/>
+          <FormSingUp email = {email} phone = {phone} setPhone = {setPhone} password = {password} name = {name} setEmail = {setEmail} setName = {setName} setPassword = {setPassword} sing_up= {sing_up}/>
         </>
       ) : (
         <>
-          <FormLogin  email = {email} password = {password} login = {login} showRuleFields = {showRuleFields} setEmail = {setEmail} setPassword = {setPassword}/>
+          <FormLogin  email = {email} password = {password} login = {login} setEmail = {setEmail} setPassword = {setPassword}/>
         </>
       )}
     </div>

@@ -9,7 +9,7 @@ function App() {
   return (
     <>
     <Header setIsSingUp = {render.setIsSingUp} />
-    <Sing_up isSingUp = {render.isSingUp} name = {render.name} password = {render.password} email = {render.email} showRulePass = {render.showRulePass} showRuleFields = {render.showRuleFields} setEmail = {render.setEmail} setName = {render.setName} setPassword = {render.setPassword} singUp = {render.sing_up} login = {render.login}/>
+    <Sing_up isSingUp = {render.isSingUp} name = {render.name} password = {render.password} email = {render.email} setEmail = {render.setEmail} setName = {render.setName} setPassword = {render.setPassword} sing_up = {render.sing_up} login = {render.login} phone = {render.phone} setPhone = {render.setPhone}/>
     </>
   )
 }
