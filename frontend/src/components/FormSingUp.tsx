@@ -6,45 +6,62 @@ import InputPassword from "./small_components/InputPassword";
 import InputUsername from "./small_components/InputUsername";
 import LogoSectionForm from "./small_components/LogoSectionForm";
 import NumberPhone from "./small_components/NumberPhone";
-
+import type { User } from "../types/User";
+import type { Errors } from "../types/Errors";
+import type { Touched } from "../types/Touched";
 
 type Props = {
-  email: string;
-  password: string;
-  name: string;
-  phone: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
-  setPhone: React.Dispatch<React.SetStateAction<string>>;
-  sing_up: (e: React.SubmitEvent<HTMLFormElement>) => void;
+  value: User;
+  errors: Errors;
+  touched: Touched;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  singUp: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export default function FormSingUp({
-  email,
-  password,
-  name,
-  phone,
-  setEmail,
-  setPhone,
-  setName,
-  setPassword,
-  sing_up,
+  value,
+  errors,
+  touched,
+  handleChange,
+  handleBlur,
+  singUp,
 }: Props) {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <form
         action=""
         className="bg-black/55 rounded-xl px-10 flex flex-col justify-center gap-2"
-        onSubmit={sing_up}
+        onSubmit={singUp}
       >
         <LogoSectionForm />
-        <InputUsername name={name} setName={setName} />
-        <InputEmail email={email} setEmail={setEmail} />
-        <InputPassword password={password} setPassword={setPassword} />
+        <InputUsername
+          value={value}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          errors={errors}
+          touched={touched}
+        />
+        <InputEmail
+          value={value}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          errors={errors}
+          touched={touched}
+        />
+        <InputPassword
+          value={value}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          errors={errors}
+          touched={touched}
+        />
         <NumberPhone
-          phone={phone}
-          setPhone={setPhone}
+          value={value}
+          handleChange={handleChange}
+          errors={errors}
+          touched={touched}
+          handleBlur={handleBlur}
         />
         <BtnSubmit />
         <FreeTrialSection />

@@ -2,6 +2,11 @@ import { useState } from "react";
 import type { User } from "../types/User";
 import * as yup from "yup";
 import { isValidPhoneNumber } from "libphonenumber-js";
+import type { Touched } from "../types/Touched";
+import type { Errors } from "../types/Errors";
+
+const passRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
 
 export const userSchema = yup.object({
   name: yup.string().required("Numele este obligatoriu"),
@@ -15,70 +20,129 @@ export const userSchema = yup.object({
     .test("phone", "Numar invalid", (value) =>
       value ? isValidPhoneNumber(value, "RO") : false,
     ),
-  password: yup.string().required("Parola este obligatorie"),
+  password: yup
+    .string()
+    .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
+    .required("Parola este obligatorie"),
 });
 
-export default function Hooks() {
-  const [email, setEmail] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showRulePass, setShowRulePass] = useState<boolean>(false);
-  const [showRuleFields, setShowRuleFields] = useState<boolean>(false);
-  const [phone, setPhone] = useState<string>("");
-  const [isSingUp, setIsSingUp] = useState<boolean>(false);
+export default function useAuthForm() {
+  const [values, setValues] = useState<User>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
 
-  const passRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
+  const [touched, setTouched] = useState<Touched>({
+    name: false,
+    email: false,
+    phone: false,
+    password: false,
+  });
 
-  async function sing_up() {
-    const missingFields = !email || !password || !name || !phone;
-    const invalidPassword = !passRegex.test(password);
+  const [errors, setErrors] = useState<Errors>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
 
-    setShowRuleFields(missingFields);
-    setShowRulePass(invalidPassword);
+  const [isSignUp, setIsSignUp] = useState(false);
 
-    if (missingFields || invalidPassword) return;
+  // 🔹 CHANGE
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
 
-    const user: User = {
-      name: name,
-      email: email,
-      phone: phone,
-      password: password,
-    };
+    setValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  // 🔹 BLUR
+  async function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
+    const { name } = e.target;
+
+    setTouched((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
 
     try {
-      await userSchema.validate(user, {
-        abortEarly: false,
+      await userSchema.validateAt(name, values);
+
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: err.message,
+        }));
+      }
+    }
+  }
+
+  // 🔹 SIGN UP
+  async function signUp(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      await userSchema.validate(values, { abortEarly: false });
+
+      setErrors({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
       });
 
       await fetch("http://localhost:4000/api/client/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
+        body: JSON.stringify(values),
       });
 
-      console.log("Dupa fetch");
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        const errorsByField = Object.fromEntries(
-          err.inner.map((e) => [e.path ?? "form", e.message]),
-        );
-        console.log("Erori:", errorsByField);
+        const newErrors: Errors = {
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
+        };
 
-        console.log("esti in catch");
-      } else {
-        console.error(err);
-        console.log("Esti in finally");
+        err.inner.forEach((error) => {
+          const field = error.path as keyof Errors;
+
+          if (field && !newErrors[field]) {
+            newErrors[field] = error.message;
+          }
+        });
+
+        setErrors(newErrors);
+
+        setTouched({
+          name: true,
+          email: true,
+          phone: true,
+          password: true,
+        });
       }
     }
   }
 
+  // 🔹 LOGIN
   async function login() {
     try {
       const user = {
-        email: email,
-        password: password,
+        email: values.email,
+        password: values.password,
       };
+
       const response = await fetch("http://localhost:4000/api/client/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,27 +156,21 @@ export default function Hooks() {
       }
 
       localStorage.setItem("token", data.token);
-      console.log("Token salvat:", data.token);
     } catch (error) {
-      console.error("Eroare la conectare: " + error);
+      console.error("Eroare la conectare:", error);
     }
   }
 
+
   return {
-    email,
-    password,
-    name,
-    showRulePass,
-    showRuleFields,
-    isSingUp,
-    phone,
-    userSchema,
-    setIsSingUp,
-    setPhone,
-    setEmail,
-    setName,
-    setPassword,
-    sing_up,
+    values,
+    errors,
+    touched,
+    isSignUp,
+    setIsSignUp,
+    handleChange,
+    handleBlur,
+    signUp,
     login,
   };
 }

@@ -8,8 +8,8 @@ function App() {
   const render = Hooks()
   return (
     <>
-    <Header setIsSingUp = {render.setIsSingUp} />
-    <Sing_up isSingUp = {render.isSingUp} name = {render.name} password = {render.password} email = {render.email} setEmail = {render.setEmail} setName = {render.setName} setPassword = {render.setPassword} sing_up = {render.sing_up} login = {render.login} phone = {render.phone} setPhone = {render.setPhone}/>
+    <Header setIsSingUp = {render.setIsSignUp} />
+    <Sing_up isSingUp = {render.isSignUp} value = {render.values} errors = {render.errors} touched = {render.touched} handleChange = {render.handleChange} handleBlur = {render.handleBlur} singUp = {render.signUp} login = {render.login} />
     </>
   )
 }
