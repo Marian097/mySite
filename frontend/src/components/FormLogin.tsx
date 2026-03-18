@@ -7,6 +7,9 @@ import ForgotPassword from "./small_components/ForgotPassword";
 import type { User } from "../types/User";
 import type { Errors } from "../types/Errors";
 import type { Touched } from "../types/Touched";
+import { useEffect } from "react"
+import type { ErrorsLogin } from "../types/ErrorsLogin";
+
 
 
 
@@ -14,12 +17,23 @@ type Props = {
   value: User;
   errors: Errors;
   touched: Touched;
+  errorsLogin:ErrorsLogin;
+  isLoggedForm:boolean,
+  setIsLoggedForm: (option: boolean) => void,
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  login: () => void;
+  login: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export default function FormLogin({ value, errors, touched,  handleChange, handleBlur, login }: Props) {
+export default function FormLogin({ value, errors, touched, isLoggedForm, errorsLogin, 
+  setIsLoggedForm, handleChange, handleBlur, login }: Props) {
+
+    useEffect(() => {
+      if (!isLoggedForm)
+      {
+        setIsLoggedForm(true)
+      }
+    }, [])
   return (
     <div className="min-h-screen flex justify-center items-center">
       <form
@@ -29,7 +43,7 @@ export default function FormLogin({ value, errors, touched,  handleChange, handl
       >
         <LogoSectionForm />
         <InputEmail value={value} handleChange={handleChange} errors = {errors} touched = {touched} handleBlur = {handleBlur} />
-        <InputPassword value={value} handleChange={handleChange} errors = {errors} touched = {touched} handleBlur = {handleBlur} />
+        <InputPassword value={value} handleChange={handleChange} errors = {errors} touched = {touched} handleBlur = {handleBlur} isLoggedForm = {isLoggedForm} setIsLoggedForm = {setIsLoggedForm} errorsLogin = {errorsLogin}/>
         <ForgotPassword />
         <BtnLogin />
         <FreeTrialSection />

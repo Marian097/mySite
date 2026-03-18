@@ -4,11 +4,12 @@ import * as yup from "yup";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import type { Touched } from "../types/Touched";
 import type { Errors } from "../types/Errors";
+import type { ErrorsLogin } from "../types/ErrorsLogin";
 
 const passRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
 
-export const userSchema = yup.object({
+const singUpSchema = yup.object({
   name: yup.string().required("Numele este obligatoriu"),
   email: yup
     .string()
@@ -24,6 +25,11 @@ export const userSchema = yup.object({
     .string()
     .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
     .required("Parola este obligatorie"),
+});
+
+const loginSchema = yup.object({
+  email: yup.string().required("Emailul este obligatoriu"),
+  password: yup.string().required("Parola este obligatorie"),
 });
 
 export default function useAuthForm() {
@@ -48,7 +54,14 @@ export default function useAuthForm() {
     password: "",
   });
 
+  const [errorsLogin, setErrorsLogin] = useState<ErrorsLogin>({
+    email: "",
+    password: "",
+  });
+
   const [isSignUp, setIsSignUp] = useState(false);
+
+  const [isLoggedForm, setIsLoggedForm] = useState(false);
 
   // 🔹 CHANGE
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -63,22 +76,34 @@ export default function useAuthForm() {
   // 🔹 BLUR
   async function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
     const { name } = e.target;
-
     setTouched((prev) => ({
       ...prev,
       [name]: true,
     }));
 
-    try {
-      await userSchema.validateAt(name, values);
+    const activateSchema = isLoggedForm ? loginSchema : singUpSchema;
 
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
+    try {
+      await activateSchema.validateAt(name, values);
+
+      if (singUpSchema) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: "",
+        }));
+      } else if (loginSchema) {
+        setErrorsLogin((prev) => ({
+          ...prev,
+          [name]: "",
+        }));
+      }
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         setErrors((prev) => ({
+          ...prev,
+          [name]: err.message,
+        }));
+         setErrorsLogin((prev) => ({
           ...prev,
           [name]: err.message,
         }));
@@ -91,7 +116,7 @@ export default function useAuthForm() {
     e.preventDefault();
 
     try {
-      await userSchema.validate(values, { abortEarly: false });
+      await singUpSchema.validate(values, { abortEarly: false });
 
       setErrors({
         name: "",
@@ -105,7 +130,6 @@ export default function useAuthForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: Errors = {
@@ -136,12 +160,19 @@ export default function useAuthForm() {
   }
 
   // 🔹 LOGIN
-  async function login() {
+  async function login(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     try {
       const user = {
         email: values.email,
         password: values.password,
       };
+
+      await loginSchema.validate(user, { abortEarly: false });
+      setErrorsLogin({
+        email: "",
+        password: "",
+      });
 
       const response = await fetch("http://localhost:4000/api/client/login", {
         method: "POST",
@@ -157,17 +188,37 @@ export default function useAuthForm() {
 
       localStorage.setItem("token", data.token);
     } catch (error) {
-      console.error("Eroare la conectare:", error);
+      if (error instanceof yup.ValidationError) {
+        const newErrors: ErrorsLogin = {
+          email: "",
+          password: "",
+        };
+        error.inner.forEach((err) => {
+          const fields = error.path as keyof ErrorsLogin;
+          if (fields && !newErrors[fields]) {
+            newErrors[fields] = err.message;
+          }
+        });
+        setErrorsLogin(newErrors);
+        setTouched({
+          name: true,
+          email: true,
+          phone: true,
+          password: true,
+        });
+      }
     }
   }
-
 
   return {
     values,
     errors,
+    errorsLogin,
     touched,
     isSignUp,
+    isLoggedForm,
     setIsSignUp,
+    setIsLoggedForm,
     handleChange,
     handleBlur,
     signUp,

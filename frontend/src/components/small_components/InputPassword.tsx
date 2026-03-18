@@ -1,11 +1,15 @@
 import type { User } from "../../types/User";
 import type { Errors } from "../../types/Errors";
 import type { Touched } from "../../types/Touched";
+import type { ErrorsLogin } from "../../types/ErrorsLogin";
 
 type Props = {
   value: User;
   errors: Errors;
   touched: Touched;
+  isLoggedForm: boolean,
+  errorsLogin: ErrorsLogin;
+  setIsLoggedForm: (option: boolean) => void,
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
@@ -14,6 +18,8 @@ export default function InputPassword({
   value,
   errors,
   touched,
+  isLoggedForm,
+  errorsLogin,
   handleChange,
   handleBlur,
 }: Props) {
@@ -27,18 +33,23 @@ export default function InputPassword({
         placeholder="Parola"
         className={
          errors.password
-            ? "border border-red-500  bg-red-100 rounded-md ml-2 w-1/2"
-            : "border border-white rounded-md bg-white ml-2 w-1/2"
+            ? "border border-red-500  bg-red-100 rounded-md ml-1.5 w-1/2"
+            : "border border-white rounded-md bg-white ml-1.5  w-1/2"
         }
         name="password"
         value={value.password}
         onChange={handleChange}
         onBlur={handleBlur}
       />
-
-      {touched.name && errors.name && (
-        <p style={{ color: "red" }}>{errors.password}</p>
-      )}
+     {
+  touched.password && errors.password && errorsLogin.password &&  (
+    <>
+      {isLoggedForm
+        ? <p style={{ color: "red" }}>{errorsLogin.password}</p>
+        : <p style={{ color: "red" }}>{errors.password}</p>}
+    </>
+  )
+}
     </div>
   );
 }

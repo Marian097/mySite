@@ -9,11 +9,16 @@ import NumberPhone from "./small_components/NumberPhone";
 import type { User } from "../types/User";
 import type { Errors } from "../types/Errors";
 import type { Touched } from "../types/Touched";
+import type { ErrorsLogin } from "../types/ErrorsLogin";
+import {useEffect} from "react";
 
 type Props = {
   value: User;
   errors: Errors;
   touched: Touched;
+  errorsLogin:ErrorsLogin;
+  isLoggedForm: boolean;
+  setIsLoggedForm: (option: boolean) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
   singUp: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -23,10 +28,20 @@ export default function FormSingUp({
   value,
   errors,
   touched,
+  errorsLogin,
+  isLoggedForm,
+  setIsLoggedForm,
   handleChange,
   handleBlur,
   singUp,
 }: Props) {
+
+  useEffect(() => {
+    if (isLoggedForm === true){
+      setIsLoggedForm(false)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen flex justify-center items-center">
       <form
@@ -55,6 +70,9 @@ export default function FormSingUp({
           handleBlur={handleBlur}
           errors={errors}
           touched={touched}
+          isLoggedForm = {isLoggedForm}
+          setIsLoggedForm = {setIsLoggedForm}
+          errorsLogin = {errorsLogin}
         />
         <NumberPhone
           value={value}

@@ -2,8 +2,35 @@ import argon2 from "argon2";
 import { pool } from "../db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import * as yup from "yup";
 
 dotenv.config();
+
+const passRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
+
+const userSchema = yup.object({
+  name: yup.string().required("Numele este obligatoriu"),
+  email: yup
+    .string()
+    .email("Email invalid")
+    .required("Emailul este obligatoriu"),
+  phone: yup
+    .string()
+    .required("Telefon obligatoriu")
+    .test("phone", "Numar invalid", (value) =>
+      value ? isValidPhoneNumber(value, "RO") : false,
+    ),
+  password: yup
+    .string()
+    .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
+    .required("Parola este obligatorie"),
+});
+
+const loginSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
 
 export async function singUp(req, res, next) {
   const client = await pool.connect();
@@ -11,9 +38,7 @@ export async function singUp(req, res, next) {
   try {
     const { name, password, email, phone } = req.body;
 
-    if (!name || !password || !email || !phone) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    await userSchema.validate(req.body, { abortEarly: false });
 
     const password_hash = await argon2.hash(password);
 
@@ -29,12 +54,13 @@ export async function singUp(req, res, next) {
     await client.query("COMMIT");
 
     return res.status(201).json({
-      message: `Hello ${clientName}! You have registered successfully`,
+      message: `Salut ${clientName}! Te-ai inregistrat cu succes!`,
     });
   } catch (error) {
-    console.error("An error occurred:", error);
-    await client.query("ROLLBACK");
-    next(error);
+    if (error instanceof yup.ValidationError) {
+      await client.query("ROLLBACK");
+      return res.json(400).json({ message: error.errors });
+    }
   } finally {
     client.release();
   }
@@ -45,12 +71,7 @@ export async function Login(req, res) {
   try {
     const { email, password } = req.body;
 
-
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email și parola sunt obligatorii" });
-    }
+    await loginSchema.validate(req.body, { abortEarly: false });
 
     const results = await client.query(
       "SELECT * FROM client WHERE email = $1",
@@ -64,7 +85,6 @@ export async function Login(req, res) {
 
     const dbUser = results.rows[0];
     const pass_hash = dbUser.password_hash;
-
 
     const isValid = await argon2.verify(pass_hash, password);
 
@@ -82,12 +102,19 @@ export async function Login(req, res) {
       throw new Error("JWT_SECRET lipsește din variabilele de mediu");
     }
 
-    const token =jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "15m" });
 
     return res.status(200).json({ token });
   } catch (error) {
-    console.error("Eroare de login: " + error);
-    return res.status(500).json({ message: "Eroare internă de server" });
+    const errors = {};
+
+    error.inner.forEach((err) => {
+      if (err.path && !errors[err.path]) {
+        errors[err.path] = err.message;
+      }
+    });
+
+    return res.status(400).json({ errors });
   } finally {
     client.release();
   }

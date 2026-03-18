@@ -9,7 +9,7 @@ function App() {
   return (
     <>
     <Header setIsSingUp = {render.setIsSignUp} />
-    <Sing_up isSingUp = {render.isSignUp} value = {render.values} errors = {render.errors} touched = {render.touched} handleChange = {render.handleChange} handleBlur = {render.handleBlur} singUp = {render.signUp} login = {render.login} />
+    <Sing_up isSingUp = {render.isSignUp} value = {render.values} errors = {render.errors} touched = {render.touched} handleChange = {render.handleChange} handleBlur = {render.handleBlur} singUp = {render.signUp} login = {render.login} isLoggedForm = {render.isLoggedForm} setIsLoggedForm = {render.setIsLoggedForm} errorsLogin = {render.errorsLogin}/>
     </>
   )
 }
