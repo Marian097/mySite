@@ -59,9 +59,11 @@ export default function useAuthForm() {
     password: "",
   });
 
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState<boolean>(false);
 
-  const [isLoggedForm, setIsLoggedForm] = useState(false);
+  const [isLoggedForm, setIsLoggedForm] = useState<boolean>(false);
+
+  const [isDropdown, setIsDropdown] = useState<boolean>(false);
 
   // 🔹 CHANGE
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -217,6 +219,8 @@ export default function useAuthForm() {
     touched,
     isSignUp,
     isLoggedForm,
+    isDropdown, 
+    setIsDropdown,
     setIsSignUp,
     setIsLoggedForm,
     handleChange,

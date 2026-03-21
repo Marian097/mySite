@@ -28,8 +28,32 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "GeistFontBold";
+  src: url("./assets/fonts/Geist-Bold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GeistFontMedium";
+  src: url("./assets/fonts/Geist-Medium.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GeistFontExtraBold";
+  src: url("./assets/fonts/Geist-ExtraBold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
 @theme {
   --font-myfont: "MyFont", SourceSerif4;
+  --font-myGeistBold: "GeistFontBold";
+  --font-myGeistMedium: "GeistFontMedium";
+  --font-myGeistExtraBold: "GGeistFontExtraBold";
 }
 
 

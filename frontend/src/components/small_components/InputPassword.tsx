@@ -34,7 +34,7 @@ export default function InputPassword({
         className={
          errors.password
             ? "border border-red-500  bg-red-100 rounded-md ml-1.5 w-1/2"
-            : "border border-white rounded-md bg-white ml-1.5  w-1/2"
+            : "border border-white rounded-md bg-white ml-1.5 w-1/2"
         }
         name="password"
         value={value.password}
