@@ -33,6 +33,9 @@ const loginSchema = yup.object({
 });
 
 export default function useAuthForm() {
+
+  const [message, setMessage] = useState("")
+  
   const [values, setValues] = useState<User>({
     name: "",
     email: "",
@@ -127,11 +130,25 @@ export default function useAuthForm() {
         password: "",
       });
 
-      await fetch("http://localhost:4000/api/client/sign-up", {
+      const response = await fetch("http://localhost:4000/api/client/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
+
+
+      const data = await response.json()
+
+      console.log(data.message)
+      
+      if (!response.ok)
+      {
+        setMessage(Array.isArray(data.message) ? data.message.join(", "): data.message)
+        return
+      }
+
+      setMessage(Array.isArray(data.message) ? data.message.join(", "): data.message)
+
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: Errors = {
@@ -219,7 +236,8 @@ export default function useAuthForm() {
     touched,
     isSignUp,
     isLoggedForm,
-    isDropdown, 
+    isDropdown,
+    message,
     setIsDropdown,
     setIsSignUp,
     setIsLoggedForm,

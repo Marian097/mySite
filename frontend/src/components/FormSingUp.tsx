@@ -18,6 +18,7 @@ type Props = {
   touched: Touched;
   errorsLogin:ErrorsLogin;
   isLoggedForm: boolean;
+  message: string;
   setIsLoggedForm: (option: boolean) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -30,6 +31,7 @@ export default function FormSingUp({
   touched,
   errorsLogin,
   isLoggedForm,
+  message,
   setIsLoggedForm,
   handleChange,
   handleBlur,
@@ -81,6 +83,7 @@ export default function FormSingUp({
           touched={touched}
           handleBlur={handleBlur}
         />
+        <p style = {{color: "white"}}>{message}</p>
         <BtnSubmit />
         <FreeTrialSection />
       </form>

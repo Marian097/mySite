@@ -12,6 +12,7 @@ type Props = {
   errorsLogin: ErrorsLogin;
   touched: Touched,
   isLoggedForm: boolean,
+  message: string,
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   setIsLoggedForm: (option : boolean) => void,
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
@@ -26,6 +27,7 @@ export default function Sing_up({
   touched,
   isLoggedForm,
   errorsLogin,
+  message,
   setIsLoggedForm,
   handleChange,
   handleBlur,
@@ -36,7 +38,7 @@ export default function Sing_up({
     <div>
       {isSingUp ? (
         <>
-          <FormSingUp value = {value} errors = {errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} singUp = {singUp} isLoggedForm = {isLoggedForm} setIsLoggedForm = {setIsLoggedForm} errorsLogin = {errorsLogin}/>
+          <FormSingUp message = {message} value = {value} errors = {errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} singUp = {singUp} isLoggedForm = {isLoggedForm} setIsLoggedForm = {setIsLoggedForm} errorsLogin = {errorsLogin}/>
         </>
       ) : (
         <>
