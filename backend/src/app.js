@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import {clientRouter} from "./routes/clientRouter.js";
+import {usersRouter} from "./routes/usersRouter.js";
 import {errorHandler} from "./middleware/error.middleware.js";
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ok: true}));
 
-app.use("/api/client", clientRouter);
+app.use("/api/users", usersRouter);
 
 app.use(errorHandler);
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { User } from "../types/User";
 import * as yup from "yup";
-import { isValidPhoneNumber } from "libphonenumber-js";
+// import { isValidPhoneNumber } from "libphonenumber-js";
 import type { Touched } from "../types/Touched";
 import type { Errors } from "../types/Errors";
 import type { ErrorsLogin } from "../types/ErrorsLogin";
@@ -15,12 +15,12 @@ const singUpSchema = yup.object({
     .string()
     .email("Email invalid")
     .required("Emailul este obligatoriu"),
-  phone: yup
-    .string()
-    .required("Telefon obligatoriu")
-    .test("phone", "Numar invalid", (value) =>
-      value ? isValidPhoneNumber(value, "RO") : false,
-    ),
+  // phone: yup
+  //   .string()
+  //   .required("Telefon obligatoriu")
+  //   .test("phone", "Numar invalid", (value) =>
+  //     value ? isValidPhoneNumber(value, "RO") : false,
+  //   ),
   password: yup
     .string()
     .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
@@ -39,21 +39,18 @@ export default function useAuthForm() {
   const [values, setValues] = useState<User>({
     name: "",
     email: "",
-    phone: "",
     password: "",
   });
 
   const [touched, setTouched] = useState<Touched>({
     name: false,
     email: false,
-    phone: false,
     password: false,
   });
 
   const [errors, setErrors] = useState<Errors>({
     name: "",
     email: "",
-    phone: "",
     password: "",
   });
 
@@ -126,11 +123,10 @@ export default function useAuthForm() {
       setErrors({
         name: "",
         email: "",
-        phone: "",
         password: "",
       });
 
-      const response = await fetch("http://localhost:4000/api/client/sign-up", {
+      const response = await fetch("http://localhost:4000/api/users/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -154,7 +150,6 @@ export default function useAuthForm() {
         const newErrors: Errors = {
           name: "",
           email: "",
-          phone: "",
           password: "",
         };
 
@@ -171,7 +166,6 @@ export default function useAuthForm() {
         setTouched({
           name: true,
           email: true,
-          phone: true,
           password: true,
         });
       }
@@ -193,7 +187,7 @@ export default function useAuthForm() {
         password: "",
       });
 
-      const response = await fetch("http://localhost:4000/api/client/login", {
+      const response = await fetch("http://localhost:4000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
@@ -222,7 +216,6 @@ export default function useAuthForm() {
         setTouched({
           name: true,
           email: true,
-          phone: true,
           password: true,
         });
       }

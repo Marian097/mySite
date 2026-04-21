@@ -5,7 +5,6 @@ import InputEmail from "./small_components/InputEmail";
 import InputPassword from "./small_components/InputPassword";
 import InputUsername from "./small_components/InputUsername";
 import LogoSectionForm from "./small_components/LogoSectionForm";
-import NumberPhone from "./small_components/NumberPhone";
 import type { User } from "../types/User";
 import type { Errors } from "../types/Errors";
 import type { Touched } from "../types/Touched";
@@ -75,13 +74,6 @@ export default function FormSingUp({
           isLoggedForm = {isLoggedForm}
           setIsLoggedForm = {setIsLoggedForm}
           errorsLogin = {errorsLogin}
-        />
-        <NumberPhone
-          value={value}
-          handleChange={handleChange}
-          errors={errors}
-          touched={touched}
-          handleBlur={handleBlur}
         />
         <p style = {{color: "white"}}>{message}</p>
         <BtnSubmit />
