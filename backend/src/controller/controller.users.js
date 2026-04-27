@@ -32,7 +32,7 @@ export async function deleteClient(req, res) {
   const { id } = req.body;
 
   try {
-    if (!clientId) {
+    if (!id) {
       return res.status(400).json({
         message: "Id este necesar",
       });
@@ -42,12 +42,6 @@ export async function deleteClient(req, res) {
       "DELETE FROM users WHERE id = $1",
       [id]
     );
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({
-        message: "Clientul nu a fost gasit",
-      });
-    }
 
     return res.status(204).send();
 
@@ -65,6 +59,10 @@ export async function findAllClient(req, res) {
 
   try {
     const result = await db.query("SELECT * FROM users");
+    if (result.rows.length === 0) 
+    {
+      return res.status(404).json({message: "Nici un rezultat gasit"})
+    }
 
     return res.status(200).json({
       data: result.rows,

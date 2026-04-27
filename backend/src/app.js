@@ -3,8 +3,9 @@ import cors from "cors";
 
 import {usersRouter} from "./routes/usersRouter.js";
 import {errorHandler} from "./middleware/error.middleware.js";
+import {workerRouter} from "./routes/workerRouter.js"
 
-const app = express();
+const app = express()
 
 app.use(cors({origin: "http://localhost:5173"}));
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.get("/health", (req, res) => res.json({ok: true}));
 
 app.use("/api/users", usersRouter);
+app.use("/api/users", workerRouter);
 
 app.use(errorHandler);
 
