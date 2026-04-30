@@ -43,7 +43,7 @@ export async function createProfile(req, res, next) {
     console.log(req.user.id);
     const category = ["Instalator", "Electrician"];
 
-    // validare INAINTE de BEGIN (asta e bine deja)
+    // validare INAINTE de BEGIN
     await profileSchema.validate(req.body, { abortEarly: false });
 
     await db.query("BEGIN");
@@ -65,7 +65,7 @@ export async function createProfile(req, res, next) {
 
     const workerProfileId = results_1.rows[0].id;
 
-    // 🔹 FIX 1: corect array + push corect
+    //array + push
     const categoriesId = [];
 
     for (let c of category) {
@@ -74,10 +74,10 @@ export async function createProfile(req, res, next) {
         [c.toLowerCase(), c],
       );
 
-      categoriesId.push(results_2.rows[0].id); // ← fix aici
+      categoriesId.push(results_2.rows[0].id);
     }
 
-    // 🔹 FIX 2: verificare corectă categorie
+    //verificare categorie
     const cat_name = await db.query("SELECT name FROM categories");
 
     if (cat_name.rows.length === 0) {
@@ -100,7 +100,7 @@ export async function createProfile(req, res, next) {
       return res.status(404).json({ message: "Categoria selectata nu exista" });
     }
 
-    // 🔹 FIX 3: verificare simplă
+    //verificare simplă
     if (categoriesId.length === 0) {
       await db.query("ROLLBACK");
       return res
@@ -108,7 +108,7 @@ export async function createProfile(req, res, next) {
         .json({ message: "Nu ati selectat nici o categorie" });
     }
 
-    // 🔹 FIX 4: inserezi pe fiecare categorie (nu array direct)
+    //inserezi pe fiecare categorie
     for (let catId of categoriesId) {
       await db.query(
         "INSERT INTO worker_categories (worker_profile_id, category_id) VALUES ($1, $2)",

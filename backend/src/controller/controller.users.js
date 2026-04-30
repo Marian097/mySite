@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import * as yup from "yup";
 
-
 dotenv.config();
 
 const passRegex =
@@ -20,6 +19,7 @@ const userSchema = yup.object({
     .string()
     .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
     .required("Parola este obligatorie"),
+  role: yup.string().required("Va rog alegeti un rol"),
 });
 
 const loginSchema = yup.object({
@@ -27,7 +27,7 @@ const loginSchema = yup.object({
   password: yup.string().required(),
 });
 
-export async function deleteClient(req, res) {
+export async function deleteUser(req, res) {
   const db = await pool.connect();
   const { id } = req.body;
 
@@ -38,13 +38,9 @@ export async function deleteClient(req, res) {
       });
     }
 
-    const result = await db.query(
-      "DELETE FROM users WHERE id = $1",
-      [id]
-    );
+    const result = await db.query("DELETE FROM users WHERE id = $1", [id]);
 
     return res.status(204).send();
-
   } catch (err) {
     return res.status(500).json({
       message: err.message,
@@ -54,14 +50,13 @@ export async function deleteClient(req, res) {
   }
 }
 
-export async function findAllClient(req, res) {
+export async function findAllUsers(req, res) {
   const db = await pool.connect();
 
   try {
     const result = await db.query("SELECT * FROM users");
-    if (result.rows.length === 0) 
-    {
-      return res.status(404).json({message: "Nici un rezultat gasit"})
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Nici un rezultat gasit" });
     }
 
     return res.status(200).json({
@@ -78,12 +73,11 @@ export async function findAllClient(req, res) {
   }
 }
 
-
 export async function singUp(req, res, next) {
   const db = await pool.connect();
 
   try {
-    const { name, password, email} = req.body;
+    const { name, password, email, role } = req.body;
 
     await userSchema.validate(req.body, { abortEarly: false });
 
@@ -91,12 +85,77 @@ export async function singUp(req, res, next) {
 
     await db.query("BEGIN");
 
+    const verified_email = await db.query("SELECT email FROM users");
+
+    let existsEmail = false;
+
+    for (let e of verified_email.rows)
+    {
+      if (email === e.email)
+      {
+        existsEmail = true
+        break
+      }
+    }
+
+    if (existsEmail)
+    {
+      await db.query("ROLLBACK")
+      return res.status(500).json({message: "Sunteti deja inregistrat"})
+    }
+
     const result = await db.query(
-      "INSERT INTO users(name, email, password_hash) VALUES ($1, $2, $3) RETURNING name",
+      "INSERT INTO users(name, email, password_hash) VALUES ($1, $2, $3) RETURNING name, id",
       [name, email, password_hash],
     );
 
+   
+   
+    if (result.rows.length === 0) {
+      await db.query("ROLLBACK");
+      return res.status(500).json({ message: "A intervenit o eroare" });
+    }
     const username = result.rows[0].name;
+    const user_id = result.rows[0].id;
+
+    const get_roles = await db.query("SELECT * FROM roles");
+
+    
+    if (get_roles.rows.length === 0)
+    {
+      await db.query("ROLLBACK");
+      return res.status(500).json({ message: "Nu exista nici un rol" });
+    }
+    
+    let exists = false;
+
+    for (let r of get_roles.rows) {
+      if (role === r.role_name) {
+        exists = true;
+        break;
+      }
+    }
+
+
+    if (exists) {
+      const role_id = get_roles.rows[0].id
+
+      const user_roles = await db.query(
+        "INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2) RETURNING *",
+        [user_id, role_id]
+      );
+
+      console.log(user_roles.rows.length)
+
+      if (user_roles.rows.length === 0) {
+        await db.query("ROLLBACK");
+        return res.status(500).json({ message: "A intervenit o eroare" });
+      }
+    }
+    else{
+      await db.query("ROLLBACK")
+      return res.status(404).json({ message: "Va rog selectati un rol valid" });
+    }
 
     await db.query("COMMIT");
 
@@ -120,10 +179,9 @@ export async function Login(req, res) {
 
     await loginSchema.validate(req.body, { abortEarly: false });
 
-    const results = await db.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email],
-    );
+    const results = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
     if (results.rows.length === 0)
       return res
