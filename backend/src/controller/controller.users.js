@@ -108,8 +108,6 @@ export async function singUp(req, res, next) {
       "INSERT INTO users(name, email, password_hash) VALUES ($1, $2, $3) RETURNING name, id",
       [name, email, password_hash],
     );
-
-   
    
     if (result.rows.length === 0) {
       await db.query("ROLLBACK");
@@ -182,6 +180,7 @@ export async function Login(req, res) {
     const results = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
+
 
     if (results.rows.length === 0)
       return res

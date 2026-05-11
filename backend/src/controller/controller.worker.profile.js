@@ -24,7 +24,6 @@ const profileSchema = yup.object({
 
 // Crearea profilului
 export async function createProfile(req, res, next) {
-  console.log(req.body);
   const db = await pool.connect();
 
   try {
@@ -40,8 +39,6 @@ export async function createProfile(req, res, next) {
       category_name,
     } = req.body;
     const user_id = req.user.id;
-    console.log(req.user.id);
-    const category = ["Instalator", "Electrician"];
 
     // validare INAINTE de BEGIN
     await profileSchema.validate(req.body, { abortEarly: false });
@@ -65,29 +62,18 @@ export async function createProfile(req, res, next) {
 
     const workerProfileId = results_1.rows[0].id;
 
-    //array + push
-    const categoriesId = [];
-
-    for (let c of category) {
-      const results_2 = await db.query(
-        "INSERT INTO categories (slug, name) VALUES ($1, $2) RETURNING id",
-        [c.toLowerCase(), c],
-      );
-
-      categoriesId.push(results_2.rows[0].id);
-    }
-
+ 
     //verificare categorie
-    const cat_name = await db.query("SELECT name FROM categories");
+    const categories = await db.query("SELECT * FROM categories");
 
-    if (cat_name.rows.length === 0) {
+    if (categories.rows.length === 0) {
       await db.query("ROLLBACK");
       return res.status(404).json({ message: "Nu exista nici o categorie" });
     }
 
     let exists = false;
 
-    for (let cat of cat_name.rows) {
+    for (let cat of categories.rows) {
       if (category_name === cat.name) // ← fix aici
       {
         exists = true;
@@ -100,27 +86,36 @@ export async function createProfile(req, res, next) {
       return res.status(404).json({ message: "Categoria selectata nu exista" });
     }
 
-    //verificare simplă
-    if (categoriesId.length === 0) {
+    const result_category = await db.query("SELECT id FROM categories WHERE name = $1", [category_name]);
+
+    if (result_category.rows.length === 0)
+    {
       await db.query("ROLLBACK");
-      return res
-        .status(404)
-        .json({ message: "Nu ati selectat nici o categorie" });
+      return res.status(404).json({message: "Nu exista categorii"})
     }
 
-    //inserezi pe fiecare categorie
-    for (let catId of categoriesId) {
-      await db.query(
-        "INSERT INTO worker_categories (worker_profile_id, category_id) VALUES ($1, $2)",
-        [workerProfileId, catId],
-      );
+    console.log("Dupa result_category")
+
+    const catId = result_category.rows[0].id;
+
+    if (!catId)
+    {
+      await db.query("ROLLBACK")
+      return res.status(500).json({message: "Eroare la server"})
+    }
+
+    const user_cat = await db.query("INSERT INTO worker_categories (worker_profile_id, category_id) VALUES ($1, $2) RETURNING * ",[workerProfileId, catId]);
+    
+    if (user_cat.rows.length === 0)
+    {
+      await db.query("ROLLBACK");
+      return res.status(500).json({message: "Nu a fost adaugat rolul"})
     }
 
     await db.query("COMMIT");
 
     return res.status(201).json({ message: "Profile creat cu succes" });
   } catch (error) {
-    // 🔹 FIX 5: rollback pentru ORICE eroare dupa BEGIN
     await db.query("ROLLBACK");
 
     if (error instanceof yup.ValidationError) {

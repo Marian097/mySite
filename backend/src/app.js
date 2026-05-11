@@ -4,6 +4,7 @@ import cors from "cors";
 import {usersRouter} from "./routes/usersRouter.js";
 import {errorHandler} from "./middleware/error.middleware.js";
 import {workerRouter} from "./routes/workerRouter.js"
+import {documentsRouter} from "./routes/documentsRouter.js"
 
 const app = express()
 
@@ -15,6 +16,8 @@ app.get("/health", (req, res) => res.json({ok: true}));
 
 app.use("/api/users", usersRouter);
 app.use("/api/users", workerRouter);
+
+app.use("/api/users/profile", documentsRouter)
 
 app.use(errorHandler);
 
