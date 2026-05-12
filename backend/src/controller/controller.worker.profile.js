@@ -62,7 +62,6 @@ export async function createProfile(req, res, next) {
 
     const workerProfileId = results_1.rows[0].id;
 
- 
     //verificare categorie
     const categories = await db.query("SELECT * FROM categories");
 
@@ -86,30 +85,31 @@ export async function createProfile(req, res, next) {
       return res.status(404).json({ message: "Categoria selectata nu exista" });
     }
 
-    const result_category = await db.query("SELECT id FROM categories WHERE name = $1", [category_name]);
+    const result_category = await db.query(
+      "SELECT id FROM categories WHERE name = $1",
+      [category_name],
+    );
 
-    if (result_category.rows.length === 0)
-    {
+    if (result_category.rows.length === 0) {
       await db.query("ROLLBACK");
-      return res.status(404).json({message: "Nu exista categorii"})
+      return res.status(404).json({ message: "Nu exista categorii" });
     }
-
-    console.log("Dupa result_category")
 
     const catId = result_category.rows[0].id;
 
-    if (!catId)
-    {
-      await db.query("ROLLBACK")
-      return res.status(500).json({message: "Eroare la server"})
+    if (!catId) {
+      await db.query("ROLLBACK");
+      return res.status(500).json({ message: "Eroare la server" });
     }
 
-    const user_cat = await db.query("INSERT INTO worker_categories (worker_profile_id, category_id) VALUES ($1, $2) RETURNING * ",[workerProfileId, catId]);
-    
-    if (user_cat.rows.length === 0)
-    {
+    const user_cat = await db.query(
+      "INSERT INTO worker_categories (worker_profile_id, category_id) VALUES ($1, $2) RETURNING * ",
+      [workerProfileId, catId],
+    );
+
+    if (user_cat.rows.length === 0) {
       await db.query("ROLLBACK");
-      return res.status(500).json({message: "Nu a fost adaugat rolul"})
+      return res.status(500).json({ message: "Nu a fost adaugat rolul" });
     }
 
     await db.query("COMMIT");
@@ -134,7 +134,7 @@ export async function getAllProfiles(req, res, next) {
 
   try {
     const profiles = await db.query(
-      "SELECT wp.full_name, wp.phone, wp.description, wp.experience_years, wp.city, wp.county, wp.profile_image_url, wp.average_rating, wp.review_count, c.name AS name_category FROM worker_profiles wp JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id",
+      "SELECT wp.full_name, wp.phone, wp.description, wp.experience_years, wp.city, wp.county, wp.profile_image_url, wp.average_rating, wp.review_count, c.name AS name_category FROM worker_profiles wp JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id WHERE is_approved = $1 ORDER BY wp.is_featured DESC, wp.full_name ASC",[true]
     );
 
     if (profiles.rows.length === 0) {
@@ -295,18 +295,18 @@ export async function deleteProfile(req, res, next) {
 export async function filterProfile(req, res, next) {
   const db = await pool.connect();
 
- const columnMap = {
-  experience_years: "wp.experience_years",
-  average_rating: "wp.average_rating",
-  county: "wp.county",
-  city: "wp.city",
-  review_count: "wp.review_count",
-  category_name: "c.name",
-};//  => req.body
+  const columnMap = {
+    experience_years: "wp.experience_years",
+    average_rating: "wp.average_rating",
+    county: "wp.county",
+    city: "wp.city",
+    review_count: "wp.review_count",
+    category_name: "c.name",
+  }; //  => req.body
 
   const fieldsFilter = {};
   const conditions = [];
-  const values = []
+  const values = [];
   const rangeFilters = ["average_rating", "experience_years", "review_count"];
   let index = 1;
   try {
@@ -316,44 +316,113 @@ export async function filterProfile(req, res, next) {
       }
     }
 
-    console.log("Debug_1")
     if (Object.keys(fieldsFilter).length === 0) {
       return res
         .status(400)
         .json({ message: "Va rog selectati cel putin un filtru" });
     } else {
       for (const key of Object.keys(fieldsFilter)) {
-        if (rangeFilters.includes(key))
-        {
-           conditions.push(`${columnMap[key]} >= $${index}`)
-        }
-        else{ 
+        if (rangeFilters.includes(key)) {
+          conditions.push(`${columnMap[key]} >= $${index}`);
+        } else {
           conditions.push(`${columnMap[key]} = $${index}`);
-        }   
-        values.push(fieldsFilter[key])
+        }
+        values.push(fieldsFilter[key]);
         index++;
       }
     }
 
-    console.log("Debug_2")
-
     const query = `
   SELECT wp.full_name, wp.phone, wp.description, wp.experience_years, wp.city, wp.county, wp.profile_image_url, wp.average_rating, wp.review_count, c.name AS name_category FROM worker_profiles wp JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id WHERE ${conditions.join(" AND ")}
   `;
-  const filterProfile = await db.query(query, values);
+    const filterProfile = await db.query(query, values);
 
-  console.log("Debug_3")
+    console.log("Debug_3");
 
-  if (filterProfile.rows.length === 0)
-  {
-    return res.status(404).json(({message: "Nici un rezultat"}))
-  }
-  console.log("Debug_4")
+    if (filterProfile.rows.length === 0) {
+      return res.status(404).json({ message: "Nici un rezultat" });
+    }
+    console.log("Debug_4");
 
-  return res.status(200).json(filterProfile.rows);
+    return res.status(200).json(filterProfile.rows);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   } finally {
     db.release();
   }
 }
+
+
+export async function hasUserApproved(req, res, next)
+{
+  const db = await pool.connect()
+  const user_id = req.user.id;
+  const { id, is_verified, is_approved, is_featured} = req.body;
+
+  try{
+    const result = await db.query("SELECT ur.role_id, r.role_name AS role FROM user_roles ur JOIN roles r ON ur.role_id = r.id WHERE user_id = $1", [user_id])
+
+    console.log("Dupa aflarea rolului")
+
+    if (result.rows.length === 0)
+    {
+      return res.status(404).json({message: "Userul nu a fost gasit."})
+    }
+
+    const role_name = result.rows[0].role;
+
+    console.log("Rol:", role_name)
+   
+    if (role_name !== "Admin")
+    {
+      return res.status(403).json({message: "Nu puteti face aceste modficari"})
+    }
+
+    console.log("Dupa verificarea rolului")
+
+    await db.query("BEGIN")
+
+    const update_profile = await db.query("UPDATE worker_profiles SET is_verified = $1, is_approved = $2, is_featured = $3 WHERE id = $4 RETURNING *", [is_verified, is_approved, is_featured, id])
+
+    console.log(update_profile.rows)
+
+    if (update_profile.rows.length === 0)
+    {
+      await db.query("ROLLBACK");
+      return res.status(500).json({message: "Operatiunea a esuat"})
+    }
+
+    await db.query("COMMIT");
+    return res.status(200).json({message: "Aprobare cu succes"})
+  }
+  catch(err){
+    await db.query("ROLLBACK");
+    return res.status(500).json({message: err.message})
+  }
+  finally{
+    db.release()
+  }
+}
+
+
+async function getProfiles(req, res, next)
+{
+  const db = await pool.connect();
+  try{
+    const results = await db.query("SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id")
+
+    if (results.rows.length === 0)
+    {
+      return res.status(404).json({message: "Nici un rezultat"})
+    }
+
+    return res.status(200).json(results.rows)
+  }
+  catch(err){
+    return res.status(500).json({message: err.message})
+  }
+  finally{
+    db.release()
+  }
+}
+ 

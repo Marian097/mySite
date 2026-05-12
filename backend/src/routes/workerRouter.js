@@ -1,15 +1,15 @@
 import { Router } from "express";
 
-import { createProfile, getAllProfiles, updateProfile, deleteProfile, filterProfile} from "../controller/controller.worker.profile.js"
+import { createProfile, updateProfile, deleteProfile, hasUserApproved} from "../controller/controller.worker.profile.js"
 
 import { verifiedToken } from "../middleware/jwt.middleware.js"
+import { addDocuments} from "../controller/controller.worker.documents.js"
 
 
 
 export const workerRouter = Router()
 
 workerRouter.post("/create/profile", verifiedToken, createProfile)
-workerRouter.get("/get/profiles", getAllProfiles)
 workerRouter.patch("/update/profile", verifiedToken, updateProfile)
 workerRouter.delete("/update/profile", verifiedToken,  deleteProfile )
-workerRouter.post("/filter/profile", filterProfile )
+workerRouter.post("/documents", verifiedToken, addDocuments)
