@@ -27,57 +27,61 @@ const loginSchema = yup.object({
   password: yup.string().required(),
 });
 
-export async function deleteUser(req, res) {
+// export async function deleteUser(req, res) {
+//   const db = await pool.connect();
+//   const { id } = req.body;
+
+//   try {
+//     if (!id) {
+//       return res.status(400).json({
+//         message: "Id este necesar",
+//       });
+//     }
+
+//     const result = await db.query("DELETE FROM users WHERE id = $1", [id]);
+
+//     return res.status(204).send();
+//   } catch (err) {
+//     return res.status(500).json({
+//       message: err.message,
+//     });
+//   } finally {
+//     db.release();
+//   }
+// }
+
+// export async function findAllUsers(req, res) {
+//   const db = await pool.connect();
+
+//   try {
+//     const result = await db.query("SELECT * FROM users");
+//     if (result.rows.length === 0) {
+//       return res.status(404).json({ message: "Nici un rezultat gasit" });
+//     }
+
+//     return res.status(200).json({
+//       data: result.rows,
+//     });
+//   } catch (err) {
+//     if (err) {
+//       return res.status(500).json({
+//         message: err.message,
+//       });
+//     }
+//   } finally {
+//     db.release();
+//   }
+// }
+
+
+export async function singUpProvider(req, res, next) {
   const db = await pool.connect();
-  const { id } = req.body;
 
   try {
-    if (!id) {
-      return res.status(400).json({
-        message: "Id este necesar",
-      });
-    }
+    const { name, password, email} = req.body;
 
-    const result = await db.query("DELETE FROM users WHERE id = $1", [id]);
 
-    return res.status(204).send();
-  } catch (err) {
-    return res.status(500).json({
-      message: err.message,
-    });
-  } finally {
-    db.release();
-  }
-}
-
-export async function findAllUsers(req, res) {
-  const db = await pool.connect();
-
-  try {
-    const result = await db.query("SELECT * FROM users");
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat gasit" });
-    }
-
-    return res.status(200).json({
-      data: result.rows,
-    });
-  } catch (err) {
-    if (err) {
-      return res.status(500).json({
-        message: err.message,
-      });
-    }
-  } finally {
-    db.release();
-  }
-}
-
-export async function singUp(req, res, next) {
-  const db = await pool.connect();
-
-  try {
-    const { name, password, email, role } = req.body;
+    const role = "Prestator";
 
     await userSchema.validate(req.body, { abortEarly: false });
 
@@ -169,7 +173,8 @@ export async function singUp(req, res, next) {
     db.release();
   }
 }
-export async function Login(req, res) {
+
+export async function LoginProvider(req, res) {
   const db = await pool.connect();
 
   try {

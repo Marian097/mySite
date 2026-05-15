@@ -13,10 +13,12 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@types/pg": "^8.20.0",
     "argon2": "^0.44.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "express-serve-static-core": "^0.1.1",
     "jsonwebtoken": "^9.0.3",
     "libphonenumber-js": "^1.12.41",
     "pg": "^8.20.0",
