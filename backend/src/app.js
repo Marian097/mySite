@@ -1,10 +1,12 @@
 import express from "express";
 import cors from "cors";
 
-import {usersRouter} from "./routes/usersRouter.js";
-import {errorHandler} from "./middleware/error.middleware.js";
-import {workerRouter} from "./routes/workerRouter.js"
-// import {documentsRouter} from "./routes/documentsRouter.js"
+import { adminRouter } from "./controller/modules/admin/admin.routes.js";
+import { usersRouter } from "./controller/modules/auth/auth.routes.js";
+import { workerRouter } from "./controller/modules/workers/worker.routes.js";
+import { errorHandler } from "./middleware/error.middleware.js";
+
+
 
 const app = express()
 
@@ -14,7 +16,10 @@ app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ok: true}));
 
+
+
 app.use("/api/users", usersRouter);
+app.use("/api/users/admin", adminRouter);
 app.use("/api/users/worker", workerRouter);
 
 // app.use("/api/users/profile", documentsRouter)

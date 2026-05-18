@@ -1,27 +1,7 @@
-import argon2 from "argon2";
 import { pool } from "../db.js";
-import * as yup from "yup";
 
 
-
-const passRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
-
-
-const adminSchema = yup.object({
-  email: yup
-    .string()
-    .email("Email invalid")
-    .required("Emailul este obligatoriu"),
-  password: yup
-    .string()
-    .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
-    .required("Parola este obligatorie"),
-});
-
-
-
-async function verifyAdmin(req, res, next)
+export async function verifyAdmin(req, res, next)
 {
   const db = await pool.connect()
   const user_id = req.user.id;
@@ -52,15 +32,4 @@ async function verifyAdmin(req, res, next)
   finally{
     db.release()
   }
-}
-
-
-async function createAdmin(req, res, next)
-{
-
-  const db = pool.connect();
-
-  const {email, password} = req.body;
-
-  const role = "Admin";
 }
