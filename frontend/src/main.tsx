@@ -7,7 +7,7 @@ import ParticlesBackground from "./components/particles/ParticlesBackground"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ParticlesBackground/>
+    {/* <ParticlesBackground/> */}
     <App />
   </StrictMode>,
 )
