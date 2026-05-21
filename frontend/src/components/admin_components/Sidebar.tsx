@@ -3,12 +3,12 @@ import DashStack from "../../assets/image/DashStack.png";
 
 export default function Sidebar() {
   return (
-    <div className=" border-2 border-black min-h-screen w-1/6">
+    <div className="border-2 border-black min-h-screen">
       <div className = "flex justify-center">
-        <img className="h-15 w-auto" src={DashStack} alt="" />
+        <img className="h-20 w-auto" src={DashStack} alt="" />
       </div>
 
-      <div className="flex flex-col py-5 gap-y-2 text-xs">
+      <div className="flex flex-col py-5 gap-y-2 text-md items-center">
         <div>
           <span>Dashboard</span>
         </div>

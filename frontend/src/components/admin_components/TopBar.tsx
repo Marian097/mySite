@@ -4,7 +4,7 @@ import Notification from "../../assets/image/icons8-notification-64.png";
 export default function TopBar() {
   return (
     <>
-      <div className="flex border-2 border-black h-10 md:h-14 lg:h-16 w-screen justify-end">
+      <div className="flex border-2 border-black h-10 md:h-14 lg:h-16 justify-end bg-white">
         <div className="flex items-center">
           <img className="h-3" src={Notification} alt="" />
         </div>
@@ -13,7 +13,7 @@ export default function TopBar() {
             <img className="h-6" src={Account} alt="" />
           </div>
 
-          <div className="text-xs ">
+          <div className="text-xs flex flex-col justify-center">
             <div>
               <span>Name</span>
             </div>

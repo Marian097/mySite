@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-@import "tailwindcss";
-
-html, body, #root {
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -13,47 +13,56 @@ body {
   overflow-x: hidden;
 }
 
-
+/* Source Serif 4 */
 @font-face {
-  font-family: "MyFont";
-  src: url("./assets/fonts/SourceSerif4-Italic-VariableFont_opsz,wght.ttf") format("ttf");
-  font-weight: 400;
+  font-family: "SourceSerif4";
+  src: url("./assets/fonts/SourceSerif4-VariableFont_opsz,wght.ttf")
+    format("truetype");
+  font-weight: 400 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "MyFont";
-  src: url("./assets/fonts/SourceSerif4-VariableFont_opsz,wght.ttf") format("ttf");
+  font-family: "SourceSerif4";
+  src: url("./assets/fonts/SourceSerif4-Italic-VariableFont_opsz,wght.ttf")
+    format("truetype");
+  font-weight: 400 700;
+  font-style: italic;
+}
+
+/* Geist */
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "GeistFontBold";
-  src: url("./assets/fonts/Geist-Bold.ttf") format("ttf");
-  font-weight: 700;
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
   font-style: normal;
 }
 
+/* Nunito Sans */
 @font-face {
-  font-family: "GeistFontMedium";
-  src: url("./assets/fonts/Geist-Medium.ttf") format("ttf");
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "GeistFontExtraBold";
-  src: url("./assets/fonts/Geist-ExtraBold.ttf") format("ttf");
-  font-weight: 700;
+  font-family: "NunitoSans";
+  src: url("./assets/fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf")
+    format("truetype");
+  font-weight: 400 900;
   font-style: normal;
 }
 
 @theme {
-  --font-myfont: "MyFont", SourceSerif4;
-  --font-myGeistBold: "GeistFontBold";
-  --font-myGeistMedium: "GeistFontMedium";
-  --font-myGeistExtraBold: "GGeistFontExtraBold";
+  --font-source-serif: "SourceSerif4", serif;
+  --font-geist: "Geist", sans-serif;
+  --font-nunito: "NunitoSans", sans-serif;
 }
-
-
