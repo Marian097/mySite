@@ -7,7 +7,7 @@ export default function CardUsersApproved() {
         <div className="flex justify-between">
           <div className="flex flex-col py-2 gap-y-1">
             <div>
-              <span className = "font-nunito font-semibold text-xs">Users Approved</span>
+              <span className = "font-nunito font-semibold text-xs">Total Approved</span>
             </div>
             <div>
               <span className = "font-bold">230962</span>

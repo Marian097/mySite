@@ -1,6 +1,6 @@
 
 import Sidebar from "../components/admin_components/Sidebar";
-import DashboardUsers from "../components/admin_components/MainUsers";
+import DashboardWorker from "../components/admin_components/MainWorker";
 
 
 export default function AdminPanel() {
@@ -10,7 +10,7 @@ export default function AdminPanel() {
           <Sidebar />
       </aside>
       <main className = "col-span-10 bg-[#f5f6fa]">
-         <DashboardUsers/>
+         <DashboardWorker/>
       </main>
     </div>
   );

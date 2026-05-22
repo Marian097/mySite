@@ -16,7 +16,13 @@ export default function Sidebar() {
           <span>Documents</span>
         </div>
         <div>
-          <span>User</span>
+          <span>Users</span>
+        </div>
+        <div>
+          <span>Payments</span>
+        </div>
+         <div>
+          <span>Messages</span>
         </div>
       </div>
     </div>

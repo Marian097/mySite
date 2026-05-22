@@ -52,12 +52,60 @@ export async function createAdminProfile(req, res, next)
 }
 
 
-export async function getUserDocumentsUnverified(req, res,next)
+export async function getWorkerPending(req, res,next)
 {
     const db = await pool.connect()
 
     try{
-        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1 OR ud.verification_status = $2", ["Pending", "Rejected"])
+        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1 OR ud.verification_status = $2", ["Pending"])
+
+        if (results.rows.length === 0)
+        {
+            return res.status(404).json({message: "Nici un rezultat"})
+        }
+
+        return res.status(200).json(results.rows)
+
+    }
+    catch(err){
+        return res.status(500).json({message: err.message})
+    }
+    finally{
+        db.release()
+    }
+
+}
+
+export async function getWorkerRejected(req, res,next)
+{
+    const db = await pool.connect()
+
+    try{
+        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1 OR ud.verification_status = $2", ["Rejected"])
+
+        if (results.rows.length === 0)
+        {
+            return res.status(404).json({message: "Nici un rezultat"})
+        }
+
+        return res.status(200).json(results.rows)
+
+    }
+    catch(err){
+        return res.status(500).json({message: err.message})
+    }
+    finally{
+        db.release()
+    }
+
+}
+
+export async function getWorker(req, res,next)
+{
+    const db = await pool.connect()
+
+    try{
+        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id")
 
         if (results.rows.length === 0)
         {
@@ -77,7 +125,7 @@ export async function getUserDocumentsUnverified(req, res,next)
 }
 
 
-export async function getUserDocumentsVerified(req, res, next)
+export async function getWorkerApproved(req, res, next)
 {
       const db = await pool.connect()
 
@@ -263,7 +311,7 @@ export async function getProfilesVerified(req, res, next)
 }
  
  
-export async function hasProfileApproved(req, res, next)
+export async function hasProfileApproved(req, res, next) //=> Pending 
 {
   const db = await pool.connect()
   const user_id = req.user.id;
@@ -296,7 +344,7 @@ export async function hasProfileApproved(req, res, next)
 }
 
 
-export async function hasProfileRejected(req, res, next)
+export async function hasProfileRejected(req, res, next) // => Pending
 {
   const db = await pool.connect()
   const user_id = req.user.id;

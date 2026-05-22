@@ -7,8 +7,10 @@ import {
   hasAcceptUserDocuments,
   hasRejectedUserDocuments,
   createAdminProfile,
-  getUserDocumentsUnverified,
-  getUserDocumentsVerified,
+  getWorkerPending,
+  getWorkerApproved,
+  getWorkerRejected,
+  getWorker,
   getProfilesVerified,
   getProfilesUnverified,
   hasProfileApproved,
@@ -28,13 +30,27 @@ adminRouter.post(
 ); 
 
 adminRouter.get(
-  "/documents/unverified",
+  "/worker/pending",
   verifiedToken,
   verifyAdmin,
-  getUserDocumentsUnverified,
+  getWorkerPending,
 );
 
-adminRouter.get("/documents/verified", verifiedToken, verifyAdmin, getUserDocumentsVerified);
+adminRouter.get(
+  "/worker/rejected",
+  verifiedToken,
+  verifyAdmin,
+  getWorkerRejected,
+);
+
+adminRouter.get(
+  "/worker",
+  verifiedToken,
+  verifyAdmin,
+  getWorker,
+);
+
+adminRouter.get("/worker/approved", verifiedToken, verifyAdmin, getWorkerApproved);
 
 adminRouter.put(
   "/documents/accept",
