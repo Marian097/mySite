@@ -4,11 +4,11 @@ import InputPassword from "./small_components/InputPassword";
 import BtnLogin from "./small_components/BtnLogin";
 import FreeTrialSection from "./small_components/FreeTrialSection";
 import ForgotPassword from "./small_components/ForgotPassword";
-import type { User } from "../types/User";
-import type { Errors } from "../types/Errors";
-import type { Touched } from "../types/Touched";
+import type { User } from "../types/AuthTypes/User";
+import type { Errors } from "../types/AuthTypes/Errors";
+import type { Touched } from "../types/AuthTypes/Touched";
 import { useEffect } from "react"
-import type { ErrorsLogin } from "../types/ErrorsLogin";
+import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
 
 
 

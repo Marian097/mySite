@@ -5,10 +5,10 @@ import InputEmail from "./small_components/InputEmail";
 import InputPassword from "./small_components/InputPassword";
 import InputUsername from "./small_components/InputUsername";
 import LogoSectionForm from "./small_components/LogoSectionForm";
-import type { User } from "../types/User";
-import type { Errors } from "../types/Errors";
-import type { Touched } from "../types/Touched";
-import type { ErrorsLogin } from "../types/ErrorsLogin";
+import type { User } from "../types/AuthTypes/User";
+import type { Errors } from "../types/AuthTypes/Errors";
+import type { Touched } from "../types/AuthTypes/Touched";
+import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
 import {useEffect} from "react";
 
 type Props = {

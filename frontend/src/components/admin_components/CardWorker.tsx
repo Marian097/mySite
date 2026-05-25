@@ -1,8 +1,14 @@
 import users from "../../assets/image/Total_users.png";
 
-export default function CardUser() {
+
+
+type Props = {
+   getWorkers: () => void
+}
+
+export default function CardUser({getWorkers}: Props) {
   return (
-    <div className="border border-black rounded-md h-full">
+    <div onClick = {() => getWorkers()} className=" rounded-md h-full">
       <div className = "ml-2">
         <div className="flex justify-between">
           <div className="flex flex-col py-2 gap-y-1">

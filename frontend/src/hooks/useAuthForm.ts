@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { User } from "../types/User";
+import type { User } from "../types/AuthTypes/User";
 import * as yup from "yup";
-// import { isValidPhoneNumber } from "libphonenumber-js";
-import type { Touched } from "../types/Touched";
-import type { Errors } from "../types/Errors";
-import type { ErrorsLogin } from "../types/ErrorsLogin";
+import type { Touched } from "../types/AuthTypes/Touched";
+import type { Errors } from "../types/AuthTypes/Errors";
+import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
+
 
 const passRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,20}$/;
@@ -15,12 +15,6 @@ const singUpSchema = yup.object({
     .string()
     .email("Email invalid")
     .required("Emailul este obligatoriu"),
-  // phone: yup
-  //   .string()
-  //   .required("Telefon obligatoriu")
-  //   .test("phone", "Numar invalid", (value) =>
-  //     value ? isValidPhoneNumber(value, "RO") : false,
-  //   ),
   password: yup
     .string()
     .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
@@ -35,7 +29,7 @@ const loginSchema = yup.object({
 export default function useAuthForm() {
 
   const [message, setMessage] = useState("")
-  
+
   const [values, setValues] = useState<User>({
     name: "",
     email: "",
@@ -64,6 +58,9 @@ export default function useAuthForm() {
   const [isLoggedForm, setIsLoggedForm] = useState<boolean>(false);
 
   const [isDropdown, setIsDropdown] = useState<boolean>(false);
+
+  const [logged_in, setLogged_in] = useState<boolean>(false)
+
 
   // 🔹 CHANGE
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -200,6 +197,9 @@ export default function useAuthForm() {
       }
 
       localStorage.setItem("token", data.token);
+
+      setLogged_in(true)
+
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         const newErrors: ErrorsLogin = {
@@ -231,6 +231,7 @@ export default function useAuthForm() {
     isLoggedForm,
     isDropdown,
     message,
+    logged_in,
     setIsDropdown,
     setIsSignUp,
     setIsLoggedForm,

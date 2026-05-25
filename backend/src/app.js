@@ -19,8 +19,8 @@ app.get("/health", (req, res) => res.json({ok: true}));
 
 
 app.use("/api/users", usersRouter);
-app.use("/api/users/admin", adminRouter);
-app.use("/api/users/worker", workerRouter);
+app.use("/api/users", adminRouter);
+app.use("/api/users", workerRouter);
 
 // app.use("/api/users/profile", documentsRouter)
 

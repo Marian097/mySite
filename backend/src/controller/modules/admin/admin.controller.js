@@ -105,7 +105,7 @@ export async function getWorker(req, res,next)
     const db = await pool.connect()
 
     try{
-        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id")
+        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id")
 
         if (results.rows.length === 0)
         {

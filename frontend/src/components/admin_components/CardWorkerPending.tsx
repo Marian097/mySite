@@ -2,7 +2,7 @@ import pending  from "../../assets/image/pending.png";
 
 export default function CardUsersPending() {
   return (
-     <div className="border border-black rounded-md h-full">
+     <div className=" rounded-md h-full">
       <div className = "ml-2">
         <div className="flex justify-between">
           <div className="flex flex-col py-2 gap-y-1">

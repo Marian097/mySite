@@ -2,20 +2,32 @@ import CardWorker from "./CardWorker";
 import CardWorkerApproved from "./CardWorkerApproved";
 import CardWorkerPending from "./CardWorkerPending";
 import CardWorkerRejected from "./CardWorkerRejected";
-import TableUsers from "./TableUsers";
+import Table from "./Table";
 import TopBar from "./TopBar";
+import type {Worker} from "../../types/WorkersTypes/Worker"
+import type {Error} from "../../types/WorkersTypes/Error"
 
-export default function MainUsers() {
+
+type Props = {
+   error:Error,
+   workers:Worker[],
+   getWorkers: () => void
+}
+
+
+export default function MainUsers({error, workers, getWorkers}: Props) {
   return (
     <div>
       <TopBar />
-      <div className="ml-5 py-5">
-        <h1>Users</h1>
+      <div className="ml-5 py-5 relative">
+        <div className = "absolute left-1/5">
+          <h1 className = "font-bold font-nunito text-xl">Users</h1>
+        </div>
       </div>
       <div className="min-w-full justify-items-center">
-        <section className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 w-40 sm:w-100 md:w-180 px gap-5">
+        <section className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 w-48 sm:w-md md:w-2xl 2xl:w-4xl gap-5 my-5 py-5">
           <div className="bg-white rounded-md">
-            <CardWorker />
+            <CardWorker getWorkers = {getWorkers} />
           </div>
           <div className="bg-white rounded-md">
             <CardWorkerRejected />
@@ -27,8 +39,11 @@ export default function MainUsers() {
             <CardWorkerPending />
           </div>
         </section>
-        <section className="text-sm px-10 border border-black bg-white rounded-xl">
-          <TableUsers />
+        <section className="text-sm px-10 rounded-xl w-full sm:w-3xl md:w-3xl 2xl:w-7xl my-10 py-5 bg-white">
+          <div className="pb-5">
+            <h2 className="font-nunito font-bold">Total Worker</h2>
+          </div>
+          <Table error = {error} workers = {workers} />
         </section>
       </div>
     </div>

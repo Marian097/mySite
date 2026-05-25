@@ -1,7 +1,7 @@
-import type { User } from "../../types/User";
-import type { Errors } from "../../types/Errors";
-import type { Touched } from "../../types/Touched";
-import type { ErrorsLogin } from "../../types/ErrorsLogin";
+import type { User } from "../../types/AuthTypes/User";
+import type { Errors } from "../../types/AuthTypes/Errors";
+import type { Touched } from "../../types/AuthTypes/Touched";
+import type { ErrorsLogin } from "../../types/AuthTypes/ErrorsLogin";
 
 type Props = {
   value: User;
