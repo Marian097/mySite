@@ -6,28 +6,38 @@ import Table from "./Table";
 import TopBar from "./TopBar";
 import type {Worker} from "../../types/WorkersTypes/Worker"
 import type {Error} from "../../types/WorkersTypes/Error"
+import {useEffect} from "react";
+import type {Admin} from "../../types/AuthTypes/Admin"
 
 
 type Props = {
    error:Error,
    workers:Worker[],
-   getWorkers: () => void
+   admin: Admin[],
+   setIsStatus: (status: string) => void,
+   getWorkersPending: () => void,
+   getWorkers: () => void;
 }
 
 
-export default function MainUsers({error, workers, getWorkers}: Props) {
+export default function MainWorker({error, workers, admin, getWorkers, getWorkersPending, setIsStatus}: Props) {
+
+  useEffect(() => {
+    getWorkers()
+  }, [])
+
   return (
     <div>
-      <TopBar />
+      <TopBar admin = {admin} />
       <div className="ml-5 py-5 relative">
         <div className = "absolute left-1/5">
-          <h1 className = "font-bold font-nunito text-xl">Users</h1>
+          <h1 className = "font-bold font-nunito text-xl">Worker</h1>
         </div>
       </div>
       <div className="min-w-full justify-items-center">
         <section className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 w-48 sm:w-md md:w-2xl 2xl:w-4xl gap-5 my-5 py-5">
           <div className="bg-white rounded-md">
-            <CardWorker getWorkers = {getWorkers} />
+            <CardWorker/>
           </div>
           <div className="bg-white rounded-md">
             <CardWorkerRejected />
@@ -43,7 +53,7 @@ export default function MainUsers({error, workers, getWorkers}: Props) {
           <div className="pb-5">
             <h2 className="font-nunito font-bold">Total Worker</h2>
           </div>
-          <Table error = {error} workers = {workers} />
+          <Table error = {error} workers = {workers} getWorkersPending = {getWorkersPending} getWorkers = {getWorkers} setIsStatus = {setIsStatus}/>
         </section>
       </div>
     </div>

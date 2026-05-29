@@ -5,6 +5,30 @@ import { adminProfileSchema } from "./admin.validation.js"
 import * as yup from "yup";
 
 
+
+
+export async function getAdminProfile(req, res, next){
+  const db = await pool.connect()
+  const id = req.user.id;
+
+  try{
+    const results = await db.query("SELECT ap.user_id AS id,  u.name AS username, r.role_name AS role, ap.ci_image_url AS profile_image FROM users u JOIN user_roles ur ON u.id = ur.user_id JOIN roles r ON r.id = ur.role_id JOIN admin_profiles ap ON u.id = ap.user_id WHERE u.id = $1", [id]);
+
+
+    if (results.rows.length === 0)
+    {
+      return res.status(500).json({message: "Neconectat"})
+    }
+
+    return res.status(200).json(results.rows)
+  }
+  catch(err){
+    return res.status(404).json({message: err.message})
+  }
+  finally{
+    db.release()
+  }
+}
 export async function createAdminProfile(req, res, next)
 {
     const db = await pool.connect();
@@ -57,7 +81,7 @@ export async function getWorkerPending(req, res,next)
     const db = await pool.connect()
 
     try{
-        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1 OR ud.verification_status = $2", ["Pending"])
+        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1", ["Pending"])
 
         if (results.rows.length === 0)
         {

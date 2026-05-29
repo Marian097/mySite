@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { User } from "../types/AuthTypes/User";
+import type { Admin } from "../types/AuthTypes/Admin"
 import * as yup from "yup";
 import type { Touched } from "../types/AuthTypes/Touched";
 import type { Errors } from "../types/AuthTypes/Errors";
@@ -60,6 +61,8 @@ export default function useAuthForm() {
   const [isDropdown, setIsDropdown] = useState<boolean>(false);
 
   const [logged_in, setLogged_in] = useState<boolean>(false)
+
+  const [admin, setAdmin] = useState<Admin[]>([])
 
 
   // 🔹 CHANGE
@@ -184,11 +187,16 @@ export default function useAuthForm() {
         password: "",
       });
 
+
+
       const response = await fetch("http://localhost:4000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
+
+
+     
 
       const data = await response.json();
 
@@ -197,6 +205,25 @@ export default function useAuthForm() {
       }
 
       localStorage.setItem("token", data.token);
+
+
+
+      const token = localStorage.getItem("token")
+
+      
+      if (!token) throw new Error ("token lipsa");
+      
+      const response_admin = await fetch("http://localhost:4000/api/users/admin/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      if (!response_admin.ok) throw new Error("Nu s-au putut încărca profilele admin");
+
+      const admin_profiles = await response_admin.json()
+
+      setAdmin(admin_profiles)
 
       setLogged_in(true)
 
@@ -232,6 +259,7 @@ export default function useAuthForm() {
     isDropdown,
     message,
     logged_in,
+    admin,
     setIsDropdown,
     setIsSignUp,
     setIsLoggedForm,

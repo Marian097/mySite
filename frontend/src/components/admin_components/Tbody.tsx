@@ -1,10 +1,14 @@
 import type { Worker } from "../../types/WorkersTypes/Worker";
 
+
 type Props = {
-  workers: Worker[];
+  workers: Worker[]; 
 };
 
-export default function TBody({ workers }: Props) {
+export default function TBody({ workers}: Props) {
+
+
+
   return (
     <div>
       {workers.map((worker) => (

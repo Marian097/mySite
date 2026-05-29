@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 
+import path from "path";
+import { fileURLToPath } from "url"
+
 import { adminRouter } from "./controller/modules/admin/admin.routes.js";
 import { usersRouter } from "./controller/modules/auth/auth.routes.js";
 import { workerRouter } from "./controller/modules/workers/worker.routes.js";
@@ -9,6 +12,10 @@ import { errorHandler } from "./middleware/error.middleware.js";
 
 
 const app = express()
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 app.use(cors({origin: "http://localhost:5173"}));
 
@@ -21,6 +28,8 @@ app.get("/health", (req, res) => res.json({ok: true}));
 app.use("/api/users", usersRouter);
 app.use("/api/users", adminRouter);
 app.use("/api/users", workerRouter);
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // app.use("/api/users/profile", documentsRouter)
 

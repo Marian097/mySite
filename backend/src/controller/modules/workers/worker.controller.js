@@ -1,7 +1,6 @@
 import { pool } from "../../../db.js";
 import * as yup from "yup";
 import dotenv from "dotenv";
-import { isValidPhoneNumber } from "libphonenumber-js";
 import {workerProfileSchema, documentsWorkerSchema} from "./worker.validation.js"
 
 
@@ -265,7 +264,7 @@ export async function addDocuments(req, res, next)
 
     try{
         
-        await documentsUserSchema.validate(req.body, {abortEarly: false})
+        await documentsWorkerSchema.validate(req.body, {abortEarly: false})
 
         await db.query("BEGIN")
 
@@ -285,7 +284,7 @@ export async function addDocuments(req, res, next)
         if (error instanceof yup.ValidationError)
         {
             await db.query("ROLLBACK")
-            return res.status(500).json({message: error.errors})
+            return res.status(500).json({message: error.message})
         }
     }
     finally{

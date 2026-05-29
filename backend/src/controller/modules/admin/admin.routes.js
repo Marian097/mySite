@@ -16,6 +16,7 @@ import {
   hasProfileApproved,
   hasProfileRejected,
   deleteUser,
+  getAdminProfile,
 } from "./admin.controller.js";
 
 export const adminRouter = Router();
@@ -23,10 +24,17 @@ export const adminRouter = Router();
 
 
 adminRouter.post(
-  "/profile",
+  "/admin/create/profile",
   verifiedToken,
   verifyAdmin,
   createAdminProfile,
+);
+
+adminRouter.get(
+  "/admin/profile",
+  verifiedToken,
+  verifyAdmin,
+  getAdminProfile,
 ); 
 
 adminRouter.get(
@@ -62,7 +70,7 @@ adminRouter.put(
   "/documents/reject",
   verifiedToken,
   verifyAdmin,
- hasRejectedUserDocuments,
+  hasRejectedUserDocuments,
 );
 adminRouter.get("/profiles/verified", verifiedToken, verifyAdmin, getProfilesVerified);
 adminRouter.get("/profiles/unverified",verifiedToken, verifyAdmin, getProfilesUnverified);

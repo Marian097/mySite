@@ -22,6 +22,9 @@ function App() {
             error={workers.error}
             workers={workers.workers}
             getWorkers={workers.getWorkers}
+            getWorkersPending = {workers.getWorkersPending}
+            setIsStatus = {workers.setIsStatus}
+            admin = {render.admin}
           />
         </>
       ) : (

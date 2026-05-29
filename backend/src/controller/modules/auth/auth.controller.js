@@ -56,24 +56,21 @@ export async function registerProvider(req, res, next) {
     const username = result.rows[0].name;
     const user_id = result.rows[0].id;
 
-    const get_roles = await db.query("SELECT * FROM roles");
+    const get_roles = await db.query("SELECT * FROM roles WHERE role_name = $1", [role]);
 
-    
+    let exists = false;
+
+
     if (get_roles.rows.length === 0)
     {
       await db.query("ROLLBACK");
       return res.status(500).json({ message: "Nu exista nici un rol" });
     }
-    
-    let exists = false;
 
-    for (let r of get_roles.rows) {
-      if (role === r.role_name) {
-        exists = true;
-        break;
-      }
+    else{
+      exists = true
     }
-
+       
 
     if (exists) {
       const role_id = get_roles.rows[0].id
@@ -82,8 +79,6 @@ export async function registerProvider(req, res, next) {
         "INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2) RETURNING *",
         [user_id, role_id]
       );
-
-      console.log(user_roles.rows.length)
 
       if (user_roles.rows.length === 0) {
         await db.query("ROLLBACK");
@@ -103,7 +98,7 @@ export async function registerProvider(req, res, next) {
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       await db.query("ROLLBACK");
-      return res.status(400).json({ message: error.errors });
+      return res.status(400).json({ message: error.message });
     }
   } finally {
     db.release();
@@ -153,25 +148,22 @@ export async function registerClient(req, res, next) {
       await db.query("ROLLBACK");
       return res.status(500).json({ message: "A intervenit o eroare" });
     }
+     
     const username = result.rows[0].name;
     const user_id = result.rows[0].id;
 
-    const get_roles = await db.query("SELECT * FROM roles");
+    const get_roles = await db.query("SELECT * FROM roles WHERE role_name = $1", [role]);
 
-    
+    let exists = false;
+
     if (get_roles.rows.length === 0)
     {
       await db.query("ROLLBACK");
       return res.status(500).json({ message: "Nu exista nici un rol" });
     }
-    
-    let exists = false;
 
-    for (let r of get_roles.rows) {
-      if (role === r.role_name) {
-        exists = true;
-        break;
-      }
+    else{
+      exists = true
     }
 
 
@@ -203,7 +195,7 @@ export async function registerClient(req, res, next) {
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       await db.query("ROLLBACK");
-      return res.status(400).json({ message: error.errors });
+      return res.status(400).json({ message: error.message });
     }
   } finally {
     db.release();
@@ -221,51 +213,53 @@ export async function registerAdmin(req, res, next)
   const role = "Admin";
 
   try{
+
+    console.log("Prima linie din try")
     await userSchema.validate(req.body, {abortEarly: false})
 
     const password_hash = await argon2.hash(password);
 
     await db.query("BEGIN");
 
-    const user = (await db).query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING * ", [name, email, password_hash])
+    const result = await db.query("INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING * ", [name, email, password_hash])
 
-    if (user.rows.length === 0)
+
+    if (result.rows.length === 0)
     {
-      (await db).query("ROLLBACK")
+      await db.query("ROLLBACK")
       return res.status(500).json({message: "Operatiune esuata"})
     }
 
-    const user_id = (await user).rows[0].id;
+     console.log("Dupa ce am verificat daca am introdus in user")
 
-    const roles = (await db).query("SELECT * FROM roles");
+    const username = result.rows[0].name;
+    const user_id = result.rows[0].id;
 
-    if (roles.rows.length === 0)
-    {
-      (await db).query("ROLLBACK");
-      return res.status(404).json({message: "Nici un rol in baza de date"})
-    }
-
+    const get_roles = await db.query("SELECT * FROM roles WHERE role_name = $1", [role]);
 
     let exists = false;
 
 
-    for (let r of roles.rows)
+    if (get_roles.rows.length === 0)
     {
-      if (role === r.role_name)
-      {
-        exists = true
-        break
-      }
+      await db.query("ROLLBACK");
+      return res.status(500).json({ message: "Nu exista nici un rol" });
+    }
+
+    else{
+      exists = true
     }
 
     if (exists)
     {
-      const role_id = roles.rows[0].id
+      const role_id = get_roles.rows[0].id
 
       const user_roles = await db.query(
         "INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2) RETURNING *",
         [user_id, role_id]
       );
+
+      console.log("Dupa if exists")
 
 
       if (user_roles.rows.length === 0) {
@@ -288,7 +282,7 @@ export async function registerAdmin(req, res, next)
     if (err instanceof yup.ValidationError )
     {
       await db.query("ROLLBACK");
-      return res.status(400).json({ message: error.errors });
+      return res.status(400).json({ message: err.message });
     }
 
   }
