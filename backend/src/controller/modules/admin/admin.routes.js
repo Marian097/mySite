@@ -17,6 +17,7 @@ import {
   hasProfileRejected,
   deleteUser,
   getAdminProfile,
+  getProfileByEmail,
 } from "./admin.controller.js";
 
 export const adminRouter = Router();
@@ -35,6 +36,14 @@ adminRouter.get(
   verifiedToken,
   verifyAdmin,
   getAdminProfile,
+);
+
+
+adminRouter.post(
+  "/worker/by_email",
+  verifiedToken,
+  verifyAdmin,
+  getProfileByEmail,
 ); 
 
 adminRouter.get(

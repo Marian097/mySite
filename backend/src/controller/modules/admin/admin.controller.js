@@ -1,6 +1,6 @@
 import { pool } from "../../../db.js";
 
-import { adminProfileSchema } from "./admin.validation.js"
+import { adminProfileSchema, verifiedEmail } from "./admin.validation.js"
 
 import * as yup from "yup";
 
@@ -43,7 +43,6 @@ export async function createAdminProfile(req, res, next)
 
         const result = await db.query("SELECT id FROM users WHERE id = $1", [user_id]);
 
-        console.log("Dupa ce am luat id-ul userului")
         
         if (result.rows.length === 0)
         {
@@ -51,7 +50,7 @@ export async function createAdminProfile(req, res, next)
             return res.status(404).json({message: "Nu sunteti inregistrat"})
         }
 
-        const adminProfiles = await db.query("INSERT INTO admin_profiles (user_id, phone, address, ci_image_url, number_contract, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [result.rows[0].id, phone, address, ci_image_url, number_contract, date]);
+        const adminProfiles = await db.query("INSERT INTO admin_profiles (user_id, phone, address, ci_image_url, number_contract, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [user_id, phone, address, ci_image_url, number_contract, date]);
 
 
         if (adminProfiles.rows.length === 0)
@@ -105,7 +104,7 @@ export async function getWorkerRejected(req, res,next)
     const db = await pool.connect()
 
     try{
-        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1 OR ud.verification_status = $2", ["Rejected"])
+        const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE ud.verification_status = $1", ["Rejected"])
 
         if (results.rows.length === 0)
         {
@@ -539,6 +538,29 @@ export async function hasUnblockUser(req, res, next)
   }
   finally{
     db.release()
+  }
+}
+
+
+export async function getProfileByEmail(req, res, next)
+{
+  const db = await pool.connect();
+
+  const { email } = req.body;
+  try {
+    await verifiedEmail.validate(req.body)
+
+    const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE u.email", [email]);
+
+    if (results.rows.length === 0)
+    {
+      return res.status(404).json({message: "Nici un rezultat"})
+    }
+
+    return res.status(200).json(results.rows)
+  }
+  catch(err){
+    if (err instanceof Yup.ValidationError) return res.status(500).json({message: err.errors})
   }
 }
 

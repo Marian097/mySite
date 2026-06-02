@@ -8,6 +8,7 @@ export default function useWorkers() {
   });
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [isStatus, setIsStatus] = useState<string>("all");
+  const [email, setEmail] = useState<string>("")
 
   async function getWorkers() {
     try {
@@ -31,6 +32,7 @@ export default function useWorkers() {
       }
     }
   }
+
 
   async function getWorkersPending() {
     try {
@@ -60,7 +62,7 @@ export default function useWorkers() {
     }
   }
 
-  async function getWorkerRejected()
+  async function getWorkersRejected()
   {
     try{
       setWorkers([])
@@ -87,7 +89,36 @@ export default function useWorkers() {
   }
 
 
-  async function getWorkerApproved(){
+  async function getWorkersByEmail(){
+    
+
+    try{
+      setWorkers([])
+
+      const token = localStorage.getItem("token");
+      
+      if (!token) throw new Error ("Token lipsa");
+
+      const response = await fetch ("http://localhost:4000/api/users/worker/by_email", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ email })
+      })
+
+      if (!response.ok) throw new Error ("Nici un rezultat")
+      const data = await response.json()
+
+      setWorkers([data])
+    }
+    catch (err){
+      if (err instanceof Error) setError({error: err.message})
+    }
+  }
+
+
+  async function getWorkersApproved(){
     try{
       setWorkers([])
       const token = localStorage.getItem("token");
@@ -114,8 +145,13 @@ export default function useWorkers() {
     error,
     workers,
     isStatus,
+    email, 
+    setEmail,
     setIsStatus,
     getWorkersPending,
+    getWorkersApproved,
+    getWorkersRejected,
+    getWorkersByEmail,
     getWorkers,
   };
 }

@@ -23,6 +23,11 @@ function App() {
             workers={workers.workers}
             getWorkers={workers.getWorkers}
             getWorkersPending = {workers.getWorkersPending}
+            getWorkersRejected = {workers.getWorkersRejected}
+            getWorkersApprove = {workers.getWorkersApproved}
+            getWorkersByEmail = {workers.getWorkersByEmail}
+            email = {workers.email}
+            setEmail = {workers.setEmail}
             setIsStatus = {workers.setIsStatus}
             admin = {render.admin}
           />

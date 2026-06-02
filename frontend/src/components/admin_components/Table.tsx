@@ -11,12 +11,17 @@ type Props = {
   error: Error;
   workers: Worker[];
   // isStatus: string 
+  email: string,
+  setEmail: (e: string) => void,
   setIsStatus: (status: string) => void,
+  getWorkersRejected: () => void, 
+  getWorkersApprove: () => void,
   getWorkersPending: () => void;
+  getWorkersByEmail: () => void;
   getWorkers: () => void;
 };
 
-export default function Table({ error, workers, getWorkersPending, getWorkers, setIsStatus }: Props) {
+export default function Table({ error, workers, email, setEmail, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove,  getWorkers, setIsStatus }: Props) {
 
 
   return (
@@ -28,10 +33,9 @@ export default function Table({ error, workers, getWorkersPending, getWorkers, s
       ) : (
         <>
         <div className = "flex">
-          <SearchBar />
-          <NavSort getWorkers = {getWorkers} getWorkersPending = {getWorkersPending} setIsStatus = {setIsStatus}/>
+          <SearchBar email = {email} setEmail = {setEmail} getWorkersByEmail = {getWorkersByEmail}/>
+          <NavSort getWorkers = {getWorkers} getWorkersPending = {getWorkersPending} setIsStatus = {setIsStatus} getWorkersRejected = {getWorkersRejected} getWorkersApprove = {getWorkersApprove} />
         </div>
-
           <Theader />
           <Tbody workers={workers} />
         </>

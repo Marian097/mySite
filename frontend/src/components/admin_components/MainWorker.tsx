@@ -14,13 +14,18 @@ type Props = {
    error:Error,
    workers:Worker[],
    admin: Admin[],
+   email: string,
+   setEmail: (e: string) => void,
    setIsStatus: (status: string) => void,
+   getWorkersRejected: () => void,  
+   getWorkersApprove: () => void,
    getWorkersPending: () => void,
+   getWorkersByEmail: () => void,
    getWorkers: () => void;
 }
 
 
-export default function MainWorker({error, workers, admin, getWorkers, getWorkersPending, setIsStatus}: Props) {
+export default function MainWorker({error, workers, admin, email, setEmail, getWorkers, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove, setIsStatus}: Props) {
 
   useEffect(() => {
     getWorkers()
@@ -53,7 +58,7 @@ export default function MainWorker({error, workers, admin, getWorkers, getWorker
           <div className="pb-5">
             <h2 className="font-nunito font-bold">Total Worker</h2>
           </div>
-          <Table error = {error} workers = {workers} getWorkersPending = {getWorkersPending} getWorkers = {getWorkers} setIsStatus = {setIsStatus}/>
+          <Table error = {error} workers = {workers} email = {email} setEmail = {setEmail} getWorkersPending = {getWorkersPending} getWorkers = {getWorkers} setIsStatus = {setIsStatus} getWorkersRejected = {getWorkersRejected} getWorkersApprove = {getWorkersApprove} getWorkersByEmail = {getWorkersByEmail}/>
         </section>
       </div>
     </div>

@@ -10,3 +10,12 @@ export const adminProfileSchema = yup.object({
     .required("Va rog adaugati buletinul"),
   number_contract: yup.string().required("Introduceti numarul de contract")
 });
+
+
+
+export const verifiedEmail = yup.object({
+    email: yup
+      .string()
+      .email("Email invalid")
+      .required("Emailul este obligatoriu"),
+})
