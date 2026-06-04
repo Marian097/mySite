@@ -2,7 +2,7 @@ import { pool } from "../../../db.js";
 
 import { adminProfileSchema, verifiedEmail } from "./admin.validation.js"
 
-import * as yup from "yup";
+import * as Yup from "yup";
 
 
 
@@ -546,12 +546,17 @@ export async function getProfileByEmail(req, res, next)
 {
   const db = await pool.connect();
 
-  const { email } = req.body;
+
+  const {email} = req.body
+
+
   try {
     await verifiedEmail.validate(req.body)
 
-    const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE u.email", [email]);
+    const results = await db.query("SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id WHERE u.email = $1", [email]);
 
+    console.log(results.rows)
+    
     if (results.rows.length === 0)
     {
       return res.status(404).json({message: "Nici un rezultat"})

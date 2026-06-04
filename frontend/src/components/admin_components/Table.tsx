@@ -5,6 +5,7 @@ import type { Worker } from "../../types/WorkersTypes/Worker";
 import type { Error } from "../../types/WorkersTypes/Error";
 import SearchBar from "../admin_components/SeachBar";
 import NavSort from "./NavSort";
+import type {FormEvent} from  "react";
 
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
   getWorkersRejected: () => void, 
   getWorkersApprove: () => void,
   getWorkersPending: () => void;
-  getWorkersByEmail: () => void;
+  getWorkersByEmail: (e: FormEvent<HTMLFormElement>) => void;
   getWorkers: () => void;
 };
 

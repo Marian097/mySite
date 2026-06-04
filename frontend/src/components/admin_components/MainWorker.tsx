@@ -8,6 +8,7 @@ import type {Worker} from "../../types/WorkersTypes/Worker"
 import type {Error} from "../../types/WorkersTypes/Error"
 import {useEffect} from "react";
 import type {Admin} from "../../types/AuthTypes/Admin"
+import type {FormEvent} from  "react";
 
 
 type Props = {
@@ -20,7 +21,7 @@ type Props = {
    getWorkersRejected: () => void,  
    getWorkersApprove: () => void,
    getWorkersPending: () => void,
-   getWorkersByEmail: () => void,
+   getWorkersByEmail: (e: FormEvent<HTMLFormElement>) => void,
    getWorkers: () => void;
 }
 

@@ -1,13 +1,18 @@
+import type {FormEvent} from  "react";
+
 type Props = {
   email: string;
   setEmail: (e: string) => void;
-  getWorkersByEmail: () => void;
+  getWorkersByEmail: (e: FormEvent<HTMLFormElement>) => void;
 };
 
 export default function SeachBar({ email, setEmail, getWorkersByEmail }: Props) {
   return (
     <div>
-      <form className="col-span-12 md:col-span-6">
+      <form className="col-span-12 md:col-span-6" onSubmit={(e) => {
+          e.preventDefault();
+          getWorkersByEmail(e);
+        }}>
         <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">
           {" "}
           Search{" "}
@@ -42,7 +47,6 @@ export default function SeachBar({ email, setEmail, getWorkersByEmail }: Props) 
             </div>
             <div>
               <button
-                onClick = {() => getWorkersByEmail()}
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-500 px-3 text-sm/6 font-semibold font-nunito text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >

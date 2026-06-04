@@ -4,6 +4,7 @@ import MainWorker from "../components/admin_components/MainWorker";
 import type {Worker} from "../types/WorkersTypes/Worker"
 import type {Error} from "../types/WorkersTypes/Error"
 import type {Admin} from "../types/AuthTypes/Admin"
+import type {FormEvent} from  "react";
 
 type Props = {
    error:Error,
@@ -15,7 +16,7 @@ type Props = {
    getWorkersPending: () => void,
    getWorkersRejected: () => void,
    getWorkersApprove: () => void,
-   getWorkersByEmail: () => void,
+   getWorkersByEmail: (e: FormEvent<HTMLFormElement>) => void,
    getWorkers: () => void;  
 }
 export default function AdminPanel({error, workers, admin, email, setEmail, getWorkersPending, getWorkersRejected, getWorkersApprove, getWorkersByEmail, getWorkers, setIsStatus}: Props) {

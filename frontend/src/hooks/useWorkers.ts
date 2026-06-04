@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import type { Worker } from "../types/WorkersTypes/Worker";
 import type { Error } from "../types/WorkersTypes/Error";
+
+
 
 export default function useWorkers() {
   const [error, setError] = useState<Error>({
@@ -36,7 +38,6 @@ export default function useWorkers() {
 
   async function getWorkersPending() {
     try {
-        
       setWorkers([]);
       const token = localStorage.getItem("token");
 
@@ -89,28 +90,35 @@ export default function useWorkers() {
   }
 
 
-  async function getWorkersByEmail(){
-    
+  async function getWorkersByEmail(e:FormEvent<HTMLFormElement>){
 
+    e.preventDefault()
+
+    
     try{
       setWorkers([])
-
       const token = localStorage.getItem("token");
       
       if (!token) throw new Error ("Token lipsa");
 
+
       const response = await fetch ("http://localhost:4000/api/users/worker/by_email", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({email: email.trim()})
       })
 
+      
+
       if (!response.ok) throw new Error ("Nici un rezultat")
+      
+  
       const data = await response.json()
 
-      setWorkers([data])
+      setWorkers(data)
     }
     catch (err){
       if (err instanceof Error) setError({error: err.message})
