@@ -18,11 +18,12 @@ type Props = {
   getWorkersRejected: () => void, 
   getWorkersApprove: () => void,
   getWorkersPending: () => void;
+  getWorkerByCI_expiring: () => void;
   getWorkersByEmail: (e: FormEvent<HTMLFormElement>) => void;
   getWorkers: () => void;
 };
 
-export default function Table({ error, workers, email, setEmail, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove,  getWorkers, setIsStatus }: Props) {
+export default function Table({ error, workers, email, setEmail, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove,  getWorkers, getWorkerByCI_expiring, setIsStatus }: Props) {
 
 
   return (
@@ -35,7 +36,7 @@ export default function Table({ error, workers, email, setEmail, getWorkersPendi
         <>
         <div className = "flex">
           <SearchBar email = {email} setEmail = {setEmail} getWorkersByEmail = {getWorkersByEmail}/>
-          <NavSort getWorkers = {getWorkers} getWorkersPending = {getWorkersPending} setIsStatus = {setIsStatus} getWorkersRejected = {getWorkersRejected} getWorkersApprove = {getWorkersApprove} />
+          <NavSort getWorkers = {getWorkers} getWorkersPending = {getWorkersPending} setIsStatus = {setIsStatus} getWorkersRejected = {getWorkersRejected} getWorkersApprove = {getWorkersApprove} getWorkerByCI_expiring = {getWorkerByCI_expiring} />
         </div>
           <Theader />
           <Tbody workers={workers} />

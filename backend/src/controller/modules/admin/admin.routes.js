@@ -18,6 +18,9 @@ import {
   deleteUser,
   getAdminProfile,
   getProfileByEmail,
+  filterByExpiringCI,
+  totalWorker,
+  calculateProcentTotalWorkers,
 } from "./admin.controller.js";
 
 export const adminRouter = Router();
@@ -38,13 +41,35 @@ adminRouter.get(
   getAdminProfile,
 );
 
+adminRouter.get(
+  "/admin/profile/card/total_workers",
+  verifiedToken,
+  verifyAdmin,
+  totalWorker,
+);
+
+adminRouter.post(
+  "/admin/profile/card/total_workers",
+  verifiedToken,
+  verifyAdmin,
+  calculateProcentTotalWorkers,
+);
+
 
 adminRouter.post(
   "/worker/by_email",
   verifiedToken,
   verifyAdmin,
   getProfileByEmail,
+);
+
+adminRouter.get(
+  "/worker/by_expiring/ci",
+  verifiedToken,
+  verifyAdmin,
+  filterByExpiringCI,
 ); 
+
 
 adminRouter.get(
   "/worker/pending",

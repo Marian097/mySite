@@ -26,10 +26,15 @@ function App() {
             getWorkersRejected = {workers.getWorkersRejected}
             getWorkersApprove = {workers.getWorkersApproved}
             getWorkersByEmail = {workers.getWorkersByEmail}
+            getWorkerByCI_expiring = {workers.getWorkerByCI_expiring}
             email = {workers.email}
             setEmail = {workers.setEmail}
             setIsStatus = {workers.setIsStatus}
             admin = {render.admin}
+            countWorkers = {workers.countWorkers}
+            totalWorkers = {workers.totalWorkers ?? 0}
+            procent = {workers.procent ?? 0}
+            calculateProcent = {workers.calculateProcent}
           />
         </>
       ) : (

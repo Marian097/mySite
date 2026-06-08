@@ -35,7 +35,7 @@ export default function TBody({ workers}: Props) {
             </span>
           </div>
           <div>
-            <span>{worker.ci_expiration}</span>
+            <span>{new Date(worker.ci_expiration).toLocaleDateString("ro-RO")}</span>
           </div>
           <div>
             {worker.status === "Success" ? (

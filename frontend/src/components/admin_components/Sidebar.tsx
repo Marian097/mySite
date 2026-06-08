@@ -8,7 +8,7 @@ export default function Sidebar() {
         <img className="h-20 w-auto" src={DashStack} alt="" />
       </div>
 
-      <div className="flex flex-col py-5 gap-y-2 md:text-sm text-xs 2xl:text-2xl items-center">
+      <div className="flex flex-col py-5 gap-y-4 text-xs font-bold font-nunito items-center ">
         <div>
           <span>Dashboard</span>
         </div>

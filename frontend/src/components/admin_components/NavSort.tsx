@@ -5,11 +5,12 @@ type Props = {
    getWorkers: () => void;
    getWorkersPending: () => void;
    getWorkersRejected: () => void;
-   getWorkersApprove: () => void; 
+   getWorkersApprove: () => void;
+   getWorkerByCI_expiring: () => void;
    setIsStatus: (status: string) => void;
 }
 
-export default function NavSort({getWorkers, getWorkersPending, getWorkersRejected, getWorkersApprove, setIsStatus}: Props) {
+export default function NavSort({getWorkers, getWorkersPending, getWorkersRejected, getWorkersApprove, setIsStatus, getWorkerByCI_expiring}: Props) {
   return (
     <div>
       <div className="tags mt-5 md:mt-0 col-span-12 md:col-span-6 md:justify-self-end">
@@ -17,7 +18,7 @@ export default function NavSort({getWorkers, getWorkersPending, getWorkersReject
           <li onClick = {() => getWorkers()} onChange = {() => setIsStatus("all")} className="capitalize text-xs font-nunito font-semibold hover:bg-indigo-600 hover:text-white  py-0.5 px-5 rounded-md cursor-pointer active">
             All
           </li>
-          <li className="capitalize text-xs font-nunito font-semibold hover:bg-indigo-600 hover:text-white  py-0.5 px-5 rounded-md cursor-pointer">
+          <li onClick = {() => getWorkerByCI_expiring()} className="capitalize text-xs font-nunito font-semibold hover:bg-indigo-600 hover:text-white  py-0.5 px-5 rounded-md cursor-pointer">
             CI Expiring
           </li>
           <li onClick ={() => getWorkersApprove()}  className="capitalize text-xs font-nunito font-semibold hover:bg-indigo-600 hover:text-white  py-0.5 px-5 rounded-md cursor-pointer">

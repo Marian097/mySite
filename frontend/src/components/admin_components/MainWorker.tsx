@@ -12,21 +12,26 @@ import type {FormEvent} from  "react";
 
 
 type Props = {
-   error:Error,
-   workers:Worker[],
-   admin: Admin[],
-   email: string,
+   error:Error;
+   workers:Worker[];
+   admin: Admin[];
+   email: string;
+   procent: number; 
+   totalWorkers: number; 
+   countWorkers: () => void;
+   calculateProcent: () => void;
    setEmail: (e: string) => void,
    setIsStatus: (status: string) => void,
    getWorkersRejected: () => void,  
    getWorkersApprove: () => void,
    getWorkersPending: () => void,
    getWorkersByEmail: (e: FormEvent<HTMLFormElement>) => void,
+   getWorkerByCI_expiring: () => void,
    getWorkers: () => void;
 }
 
 
-export default function MainWorker({error, workers, admin, email, setEmail, getWorkers, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove, setIsStatus}: Props) {
+export default function MainWorker({error, workers, admin, email, procent, totalWorkers, calculateProcent, countWorkers, setEmail, getWorkers, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove, getWorkerByCI_expiring, setIsStatus}: Props) {
 
   useEffect(() => {
     getWorkers()
@@ -43,7 +48,8 @@ export default function MainWorker({error, workers, admin, email, setEmail, getW
       <div className="min-w-full justify-items-center">
         <section className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 w-48 sm:w-md md:w-2xl 2xl:w-4xl gap-5 my-5 py-5">
           <div className="bg-white rounded-md">
-            <CardWorker/>
+            <CardWorker procent = {procent} totalWorkers = {totalWorkers} calculateProcent = {calculateProcent} countWorkers = {countWorkers}/>
+          
           </div>
           <div className="bg-white rounded-md">
             <CardWorkerRejected />
@@ -59,7 +65,7 @@ export default function MainWorker({error, workers, admin, email, setEmail, getW
           <div className="pb-5">
             <h2 className="font-nunito font-bold">Total Worker</h2>
           </div>
-          <Table error = {error} workers = {workers} email = {email} setEmail = {setEmail} getWorkersPending = {getWorkersPending} getWorkers = {getWorkers} setIsStatus = {setIsStatus} getWorkersRejected = {getWorkersRejected} getWorkersApprove = {getWorkersApprove} getWorkersByEmail = {getWorkersByEmail}/>
+          <Table error = {error} workers = {workers} email = {email} setEmail = {setEmail} getWorkersPending = {getWorkersPending} getWorkers = {getWorkers} setIsStatus = {setIsStatus} getWorkersRejected = {getWorkersRejected} getWorkersApprove = {getWorkersApprove} getWorkersByEmail = {getWorkersByEmail} getWorkerByCI_expiring = {getWorkerByCI_expiring}/>
         </section>
       </div>
     </div>
