@@ -21,6 +21,12 @@ import {
   filterByExpiringCI,
   totalWorker,
   calculateProcentTotalWorkers,
+  totalWorkerApproved,
+  calculateProcentWorkersApproved,
+  totalWorkerRejected,
+  calculateProcentWorkersRejected,
+  totalWorkerPending,
+  calculateProcentWorkersPending,
 } from "./admin.controller.js";
 
 export const adminRouter = Router();
@@ -41,6 +47,7 @@ adminRouter.get(
   getAdminProfile,
 );
 
+//Card total worker
 adminRouter.get(
   "/admin/profile/card/total_workers",
   verifiedToken,
@@ -54,7 +61,55 @@ adminRouter.post(
   verifyAdmin,
   calculateProcentTotalWorkers,
 );
+//
 
+// Card worker approved
+adminRouter.get(
+  "/admin/profile/card/total_workers/approved",
+  verifiedToken,
+  verifyAdmin,
+  totalWorkerApproved,
+);
+
+adminRouter.post(
+  "/admin/profile/card/total_workers/approved",
+  verifiedToken,
+  verifyAdmin,
+  calculateProcentWorkersApproved,
+);
+//////////////////////////////////////////////////
+
+//Card worker rejected
+adminRouter.get(
+  "/admin/profile/card/total_workers/rejected",
+  verifiedToken,
+  verifyAdmin,
+  totalWorkerRejected,
+);
+
+adminRouter.post(
+  "/admin/profile/card/total_workers/rejected",
+  verifiedToken,
+  verifyAdmin,
+  calculateProcentWorkersRejected,
+);
+//////////////////////////////////////////////////
+
+//Card worker pending
+adminRouter.get(
+  "/admin/profile/card/total_workers/pending",
+  verifiedToken,
+  verifyAdmin,
+  totalWorkerPending,
+);
+
+adminRouter.post(
+  "/admin/profile/card/total_workers/pending",
+  verifiedToken,
+  verifyAdmin,
+  calculateProcentWorkersPending,
+);
+////////////////////////////////////////////////////////////////
 
 adminRouter.post(
   "/worker/by_email",

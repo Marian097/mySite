@@ -17,7 +17,19 @@ type Props = {
    admin: Admin[];
    email: string;
    procent: number; 
-   totalWorkers: number; 
+   totalWorkers: number;
+   procentApproved: number;
+   approvedWorkers: number;
+   rejectedWorkers: number;
+   procentRejected: number;
+   pendingdWorkers: number;
+   procentPending: number;
+   countWorkersPending: () => void;
+   calculateProcentPending: () => void;
+   countWorkersRejected: () => void;
+   calculateProcentRejected: () => void;
+   calculateProcentApproved: () => void;
+   countWorkersApproved: () => void;
    countWorkers: () => void;
    calculateProcent: () => void;
    setEmail: (e: string) => void,
@@ -31,7 +43,7 @@ type Props = {
 }
 
 
-export default function MainWorker({error, workers, admin, email, procent, totalWorkers, calculateProcent, countWorkers, setEmail, getWorkers, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove, getWorkerByCI_expiring, setIsStatus}: Props) {
+export default function MainWorker({error, workers, admin, email, procent, totalWorkers, procentApproved, approvedWorkers, rejectedWorkers, procentRejected, pendingdWorkers, procentPending, countWorkersPending, calculateProcentPending, countWorkersRejected, calculateProcentRejected, calculateProcentApproved, countWorkersApproved,   calculateProcent, countWorkers, setEmail, getWorkers, getWorkersPending, getWorkersRejected, getWorkersByEmail, getWorkersApprove, getWorkerByCI_expiring, setIsStatus}: Props) {
 
   useEffect(() => {
     getWorkers()
@@ -52,13 +64,13 @@ export default function MainWorker({error, workers, admin, email, procent, total
           
           </div>
           <div className="bg-white rounded-md">
-            <CardWorkerRejected />
+            <CardWorkerRejected rejectedWorkers = {rejectedWorkers} procentRejected = {procentRejected } countWorkersRejected = {countWorkersRejected} calculateProcentRejected = {calculateProcentRejected}/>
           </div>
           <div className="bg-white rounded-md">
-            <CardWorkerApproved />
+            <CardWorkerApproved procentApproved = {procentApproved} approvedWorkers = {approvedWorkers} calculateProcentApproved = {calculateProcentApproved} countWorkersApproved = {countWorkersApproved} />
           </div>
           <div className="bg-white rounded-md">
-            <CardWorkerPending />
+            <CardWorkerPending pendingdWorkers = {pendingdWorkers } procentPending = {procentPending} countWorkersPending = {countWorkersPending} calculateProcentPending = {calculateProcentPending}/>
           </div>
         </section>
         <section className="text-sm px-10 rounded-xl w-full sm:w-3xl md:w-3xl 2xl:w-7xl my-10 py-5 bg-white">

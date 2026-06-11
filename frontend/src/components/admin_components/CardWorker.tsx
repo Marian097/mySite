@@ -1,7 +1,7 @@
 import users from "../../assets/image/Total_users.png";
 import { useEffect } from "react";
-import trend_up from "../../assets/image/trend-up.svg"
-import trend_down from "../../assets/image/trend-down.svg"
+import trend_up from "../../assets/image/trend-up.svg";
+import trend_down from "../../assets/image/trend-down.svg";
 
 type Props = {
   procent: number;
@@ -16,13 +16,20 @@ export default function CardUser({
   countWorkers,
   calculateProcent,
 }: Props) {
+  
   useEffect(() => {
     countWorkers();
+
+    const interval = setInterval(() => {
+      countWorkers();
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
+  
   useEffect(() => {
     calculateProcent();
-  }, [procent]);
+  }, [totalWorkers]);
 
   return (
     <div className=" rounded-md h-full">
@@ -44,20 +51,25 @@ export default function CardUser({
         </div>
         <div>
           {procent >= 0 ? (
-            <><div className = "flex font-bold font-nunito text-xs ">
-              <span><img src={trend_up} alt="" className = "h-4" /></span>
-              <span className="text-[#00B894]">{procent}%</span>
-              <span className = "ml-1 font-nunito font-semibold text-xs">Up from yesterday</span>
-    
-            </div>
-              
+            <>
+              <div className="flex font-bold font-nunito text-xs ">
+                <span>
+                  <img src={trend_up} alt="" className="h-4" />
+                </span>
+                <span className="text-[#00B894]">+{procent}%</span>
+                <span className="ml-1 font-nunito font-semibold text-xs">
+                  Up from yesterday
+                </span>
+              </div>
             </>
           ) : (
             <>
-            <div>
-              <span className="text-red-700">{procent}%</span>
-              <span><img src={trend_down} alt="" /></span>
-            </div>
+              <div>
+                <span className="text-red-700">{procent}%</span>
+                <span>
+                  <img src={trend_down} alt="" />
+                </span>
+              </div>
             </>
           )}
         </div>

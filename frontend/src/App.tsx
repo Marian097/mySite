@@ -35,6 +35,18 @@ function App() {
             totalWorkers = {workers.totalWorkers ?? 0}
             procent = {workers.procent ?? 0}
             calculateProcent = {workers.calculateProcent}
+            procentApproved = {workers.procentApproved ?? 0}
+            approvedWorkers = {workers.approvedWorkers ?? 0}
+            calculateProcentApproved = {workers.calculateProcentApproved} 
+            countWorkersApproved = {workers.countWorkersApproved}
+            rejectedWorkers = {workers.rejectedWorkers ?? 0}
+            procentRejected = {workers.procentRejected ?? 0}
+            countWorkersRejected = {workers.countWorkersRejected}
+            calculateProcentRejected = {workers.calculateProcentRejected}
+            pendingdWorkers = {workers.pendingdWorkers ?? 0}
+            procentPending = {workers.procentPending ?? 0}
+            countWorkersPending = {workers.countWorkersPending}
+            calculateProcentPending = {workers.calculateProcentPending}
           />
         </>
       ) : (

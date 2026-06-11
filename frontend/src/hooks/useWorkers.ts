@@ -10,6 +10,10 @@ export default function useWorkers() {
   const [isStatus, setIsStatus] = useState<string>("all");
   const [email, setEmail] = useState<string>("");
   const [totalWorkers, setTotalWorkers] = useState<number>();
+  const [approvedWorkers, setApprovedWorkers] = useState<number>();
+  const [procentApproved, setProcentApproved] = useState<number>();
+  const [rejectedWorkers, setRejectedWorkers] = useState<number>();
+  const [procentRejected, setProcentRejected] = useState<number>();
   const [procent, setProcent] = useState<number>();
 
   async function countWorkers() {
@@ -59,6 +63,111 @@ export default function useWorkers() {
       if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
       const data = await response.json();
       setProcent(Number(data));
+    } catch (err) {
+      if (err instanceof Error) setError({ error: err.message + "calculate" });
+    }
+  }
+
+  async function countWorkersApproved() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token lipsa");
+
+      const response = await fetch (
+        "http://localhost:4000/api/users/admin/profile/card/total_workers/approved",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          
+        },
+      );
+
+      if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
+      const data = await response.json();
+      setApprovedWorkers(Number(data[0].count));
+      console.log(data[0])
+      localStorage.setItem("initialValueApproved", String(data[0].count));
+    } catch (err) {
+      if (err instanceof Error) setError({ error: err.message});
+    }
+  }
+
+  async function calculateProcentApproved() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token lipsa");
+
+      const initialValueApproved = localStorage.getItem("initialValueApproved");
+      console.log( initialValueApproved)
+      const response = await fetch(
+        "http://localhost:4000/api/users/admin/profile/card/total_workers/approved",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ initialValueApproved }),
+        },
+      );
+
+      if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
+      const data = await response.json();
+      setProcentApproved(Number(data));
+    } catch (err) {
+      if (err instanceof Error) setError({ error: err.message + "calculate" });
+    }
+  }
+
+   async function countWorkersRejected() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token lipsa");
+
+      const response = await fetch (
+        "http://localhost:4000/api/users/admin/profile/card/total_workers/rejected",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          
+        },
+      );
+
+      if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
+      const data = await response.json();
+      setRejectedWorkers(Number(data[0].count));
+      localStorage.setItem("initialValueRejected", String(data[0].count));
+    } catch (err) {
+      if (err instanceof Error) setError({ error: err.message});
+    }
+  }
+
+  async function calculateProcentRejected() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token lipsa");
+
+      const initialValueRejected = localStorage.getItem("initialValueRejected");
+
+      const response = await fetch(
+        "http://localhost:4000/api/users/admin/profile/card/total_workers/rejected",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ initialValueRejected }),
+        },
+      );
+
+      if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
+      const data = await response.json();
+      setProcentRejected(Number(data));
     } catch (err) {
       if (err instanceof Error) setError({ error: err.message + "calculate" });
     }
@@ -229,6 +338,14 @@ export default function useWorkers() {
     email,
     totalWorkers,
     procent,
+    procentApproved,
+    approvedWorkers,
+    rejectedWorkers,
+    procentRejected,
+    countWorkersRejected,
+    calculateProcentRejected,
+    calculateProcentApproved,
+    countWorkersApproved,
     countWorkers,
     calculateProcent,
     setEmail,

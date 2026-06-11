@@ -590,3 +590,158 @@ export async function calculateProcentTotalWorkers(req, res, next) {
     db.release();
   }
 }
+
+
+export async function totalWorkerApproved(req, res, next) {
+  const db = await pool.connect();
+
+  try {
+    const approvedWorkers = await db.query("SELECT COUNT(*) FROM user_documents WHERE verification_status = $1", ["Success"]);
+    if (approvedWorkers.rows.length === 0)
+      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
+
+    return res.status(200).json(approvedWorkers.rows);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  } finally {
+    db.release();
+  }
+}
+
+export async function calculateProcentWorkersApproved(req, res, next) {
+  const db = await pool.connect();
+
+  const { initialValueApproved } = req.body;
+
+  console.log(initialValueApproved)
+
+  try {
+    const initialApproved = Number(initialValueApproved);
+
+    if (!initialApproved || initialApproved <= 0) {
+      return res.status(400).json({
+        message: "Nu se poate calcula procentul",
+      });
+    }
+
+    const currentValue = await db.query("SELECT COUNT(*) FROM user_documents");
+    
+    if (currentValue.rows.length === 0)
+      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
+
+    const current = Number(currentValue.rows[0].count);
+
+    const procent = currentValue > 0 ? (initialApproved / currentValue) * 100 : 0;
+
+    if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
+
+
+    return res.status(200).json(procent);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  } finally {
+    db.release();
+  }
+}
+
+export async function totalWorkerRejected(req, res, next) {
+  const db = await pool.connect();
+
+  try {
+    const rejectedWorkers = await db.query("SELECT COUNT(*) FROM user_documents WHERE verification_status = $1", ["Rejected"]);
+    if (rejectedWorkers.rows.length === 0)
+      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
+
+    return res.status(200).json(rejectedWorkers.rows);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  } finally {
+    db.release();
+  }
+}
+
+export async function calculateProcentWorkersRejected(req, res, next) {
+  const db = await pool.connect();
+
+  const { initialValueRejected } = req.body;
+
+  try {
+    const initialRejected = Number(initialValueRejected);
+
+    if (!initialValueRejected || initialValueRejected <= 0) {
+      return res.status(400).json({
+        message: "Nu se poate calcula procentul",
+      });
+    }
+
+    const currentValue = await db.query("SELECT COUNT(*) FROM user_documents");
+    
+    if (currentValue.rows.length === 0)
+      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
+
+    const current = Number(currentValue.rows[0].count);
+
+    const procent = currentValue > 0 ? (initialRejected / currentValue) * 100 : 0;
+
+    if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
+
+
+    return res.status(200).json(procent);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  } finally {
+    db.release();
+  }
+}
+
+
+export async function totalWorkerPending(req, res, next) {
+  const db = await pool.connect();
+
+  try {
+    const pendingWorkers = await db.query("SELECT COUNT(*) FROM user_documents WHERE verification_status = $1", ["Pending"]);
+    if (pendingWorkers.rows.length === 0)
+      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
+
+    return res.status(200).json(rejectedWorkers.rows);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  } finally {
+    db.release();
+  }
+}
+
+export async function calculateProcentWorkersPending(req, res, next) {
+  const db = await pool.connect();
+
+  const { initialValuePending } = req.body;
+
+  try {
+    const initialPending = Number(initialValuePending);
+
+    if (!initialPending || initialPending <= 0) {
+      return res.status(400).json({
+        message: "Nu se poate calcula procentul",
+      });
+    }
+
+    const currentValue = await db.query("SELECT COUNT(*) FROM user_documents");
+    
+    if (currentValue.rows.length === 0)
+      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
+
+    const current = Number(currentValue.rows[0].count);
+
+    const procent = currentValue > 0 ? (initialPending / currentValue) * 100 : 0;
+
+    if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
+
+
+    return res.status(200).json(procent);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  } finally {
+    db.release();
+  }
+}
+
