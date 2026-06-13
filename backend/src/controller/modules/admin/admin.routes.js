@@ -25,8 +25,9 @@ import {
   calculateProcentWorkersApproved,
   totalWorkerRejected,
   calculateProcentWorkersRejected,
-  totalWorkerPending,
+  totalWorkersPending,
   calculateProcentWorkersPending,
+  getStatistic,
 } from "./admin.controller.js";
 
 export const adminRouter = Router();
@@ -100,7 +101,7 @@ adminRouter.get(
   "/admin/profile/card/total_workers/pending",
   verifiedToken,
   verifyAdmin,
-  totalWorkerPending,
+  totalWorkersPending,
 );
 
 adminRouter.post(
@@ -147,8 +148,19 @@ adminRouter.get(
   getWorker,
 );
 
+// Get statistic worker
+adminRouter.get(
+  "/worker/statistic",
+  verifiedToken,
+  verifyAdmin,
+  getStatistic,
+);
+///////////////////
+
 adminRouter.get("/worker/approved", verifiedToken, verifyAdmin, getWorkerApproved);
 
+
+//Accept users
 adminRouter.put(
   "/documents/accept",
   verifiedToken,

@@ -14,8 +14,44 @@ export default function useWorkers() {
   const [procentApproved, setProcentApproved] = useState<number>();
   const [rejectedWorkers, setRejectedWorkers] = useState<number>();
   const [procentRejected, setProcentRejected] = useState<number>();
+  const [pendingdWorkers, setPendingWorkers] = useState<number>();
+  const [procentPending, setProcentPending] = useState<number>();
   const [procent, setProcent] = useState<number>();
+  const [isAccept, setIsAccept] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
+  
+  async function handleAcceptUser(id: string){
+    try{
+
+      const token = localStorage.getItem("token");
+
+      if (!token) throw new Error ("Token lipsa")
+      if (!id) throw new Error ("Nu puteti face aceasta actiune");
+
+      const response = await fetch("http://localhost:4000/api/users/documents/accept", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({id})
+      })
+
+      if (!response.ok) throw new Error ("Ceva nu a mers cum trebuie")
+
+      const res = await response.json();
+      
+      setIsAccept(res);
+
+    }
+    catch(err){
+      if (err instanceof Error) setError({error: err.message})
+    }
+  }
+  
+  
+  
   async function countWorkers() {
     try {
       const token = localStorage.getItem("token");
@@ -87,7 +123,6 @@ export default function useWorkers() {
       if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
       const data = await response.json();
       setApprovedWorkers(Number(data[0].count));
-      console.log(data[0])
       localStorage.setItem("initialValueApproved", String(data[0].count));
     } catch (err) {
       if (err instanceof Error) setError({ error: err.message});
@@ -100,7 +135,7 @@ export default function useWorkers() {
       if (!token) throw new Error("Token lipsa");
 
       const initialValueApproved = localStorage.getItem("initialValueApproved");
-      console.log( initialValueApproved)
+
       const response = await fetch(
         "http://localhost:4000/api/users/admin/profile/card/total_workers/approved",
         {
@@ -115,6 +150,7 @@ export default function useWorkers() {
 
       if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
       const data = await response.json();
+    
       setProcentApproved(Number(data));
     } catch (err) {
       if (err instanceof Error) setError({ error: err.message + "calculate" });
@@ -173,6 +209,62 @@ export default function useWorkers() {
     }
   }
 
+
+  async function countWorkersPending() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token lipsa");
+
+      const response = await fetch (
+        "http://localhost:4000/api/users/admin/profile/card/total_workers/pending",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          
+        },
+      );
+
+      if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
+      const data = await response.json();
+      setPendingWorkers(Number(data[0].count));
+      localStorage.setItem("initialValuePending", String(data[0].count));
+    } catch (err) {
+      if (err instanceof Error) setError({ error: err.message});
+    }
+  }
+
+  async function calculateProcentPending() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token lipsa");
+
+      const initialValuePending = localStorage.getItem("initialValuePending");
+      console.log(initialValuePending)
+
+      if (Number(initialValuePending) <= 0) return
+
+      const response = await fetch(
+        "http://localhost:4000/api/users/admin/profile/card/total_workers/pending",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ initialValuePending }),
+        },
+      );
+
+      if (!response.ok) throw new Error("Ceva nu a mers cum trebuie");
+      const data = await response.json();
+      setProcentPending(Number(data));
+    } catch (err) {
+      if (err instanceof Error) setError({ error: err.message + "calculate" });
+    }
+  }
+
   async function getWorkers() {
     try {
       const token = localStorage.getItem("token");
@@ -212,9 +304,10 @@ export default function useWorkers() {
         },
       );
 
-      if (!response.ok) throw new Error("Nici un rezultat");
+      if (!response.ok) return;
 
       const data = await response.json();
+      console.log("Sunt in getPending " + data)
       setWorkers(data);
     } catch (err) {
       if (err instanceof Error) {
@@ -299,7 +392,7 @@ export default function useWorkers() {
       if (!response.ok) throw new Error("Nici un rezultat");
 
       const data = await response.json();
-
+      
       setWorkers(data);
     } catch (err) {
       if (err instanceof Error) setError({ error: err.message });
@@ -342,6 +435,12 @@ export default function useWorkers() {
     approvedWorkers,
     rejectedWorkers,
     procentRejected,
+    pendingdWorkers,
+    procentPending,
+    isAccept,
+    handleAcceptUser, 
+    countWorkersPending,
+    calculateProcentPending,
     countWorkersRejected,
     calculateProcentRejected,
     calculateProcentApproved,

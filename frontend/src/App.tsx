@@ -1,5 +1,6 @@
 import Sing_up from "./page/Sing_up";
 import useAuthForm from "./hooks/useAuthForm.ts";
+import useCharts from "./hooks/useCharts.ts"
 import Header from "./components/Header.tsx";
 import AdminPanel from "./page/AdminPanel.tsx";
 import hooksWorker from "./hooks/useWorkers.ts";
@@ -8,6 +9,7 @@ import hooksWorker from "./hooks/useWorkers.ts";
 function App() {
   const render = useAuthForm();
   const workers = hooksWorker();
+  const charts = useCharts();
   return (
     <>
       <Header
@@ -47,6 +49,11 @@ function App() {
             procentPending = {workers.procentPending ?? 0}
             countWorkersPending = {workers.countWorkersPending}
             calculateProcentPending = {workers.calculateProcentPending}
+            data = {charts.data}
+            errCharts = {charts.error}
+            getStats = {charts.getStats}
+            isAccept = {workers.isAccept}
+            handleAcceptUser = {workers.handleAcceptUser}
           />
         </>
       ) : (

@@ -1,14 +1,13 @@
 import type { Worker } from "../../types/WorkersTypes/Worker";
-
+import type { Error } from "../../types/WorkersTypes/Error";
 
 type Props = {
-  workers: Worker[]; 
+  workers: Worker[];
+  error: Error;
+  handleAcceptUser: (id: string) => void; 
 };
 
-export default function TBody({ workers}: Props) {
-
-
-
+export default function TBody({ workers, handleAcceptUser}: Props) {
   return (
     <div>
       {workers.map((worker) => (
@@ -35,20 +34,28 @@ export default function TBody({ workers}: Props) {
             </span>
           </div>
           <div>
-            <span>{new Date(worker.ci_expiration).toLocaleDateString("ro-RO")}</span>
+            <span>
+              {new Date(worker.ci_expiration).toLocaleDateString("ro-RO")}
+            </span>
           </div>
           <div>
             {worker.status === "Success" ? (
               <>
-                <span className = "text-green-600 font-nunito">{worker.status}</span>
+                <span className="text-green-600 font-nunito">
+                  {worker.status}
+                </span>
               </>
             ) : worker.status === "Rejected" ? (
               <>
-                <span className = "text-red-600 font-nunito">{worker.status}</span>
+                <span className="text-red-600 font-nunito">
+                  {worker.status}
+                </span>
               </>
             ) : worker.status === "Pending" ? (
               <>
-                <span className = "text-indigo-500 font-nunito">{worker.status}</span>
+                <span className="text-indigo-500 font-nunito">
+                  {worker.status}
+                </span>
               </>
             ) : (
               <></>
@@ -61,13 +68,18 @@ export default function TBody({ workers}: Props) {
               </button>
             </span>
             <span>
-              <button className="w-full justify-center rounded-md bg-green-600 text-xs font-semibold text-white hover:bg-green-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">
+              <button onClick = {() => handleAcceptUser(worker.id) } className="w-full justify-center rounded-md bg-green-600 text-xs font-semibold text-white hover:bg-green-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">
                 Approve
               </button>
             </span>
             <span>
               <button className="w-full justify-center rounded-md bg-indigo-500 text-xs font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                 Reject
+              </button>
+            </span>
+            <span>
+              <button className="w-full flex justify-center rounded-md bg-blue-500 text-xs font-semibold text-white hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                More
               </button>
             </span>
           </div>

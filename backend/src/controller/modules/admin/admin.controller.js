@@ -14,10 +14,7 @@ export async function getAdminProfile(req, res, next) {
       [id],
     );
 
-    if (results.rows.length === 0) {
-      return res.status(500).json({ message: "Neconectat" });
-    }
-
+  
     return res.status(200).json(results.rows);
   } catch (err) {
     return res.status(404).json({ message: err.message });
@@ -76,10 +73,6 @@ export async function getWorkerPending(req, res, next) {
       ["Pending"],
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
-
     return res.status(200).json(results.rows);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -97,10 +90,7 @@ export async function getWorkerRejected(req, res, next) {
       ["Rejected"],
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
-
+  
     return res.status(200).json(results.rows);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -117,9 +107,6 @@ export async function getWorker(req, res, next) {
       "SELECT ud.id, wp.full_name AS username, u.email, ud.ci_image_url AS CI, ud.ci_expiration_date AS CI_expiration, ud.verification_status AS status FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN user_documents ud ON u.id = ud.user_id",
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
 
     return res.status(200).json(results.rows);
   } catch (err) {
@@ -138,10 +125,7 @@ export async function getWorkerApproved(req, res, next) {
       ["Success"],
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
-
+   
     return res.status(200).json(results.rows);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -246,9 +230,6 @@ async function getProfiles(req, res, next) {
       "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id",
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
 
     return res.status(200).json(results.rows);
   } catch (err) {
@@ -266,10 +247,7 @@ export async function getProfilesUnverified(req, res, next) {
       [false, false],
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
-
+  
     return res.status(200).json(results.rows);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -286,9 +264,6 @@ export async function getProfilesVerified(req, res, next) {
       [true, true],
     );
 
-    if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
-    }
 
     return res.status(200).json(results.rows);
   } catch (err) {
@@ -508,10 +483,9 @@ export async function getProfileByEmail(req, res, next) {
       [email],
     );
 
-    console.log(results.rows);
 
     if (results.rows.length === 0) {
-      return res.status(404).json({ message: "Nici un rezultat" });
+      return res.status(200).json([]);
     }
 
     return res.status(200).json(results.rows);
@@ -583,8 +557,9 @@ export async function calculateProcentTotalWorkers(req, res, next) {
     if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
 
 
-    res.status(200).json(procent);
-  } catch (err) {
+   return res.status(200).json(procent);
+  } 
+  catch (err) {
     return res.status(500).json({ message: err.message });
   } finally {
     db.release();
@@ -665,6 +640,8 @@ export async function calculateProcentWorkersRejected(req, res, next) {
 
   const { initialValueRejected } = req.body;
 
+  console.log("Sunt in functia de calculate rejected" + initialValueRejected)
+
   try {
     const initialRejected = Number(initialValueRejected);
 
@@ -675,11 +652,15 @@ export async function calculateProcentWorkersRejected(req, res, next) {
     }
 
     const currentValue = await db.query("SELECT COUNT(*) FROM user_documents");
+
+    
     
     if (currentValue.rows.length === 0)
       return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
 
     const current = Number(currentValue.rows[0].count);
+
+    console.log("Count dupa modificare " + current)
 
     const procent = currentValue > 0 ? (initialRejected / currentValue) * 100 : 0;
 
@@ -695,7 +676,7 @@ export async function calculateProcentWorkersRejected(req, res, next) {
 }
 
 
-export async function totalWorkerPending(req, res, next) {
+export async function totalWorkersPending(req, res, next) {
   const db = await pool.connect();
 
   try {
@@ -703,7 +684,7 @@ export async function totalWorkerPending(req, res, next) {
     if (pendingWorkers.rows.length === 0)
       return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
 
-    return res.status(200).json(rejectedWorkers.rows);
+    return res.status(200).json(pendingWorkers.rows);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   } finally {
@@ -744,4 +725,27 @@ export async function calculateProcentWorkersPending(req, res, next) {
     db.release();
   }
 }
+
+
+export async function getStatistic(req, res, next)
+{
+  const db = await pool.connect();
+  
+  try{
+    const statistic = await db.query("SELECT  TO_CHAR(wp.created_at, 'DD.MM.YYYY') AS date, COUNT(*) AS users FROM users u JOIN worker_profiles wp ON u.id = wp.user_id GROUP BY date ORDER BY date");
+    
+    if (statistic.rows.length === 0)
+    {
+      return res.status(500).json({message: "Eroare de server"})
+    }
+
+    return res.status(200).json(statistic.rows)
+  }
+  catch(err){
+    return res.status(500).json({message: err.message})
+  }
+  finally{
+    db.release()
+  }
+} 
 

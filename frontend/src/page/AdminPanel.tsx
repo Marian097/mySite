@@ -3,6 +3,7 @@ import MainWorker from "../components/admin_components/MainWorker";
 import type { Worker } from "../types/WorkersTypes/Worker";
 import type { Error } from "../types/WorkersTypes/Error";
 import type { Admin } from "../types/AuthTypes/Admin";
+import type { Statistic } from "../types/StatisticTypes/Statistic"
 import type { FormEvent } from "react";
 
 type Props = {
@@ -16,6 +17,15 @@ type Props = {
   approvedWorkers: number;
   rejectedWorkers: number;
   procentRejected: number;
+  pendingdWorkers: number;
+  procentPending: number;
+  data: Statistic[];
+  errCharts:string;
+  isAccept : string;
+  handleAcceptUser: (id: string) => void;
+  getStats: () => void
+  countWorkersPending: () => void;
+  calculateProcentPending: () => void;
   countWorkersRejected: () => void;
   calculateProcentRejected: () => void;
   calculateProcentApproved: () => void;
@@ -42,6 +52,15 @@ export default function AdminPanel({
   approvedWorkers,
   rejectedWorkers,
   procentRejected,
+  pendingdWorkers,
+  procentPending,
+  data,
+  errCharts,
+  isAccept,
+  handleAcceptUser, 
+  getStats,
+  countWorkersPending,
+  calculateProcentPending,
   countWorkersRejected,
   calculateProcentRejected,
   calculateProcentApproved,
@@ -88,6 +107,15 @@ export default function AdminPanel({
           procentRejected = {procentRejected}
           countWorkersRejected = {countWorkersRejected}
           calculateProcentRejected = {calculateProcentRejected}
+          pendingdWorkers = {pendingdWorkers}
+          procentPending = {procentPending}
+          countWorkersPending = {countWorkersPending}
+          calculateProcentPending = {calculateProcentPending}
+          data = {data}
+          errCharts = {errCharts}
+          getStats = {getStats}
+          isAccept = {isAccept}
+          handleAcceptUser = {handleAcceptUser} 
           />
       </main>
     </div>
