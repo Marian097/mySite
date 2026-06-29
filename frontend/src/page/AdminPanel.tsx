@@ -1,5 +1,5 @@
 import Sidebar from "../components/admin_components/Sidebar";
-import MainWorker from "../components/admin_components/MainWorker";
+import Profiles from "../components/admin_components/Profiles";
 import type { Worker } from "../types/WorkersTypes/Worker";
 import type { Error } from "../types/WorkersTypes/Error";
 import type { Admin } from "../types/AuthTypes/Admin";
@@ -21,8 +21,8 @@ type Props = {
   procentPending: number;
   data: Statistic[];
   errCharts:string;
-  isAccept : string;
   handleAcceptUser: (id: string) => void;
+  handleRejectUser: (id: string) => void;
   getStats: () => void
   countWorkersPending: () => void;
   calculateProcentPending: () => void;
@@ -56,8 +56,8 @@ export default function AdminPanel({
   procentPending,
   data,
   errCharts,
-  isAccept,
-  handleAcceptUser, 
+  handleAcceptUser,
+  handleRejectUser,
   getStats,
   countWorkersPending,
   calculateProcentPending,
@@ -82,7 +82,7 @@ export default function AdminPanel({
         <Sidebar />
       </aside>
       <main className="col-span-11 bg-[#f5f6fa]">
-        <MainWorker
+        <Profiles
           error={error}
           email={email}
           workers={workers}
@@ -114,8 +114,8 @@ export default function AdminPanel({
           data = {data}
           errCharts = {errCharts}
           getStats = {getStats}
-          isAccept = {isAccept}
-          handleAcceptUser = {handleAcceptUser} 
+          handleAcceptUser = {handleAcceptUser}
+          handleRejectUser = {handleRejectUser}
           />
       </main>
     </div>

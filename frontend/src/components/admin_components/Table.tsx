@@ -10,10 +10,9 @@ import type { FormEvent } from "react";
 type Props = {
   error: Error;
   workers: Worker[];
-  // isStatus: string
   email: string;
-  isAccept: string;
   handleAcceptUser: (id: string) => void;
+  handleRejectUser: (id: string) => void;
   setEmail: (e: string) => void;
   setIsStatus: (status: string) => void;
   getWorkersRejected: () => void;
@@ -28,8 +27,8 @@ export default function Table({
   error,
   workers,
   email,
-  // isAccept,
   handleAcceptUser,
+  handleRejectUser,
   setEmail,
   getWorkersPending,
   getWorkersRejected,
@@ -60,6 +59,7 @@ export default function Table({
       <Tbody
         workers={workers}
         handleAcceptUser={handleAcceptUser}
+        handleRejectUser = {handleRejectUser}
         error={error}
       />
     </div>

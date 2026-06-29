@@ -4,10 +4,11 @@ import type { Error } from "../../types/WorkersTypes/Error";
 type Props = {
   workers: Worker[];
   error: Error;
-  handleAcceptUser: (id: string) => void; 
+  handleAcceptUser: (id: string) => void;
+  handleRejectUser: (id: string) => void;
 };
 
-export default function TBody({ workers, handleAcceptUser}: Props) {
+export default function TBody({ workers, handleAcceptUser, handleRejectUser}: Props) {
   return (
     <div>
       {workers.map((worker) => (
@@ -63,17 +64,12 @@ export default function TBody({ workers, handleAcceptUser}: Props) {
           </div>
           <div className="flex flex-col font-nunito text-xs gap-y-1">
             <span>
-              <button className="w-full justify-center rounded-md bg-red-600 text-xs font-semibold text-white hover:bg-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500">
-                Delete
-              </button>
-            </span>
-            <span>
               <button onClick = {() => handleAcceptUser(worker.id) } className="w-full justify-center rounded-md bg-green-600 text-xs font-semibold text-white hover:bg-green-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">
                 Approve
               </button>
             </span>
             <span>
-              <button className="w-full justify-center rounded-md bg-indigo-500 text-xs font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+              <button onClick = {() => handleRejectUser(worker.id)} className="w-full justify-center rounded-md bg-indigo-500 text-xs font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                 Reject
               </button>
             </span>

@@ -19,7 +19,7 @@ export default function CardUsersPending({
     countWorkersPending()
     const interval = setInterval(() => {
       countWorkersPending();
-    }, 5000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -34,7 +34,7 @@ export default function CardUsersPending({
           <div className="flex flex-col py-2 gap-y-1">
             <div>
               <span className="font-nunito font-semibold text-xs">
-                Total Pending
+                Pending
               </span>
             </div>
             <div>

@@ -28,7 +28,6 @@ export default function UsersCharts({ data, errCharts, getStats }: Props) {
 
   return (
     <div style={{ width: "100%", height: 300 }}>
-      <h2>Utilizatori înregistrați</h2>
       {!data ? (
         <>
           <span>{errCharts}</span>
@@ -41,7 +40,7 @@ export default function UsersCharts({ data, errCharts, getStats }: Props) {
               <XAxis dataKey= "date" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="users" />
+              <Line type="monotone" dataKey="profiles" />
             </LineChart>
           </ResponsiveContainer>
         </>

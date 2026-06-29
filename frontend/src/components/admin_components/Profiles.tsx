@@ -27,8 +27,8 @@ type Props = {
   procentPending: number;
   data: Statistic[];
   errCharts: string;
-  isAccept: string;
   handleAcceptUser: (id: string) => void;
+  handleRejectUser: (id: string) => void;
   getStats: () => void;
   countWorkersPending: () => void;
   calculateProcentPending: () => void;
@@ -63,8 +63,8 @@ export default function MainWorker({
   procentPending,
   data,
   errCharts,
-  isAccept,
   handleAcceptUser,
+  handleRejectUser,
   getStats,
   countWorkersPending,
   calculateProcentPending,
@@ -92,7 +92,7 @@ export default function MainWorker({
       <TopBar admin={admin} />
       <div className="ml-5 py-5 relative">
         <div className="absolute left-1/5">
-          <h1 className="font-bold font-nunito text-xl">Worker</h1>
+          <h1 className="font-bold font-nunito text-xl">Profiles</h1>
         </div>
       </div>
       <div className="min-w-full justify-items-center">
@@ -146,8 +146,8 @@ export default function MainWorker({
             getWorkersApprove={getWorkersApprove}
             getWorkersByEmail={getWorkersByEmail}
             getWorkerByCI_expiring={getWorkerByCI_expiring}
-            isAccept = {isAccept}
-            handleAcceptUser = {handleAcceptUser} 
+            handleAcceptUser = {handleAcceptUser}
+            handleRejectUser = {handleRejectUser}
           />
         </section>
         <section className="min-w-3/4 h-100 bg-white rounded-md px-4 py-4">

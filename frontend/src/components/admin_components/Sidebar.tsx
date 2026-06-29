@@ -8,20 +8,20 @@ export default function Sidebar() {
         <img className="h-20 w-auto" src={DashStack} alt="" />
       </div>
 
-      <div className="flex flex-col py-5 gap-y-4 text-xs font-bold font-nunito items-center ">
-        <div>
+      <div className="flex flex-col py-5 gap-y-4 text-xs font-bold font-nunito items-center">
+        <div className = " hover:bg-indigo-300 py-1 px-1">
           <span>Dashboard</span>
         </div>
-        <div>
+        <div className = " hover:bg-indigo-300 py-1 px-1">
           <span>Documents</span>
         </div>
-        <div>
-          <span>Users</span>
+        <div className = " hover:bg-indigo-300 py-1 px-1">
+          <span>Profiles</span>
         </div>
-        <div>
+        <div className = " hover:bg-indigo-300 py-1 px-1">
           <span>Payments</span>
         </div>
-         <div>
+         <div className = " hover:bg-indigo-300 py-1 px-1">
           <span>Messages</span>
         </div>
       </div>

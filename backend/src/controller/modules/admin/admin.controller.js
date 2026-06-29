@@ -167,8 +167,6 @@ export async function hasAcceptUserDocuments(req, res, next) {
       return res.status(500).json({ message: "A intervenit o eroare" });
     }
 
-    console.log("Rezultat dupa verificare");
-
     await db.query("COMMIT");
 
     return res.status(200).json({ message: "Verificare cu succes" });
@@ -210,8 +208,6 @@ export async function hasRejectedUserDocuments(req, res, next) {
       return res.status(500).json({ message: "A intervenit o eroare" });
     }
 
-    console.log("Rezultat dupa verificare");
-
     await db.query("COMMIT");
 
     return res.status(200).json({ message: "Ati respins documentele" });
@@ -223,55 +219,55 @@ export async function hasRejectedUserDocuments(req, res, next) {
   }
 }
 
-async function getProfiles(req, res, next) {
-  const db = await pool.connect();
-  try {
-    const results = await db.query(
-      "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id",
-    );
+// async function getProfiles(req, res, next) {
+//   const db = await pool.connect();
+//   try {
+//     const results = await db.query(
+//       "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id",
+//     );
 
 
-    return res.status(200).json(results.rows);
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  } finally {
-    db.release();
-  }
-}
+//     return res.status(200).json(results.rows);
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message });
+//   } finally {
+//     db.release();
+//   }
+// }
 
-export async function getProfilesUnverified(req, res, next) {
-  const db = await pool.connect();
-  try {
-    const results = await db.query(
-      "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare, wp.is_verified AS verified, wp.is_approved AS approved FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id WHERE wp.is_verified = $1 OR wp.is_approved = $2",
-      [false, false],
-    );
+// export async function getProfilesUnverified(req, res, next) {
+//   const db = await pool.connect();
+//   try {
+//     const results = await db.query(
+//       "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare, wp.is_verified AS verified, wp.is_approved AS approved FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id WHERE wp.is_verified = $1 OR wp.is_approved = $2",
+//       [false, false],
+//     );
 
   
-    return res.status(200).json(results.rows);
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  } finally {
-    db.release();
-  }
-}
+//     return res.status(200).json(results.rows);
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message });
+//   } finally {
+//     db.release();
+//   }
+// }
 
-export async function getProfilesVerified(req, res, next) {
-  const db = await pool.connect();
-  try {
-    const results = await db.query(
-      "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare, wp.is_verified AS verified, wp.is_approved AS approved FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id WHERE wp.is_verified = $1 OR wp.is_approved = $2",
-      [true, true],
-    );
+// export async function getProfilesVerified(req, res, next) {
+//   const db = await pool.connect();
+//   try {
+//     const results = await db.query(
+//       "SELECT wp.id, wp.full_name AS Nume, wp.phone AS telefon, u.email AS email, c.name AS calificare, wp.created_at AS data_inregistrare, wp.updated_at AS data_actualizare, wp.is_verified AS verified, wp.is_approved AS approved FROM users u JOIN worker_profiles wp ON u.id = wp.user_id JOIN worker_categories wc ON wp.id = wc.worker_profile_id JOIN categories c ON wc.category_id = c.id WHERE wp.is_verified = $1 OR wp.is_approved = $2",
+//       [true, true],
+//     );
 
 
-    return res.status(200).json(results.rows);
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  } finally {
-    db.release();
-  }
-}
+//     return res.status(200).json(results.rows);
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message });
+//   } finally {
+//     db.release();
+//   }
+// }
 
 export async function hasProfileApproved(req, res, next) {
   //=> Pending
@@ -333,7 +329,7 @@ export async function hasProfileRejected(req, res, next) {
   }
 }
 
-export async function deleteUser(req, res) {
+export async function deleteProfile(req, res) {
   const db = await pool.connect();
   const { id } = req.body;
 
@@ -344,7 +340,7 @@ export async function deleteUser(req, res) {
       });
     }
 
-    const result = await db.query("DELETE FROM users WHERE id = $1", [id]);
+    const result = await db.query("DELETE FROM user_documents WHERE id = $1", [id]);
 
     return res.status(204).send();
   } catch (err) {
@@ -588,7 +584,6 @@ export async function calculateProcentWorkersApproved(req, res, next) {
 
   const { initialValueApproved } = req.body;
 
-  console.log(initialValueApproved)
 
   try {
     const initialApproved = Number(initialValueApproved);
@@ -601,14 +596,16 @@ export async function calculateProcentWorkersApproved(req, res, next) {
 
     const currentValue = await db.query("SELECT COUNT(*) FROM user_documents");
     
-    if (currentValue.rows.length === 0)
-      return res.status(500).json({ message: "Ceva nu a mers cum trebuie" });
 
     const current = Number(currentValue.rows[0].count);
 
-    const procent = currentValue > 0 ? (initialApproved / currentValue) * 100 : 0;
+    console.log(current)
 
-    if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
+    const procent = current > 0 ? Math.floor((initialApproved / current) * 1000) / 10 : 0;
+
+    console.log(procent)
+
+    if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN"});
 
 
     return res.status(200).json(procent);
@@ -640,12 +637,10 @@ export async function calculateProcentWorkersRejected(req, res, next) {
 
   const { initialValueRejected } = req.body;
 
-  console.log("Sunt in functia de calculate rejected" + initialValueRejected)
-
   try {
     const initialRejected = Number(initialValueRejected);
 
-    if (!initialValueRejected || initialValueRejected <= 0) {
+    if (!initialRejected  || initialRejected  <= 0) {
       return res.status(400).json({
         message: "Nu se poate calcula procentul",
       });
@@ -662,7 +657,7 @@ export async function calculateProcentWorkersRejected(req, res, next) {
 
     console.log("Count dupa modificare " + current)
 
-    const procent = currentValue > 0 ? (initialRejected / currentValue) * 100 : 0;
+    const procent = current > 0 ? Math.floor((initialRejected / current) * 1000) / 10 : 0;
 
     if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
 
@@ -713,7 +708,7 @@ export async function calculateProcentWorkersPending(req, res, next) {
 
     const current = Number(currentValue.rows[0].count);
 
-    const procent = currentValue > 0 ? (initialPending / currentValue) * 100 : 0;
+    const procent = current > 0 ? (initialPending / currentValue) * 100 : 0;
 
     if (Number.isNaN(procent)) return res.status(500).json({ message: "NaN" });
 
@@ -732,7 +727,7 @@ export async function getStatistic(req, res, next)
   const db = await pool.connect();
   
   try{
-    const statistic = await db.query("SELECT  TO_CHAR(wp.created_at, 'DD.MM.YYYY') AS date, COUNT(*) AS users FROM users u JOIN worker_profiles wp ON u.id = wp.user_id GROUP BY date ORDER BY date");
+    const statistic = await db.query("SELECT  TO_CHAR(wp.created_at, 'DD.MM.YYYY') AS date, COUNT(*) AS profiles FROM users u JOIN worker_profiles wp ON u.id = wp.user_id GROUP BY date ORDER BY date");
     
     if (statistic.rows.length === 0)
     {

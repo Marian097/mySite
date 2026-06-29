@@ -1,23 +1,27 @@
 import FormSingUp from "../components/FormSingUp";
 import FormLogin from "../components/FormLogin";
+import Header from "../components/Header.tsx";
 import type { User } from "../types/AuthTypes/User";
 import type { Errors } from "../types/AuthTypes/Errors";
 import type { Touched } from "../types/AuthTypes/Touched";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
 
 type Props = {
-  value: User,
-  isSingUp: boolean,
-  errors: Errors,
+  value: User;
+  isSingUp: boolean;
+  errors: Errors;
   errorsLogin: ErrorsLogin;
-  touched: Touched,
-  isLoggedForm: boolean,
-  message: string,
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  setIsLoggedForm: (option : boolean) => void,
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
-  singUp: (e: React.FormEvent<HTMLFormElement>) => void,
-  login: (e: React.FormEvent<HTMLFormElement>) => void
+  touched: Touched;
+  isLoggedForm: boolean;
+  message: string;
+  isDropdown: boolean;
+  setIsSignUp: (option:boolean) => void;
+  setIsDropdown: (option: boolean) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setIsLoggedForm: (option: boolean) => void;
+  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  singUp: (e: React.FormEvent<HTMLFormElement>) => void;
+  login: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export default function Sing_up({
@@ -28,6 +32,9 @@ export default function Sing_up({
   isLoggedForm,
   errorsLogin,
   message,
+  isDropdown,
+  setIsSignUp,
+  setIsDropdown,
   setIsLoggedForm,
   handleChange,
   handleBlur,
@@ -36,13 +43,39 @@ export default function Sing_up({
 }: Props) {
   return (
     <div>
+      <Header
+        setIsSingUp={setIsSignUp}
+        setIsDropdown={setIsDropdown}
+        isDropdown={isDropdown}
+      />
       {isSingUp ? (
         <>
-          <FormSingUp message = {message} value = {value} errors = {errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} singUp = {singUp} isLoggedForm = {isLoggedForm} setIsLoggedForm = {setIsLoggedForm} errorsLogin = {errorsLogin}/>
+          <FormSingUp
+            message={message}
+            value={value}
+            errors={errors}
+            touched={touched}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
+            singUp={singUp}
+            isLoggedForm={isLoggedForm}
+            setIsLoggedForm={setIsLoggedForm}
+            errorsLogin={errorsLogin}
+          />
         </>
       ) : (
         <>
-          <FormLogin value = {value} login = {login} errors = {errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} isLoggedForm = {isLoggedForm} setIsLoggedForm = {setIsLoggedForm} errorsLogin = {errorsLogin}/>
+          <FormLogin
+            value={value}
+            login={login}
+            errors={errors}
+            touched={touched}
+            handleChange={handleChange}
+            handleBlur={handleBlur}
+            isLoggedForm={isLoggedForm}
+            setIsLoggedForm={setIsLoggedForm}
+            errorsLogin={errorsLogin}
+          />
         </>
       )}
     </div>

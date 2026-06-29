@@ -21,7 +21,7 @@ export default function CardUsersApproved({
 
     const interval = setInterval(() => {
       countWorkersApproved();
-    }, 5000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -37,7 +37,7 @@ export default function CardUsersApproved({
           <div className="flex flex-col py-2 gap-y-1">
             <div>
               <span className="font-nunito font-semibold text-xs">
-                Total Approved
+                Approved
               </span>
             </div>
             <div>

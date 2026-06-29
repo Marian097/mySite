@@ -1,7 +1,6 @@
 import Sing_up from "./page/Sing_up";
 import useAuthForm from "./hooks/useAuthForm.ts";
 import useCharts from "./hooks/useCharts.ts"
-import Header from "./components/Header.tsx";
 import AdminPanel from "./page/AdminPanel.tsx";
 import hooksWorker from "./hooks/useWorkers.ts";
 // import ExplorePage from "./page/ExplorePage.tsx";
@@ -12,11 +11,6 @@ function App() {
   const charts = useCharts();
   return (
     <>
-      <Header
-        setIsSingUp={render.setIsSignUp}
-        setIsDropdown={render.setIsDropdown}
-        isDropdown={render.isDropdown}
-      />
       {render.logged_in ? (
         <>
           {" "}
@@ -52,13 +46,16 @@ function App() {
             data = {charts.data}
             errCharts = {charts.error}
             getStats = {charts.getStats}
-            isAccept = {workers.isAccept}
             handleAcceptUser = {workers.handleAcceptUser}
+            handleRejectUser = {workers.handleRejectUser}
           />
         </>
       ) : (
         <>
           <Sing_up
+            setIsSignUp={render.setIsSignUp}
+            setIsDropdown={render.setIsDropdown}
+            isDropdown={render.isDropdown}
             message={render.message}
             isSingUp={render.isSignUp}
             value={render.values}

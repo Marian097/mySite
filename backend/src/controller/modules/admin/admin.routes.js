@@ -11,11 +11,11 @@ import {
   getWorkerApproved,
   getWorkerRejected,
   getWorker,
-  getProfilesVerified,
-  getProfilesUnverified,
+  // getProfilesVerified,
+  // getProfilesUnverified,
   hasProfileApproved,
   hasProfileRejected,
-  deleteUser,
+  deleteProfile,
   getAdminProfile,
   getProfileByEmail,
   filterByExpiringCI,
@@ -162,29 +162,32 @@ adminRouter.get("/worker/approved", verifiedToken, verifyAdmin, getWorkerApprove
 
 //Accept users
 adminRouter.put(
-  "/documents/accept",
+  "/profile/accept",
   verifiedToken,
   verifyAdmin,
   hasAcceptUserDocuments,
 );
 adminRouter.put(
-  "/documents/reject",
+  "/profile/reject",
   verifiedToken,
   verifyAdmin,
   hasRejectedUserDocuments,
 );
-adminRouter.get("/profiles/verified", verifiedToken, verifyAdmin, getProfilesVerified);
-adminRouter.get("/profiles/unverified",verifiedToken, verifyAdmin, getProfilesUnverified);
+// adminRouter.get("/profiles/verified", verifiedToken, verifyAdmin, getProfilesVerified);
+// adminRouter.get("/profiles/unverified",verifiedToken, verifyAdmin, getProfilesUnverified);
 adminRouter.put(
   "/profile/verify/accept",
   verifiedToken,
   verifyAdmin,
   hasProfileApproved,
 );
+
+
 adminRouter.put(
   "/profile/verify/reject",
   verifiedToken,
   verifyAdmin,
   hasProfileRejected,
 );
-adminRouter.delete("/user", verifiedToken, verifyAdmin, deleteUser);
+
+adminRouter.delete("/delete", verifiedToken, verifyAdmin, deleteProfile);

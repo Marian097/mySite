@@ -38,7 +38,7 @@ export default function CardUser({
           <div className="flex flex-col py-2 gap-y-1">
             <div>
               <span className="font-nunito font-semibold text-xs">
-                Total Worker
+                Profiles
               </span>
             </div>
             <div>

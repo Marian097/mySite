@@ -17,19 +17,78 @@ export default function useWorkers() {
   const [pendingdWorkers, setPendingWorkers] = useState<number>();
   const [procentPending, setProcentPending] = useState<number>();
   const [procent, setProcent] = useState<number>();
-  const [isAccept, setIsAccept] = useState<string>("");
+  // const [isAccept, setIsAccept] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
   
+
+
+
+  // async function handleDeleteUser(id: string)
+  // {
+  //   try{
+  //     const token = localStorage.getItem("token");
+
+  //     if (!token) throw new Error ("Token lipsa");
+  //     if (!id) throw new Error ("Nu puteti face aceste modificari");
+
+  //     const response = await fetch ("http://localhost:4000/api/users/delete", {
+  //       method: "DELETE",
+  //       headers:{
+  //         Authorization: `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify({id})
+  //     })
+
+  //     if (!response.ok) throw new Error ("A intervenit o eroare");
+
+  //     setMessage("Ati sters cu succes utilizatorul")
+  //     getWorkers()
+
+  //   }
+  //   catch(err){
+  //     if (err instanceof Error) setError({error: err.message})
+  //   }
+  // }
+
+
+  async function handleRejectUser(id: string)
+  {
+    try{
+
+      const token = localStorage.getItem("token");
+
+      if (!token) throw new Error ("Token lipsa");
+      if (!id) throw new Error ("Nu puteti face aceste modificari");
+
+      const response = await fetch("http://localhost:4000/api/users/profile/reject", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({id})
+      })
+
+      if (!response.ok) throw new Error ("Ceva nu a mers cum trebuie")
+      const res = await response.json();
+      getWorkersRejected()
+      setMessage(res)
+    }
+
+    catch(err){
+      if (err instanceof Error) setError({error: err.message})
+    }
+  }
   async function handleAcceptUser(id: string){
     try{
 
       const token = localStorage.getItem("token");
 
       if (!token) throw new Error ("Token lipsa")
-      if (!id) throw new Error ("Nu puteti face aceasta actiune");
+      if (!id) throw new Error ("Nu puteti face aceste modificari");
 
-      const response = await fetch("http://localhost:4000/api/users/documents/accept", {
+      const response = await fetch("http://localhost:4000/api/users/profile/accept", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,7 +101,8 @@ export default function useWorkers() {
 
       const res = await response.json();
       
-      setIsAccept(res);
+      getWorkersApproved()
+      setMessage(res);
 
     }
     catch(err){
@@ -241,7 +301,6 @@ export default function useWorkers() {
       if (!token) throw new Error("Token lipsa");
 
       const initialValuePending = localStorage.getItem("initialValuePending");
-      console.log(initialValuePending)
 
       if (Number(initialValuePending) <= 0) return
 
@@ -437,7 +496,8 @@ export default function useWorkers() {
     procentRejected,
     pendingdWorkers,
     procentPending,
-    isAccept,
+    message,
+    handleRejectUser,
     handleAcceptUser, 
     countWorkersPending,
     calculateProcentPending,
