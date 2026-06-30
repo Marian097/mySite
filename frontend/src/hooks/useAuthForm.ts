@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { User } from "../types/AuthTypes/User";
-import type { Admin } from "../types/AuthTypes/Admin"
+// import type { Admin } from "../types/AuthTypes/Admin"
 import * as yup from "yup";
 import type { Touched } from "../types/AuthTypes/Touched";
 import type { Errors } from "../types/AuthTypes/Errors";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
+// import { useNavigate } from "react-router";
 
 
 const passRegex =
@@ -28,6 +29,8 @@ const loginSchema = yup.object({
 });
 
 export default function useAuthForm() {
+
+  // const navigate = useNavigate()
 
   const [message, setMessage] = useState("")
 
@@ -54,15 +57,12 @@ export default function useAuthForm() {
     password: "",
   });
 
-  const [isSignUp, setIsSignUp] = useState<boolean>(false);
 
   const [isLoggedForm, setIsLoggedForm] = useState<boolean>(false);
 
-  const [isDropdown, setIsDropdown] = useState<boolean>(false);
-
   const [logged_in, setLogged_in] = useState<boolean>(false)
 
-  const [admin, setAdmin] = useState<Admin[]>([])
+  // const [admin, setAdmin] = useState<Admin[]>([])
 
 
   // 🔹 CHANGE
@@ -126,7 +126,7 @@ export default function useAuthForm() {
         password: "",
       });
 
-      const response = await fetch("http://localhost:4000/api/users/sign-up", {
+      const response = await fetch("http://localhost:4000/api/users/sign-up/provider", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -196,8 +196,7 @@ export default function useAuthForm() {
       });
 
 
-     
-
+    
       const data = await response.json();
 
       if (!response.ok) {
@@ -208,24 +207,26 @@ export default function useAuthForm() {
 
 
 
-      const token = localStorage.getItem("token")
+      // const token = localStorage.getItem("token")
 
       
-      if (!token) throw new Error ("token lipsa");
+      // if (!token) throw new Error ("token lipsa");
       
-      const response_admin = await fetch("http://localhost:4000/api/users/admin/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      // const response_admin = await fetch("http://localhost:4000/api/users/admin/profile", {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`
+      //   }
+      // })
 
-      if (!response_admin.ok) throw new Error("Nu s-au putut încărca profilele admin");
+      // if (!response_admin.ok) throw new Error("Nu s-au putut încărca profilele admin");
 
-      const admin_profiles = await response_admin.json()
+      // const admin_profiles = await response_admin.json()
 
-      setAdmin(admin_profiles)
+      // setAdmin(admin_profiles)
 
       setLogged_in(true)
+
+      // navigate("/admin")
 
     } catch (error) {
       if (error instanceof yup.ValidationError) {
@@ -254,14 +255,10 @@ export default function useAuthForm() {
     errors,
     errorsLogin,
     touched,
-    isSignUp,
     isLoggedForm,
-    isDropdown,
     message,
     logged_in,
-    admin,
-    setIsDropdown,
-    setIsSignUp,
+    // admin,
     setIsLoggedForm,
     handleChange,
     handleBlur,

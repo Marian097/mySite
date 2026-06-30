@@ -1,6 +1,6 @@
 import { pool } from "../../../db.js";
 
-import { userSchema, loginSchema } from "./auth.validation.js"
+import { userSchema, loginSchema} from "./auth.validation.js"
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -346,3 +346,4 @@ export async function Login(req, res) {
     db.release();
   }
 }
+

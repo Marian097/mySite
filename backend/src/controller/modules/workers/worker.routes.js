@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { createProfile, updateProfile, deleteProfile, addDocuments} from "./worker.controller.js"
+import { createProfile, updateProfile, deleteProfile, addDocuments, registerBussines} from "./worker.controller.js"
 
 import { verifiedToken } from "../../../middleware/jwt.middleware.js"
 import { verifyProvider } from "../../../middleware/requireRole.js"
@@ -13,3 +13,4 @@ workerRouter.post("/create/worker/profile", verifiedToken, verifyProvider , crea
 workerRouter.patch("/update/worker/profile", verifiedToken, verifyProvider, updateProfile)
 workerRouter.delete("/update/worker/profile", verifiedToken, verifyProvider, deleteProfile )
 workerRouter.post("/worker/documents", verifiedToken, verifyProvider, addDocuments)
+workerRouter.post("/bussines/documents", verifiedToken, verifyProvider, registerBussines)

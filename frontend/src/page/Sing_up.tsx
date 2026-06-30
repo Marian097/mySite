@@ -1,22 +1,19 @@
-import FormSingUp from "../components/FormSingUp";
+import FormWorker from "../components/SignUpWorker.tsx";
 import FormLogin from "../components/FormLogin";
 import Header from "../components/Header.tsx";
 import type { User } from "../types/AuthTypes/User";
 import type { Errors } from "../types/AuthTypes/Errors";
 import type { Touched } from "../types/AuthTypes/Touched";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
+import { Routes, Route } from "react-router";
 
 type Props = {
   value: User;
-  isSingUp: boolean;
   errors: Errors;
   errorsLogin: ErrorsLogin;
   touched: Touched;
   isLoggedForm: boolean;
   message: string;
-  isDropdown: boolean;
-  setIsSignUp: (option:boolean) => void;
-  setIsDropdown: (option: boolean) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setIsLoggedForm: (option: boolean) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -26,15 +23,11 @@ type Props = {
 
 export default function Sing_up({
   value,
-  isSingUp,
   errors,
   touched,
   isLoggedForm,
   errorsLogin,
   message,
-  isDropdown,
-  setIsSignUp,
-  setIsDropdown,
   setIsLoggedForm,
   handleChange,
   handleBlur,
@@ -44,40 +37,44 @@ export default function Sing_up({
   return (
     <div>
       <Header
-        setIsSingUp={setIsSignUp}
-        setIsDropdown={setIsDropdown}
-        isDropdown={isDropdown}
       />
-      {isSingUp ? (
-        <>
-          <FormSingUp
-            message={message}
-            value={value}
-            errors={errors}
-            touched={touched}
-            handleChange={handleChange}
-            handleBlur={handleBlur}
-            singUp={singUp}
-            isLoggedForm={isLoggedForm}
-            setIsLoggedForm={setIsLoggedForm}
-            errorsLogin={errorsLogin}
-          />
-        </>
-      ) : (
-        <>
-          <FormLogin
-            value={value}
-            login={login}
-            errors={errors}
-            touched={touched}
-            handleChange={handleChange}
-            handleBlur={handleBlur}
-            isLoggedForm={isLoggedForm}
-            setIsLoggedForm={setIsLoggedForm}
-            errorsLogin={errorsLogin}
-          />
-        </>
-      )}
+
+      <Routes>
+        <Route
+          path="/sign-up"
+          element={
+            <FormWorker
+              message={message}
+              value={value}
+              errors={errors}
+              touched={touched}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              singUp={singUp}
+              isLoggedForm={isLoggedForm}
+              setIsLoggedForm={setIsLoggedForm}
+              errorsLogin={errorsLogin}
+            />
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <FormLogin
+              value={value}
+              login={login}
+              errors={errors}
+              touched={touched}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              isLoggedForm={isLoggedForm}
+              setIsLoggedForm={setIsLoggedForm}
+              errorsLogin={errorsLogin}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

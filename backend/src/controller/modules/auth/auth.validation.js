@@ -24,3 +24,5 @@ export const userSchema = yup.object({
     .matches(passRegex, "Min 8 caractere, o literă mare, un simbol")
     .required("Parola este obligatorie"),
 });
+
+

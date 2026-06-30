@@ -5,9 +5,9 @@ import path from "path";
 import { fileURLToPath } from "url"
 
 import { adminRouter } from "./controller/modules/admin/admin.routes.js";
-import { usersRouter } from "./controller/modules/auth/auth.routes.js";
 import { workerRouter } from "./controller/modules/workers/worker.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
+import { authRouter } from "./controller/modules/auth/auth.routes.js"
 
 
 
@@ -25,7 +25,7 @@ app.get("/health", (req, res) => res.json({ok: true}));
 
 
 
-app.use("/api/users", usersRouter);
+app.use("/api/users", authRouter);
 app.use("/api/users", adminRouter);
 app.use("/api/users", workerRouter);
 

@@ -5,8 +5,8 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 
 dotenv.config();
 
-let regex_date =
-  "^(3[01]|[12][0-9]|0?[1-9])(\\/|-)(1[0-2]|0?[1-9])\\2(19|20)\\d{2}$";
+const regex_date =
+  /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 export const documentsWorkerSchema = yup.object({
   ci_image_url: yup.string().required("Poza de buletin este obligatorie"),
@@ -29,4 +29,22 @@ export const workerProfileSchema = yup.object({
   county: yup.string().required(),
   address_text: yup.string().required(),
   profile_image_url: yup.string().required(),
+});
+
+
+export const bussinesSchema = yup.object({
+  name_bussines: yup.string().required("Va rog adaugati un nume"),
+  certificate_registration: yup
+    .string()
+    .required("Cerificatul de inegistrare este obligatoriu!"),
+  type_bussines: yup
+    .string()
+    .required("Alege-ti forma de lucru."),
+  cif: yup
+  .string()
+  .required("Codul fiscal este obligatoriu."),
+
+  address: yup
+  .string()
+  .required("Va rugam introduceti sediului social")
 });

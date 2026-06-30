@@ -3,9 +3,9 @@ import { Router } from "express";
 import { registerProvider, Login, registerClient, registerAdmin } from "./auth.controller.js"
 
 
-export const usersRouter = Router()
+export const authRouter = Router()
 
-usersRouter.post("/provider", registerProvider)
-usersRouter.post("/client", registerClient)
-usersRouter.post("/admin", registerAdmin)
-usersRouter.post("/login", Login)
+authRouter.post("/sign-up/provider", registerProvider)
+authRouter.post("/client", registerClient)
+authRouter.post("/admin", registerAdmin)
+authRouter.post("/login", Login)

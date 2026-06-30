@@ -1,7 +1,7 @@
 import { pool } from "../../../db.js";
 import * as yup from "yup";
 import dotenv from "dotenv";
-import {workerProfileSchema, documentsWorkerSchema} from "./worker.validation.js"
+import {workerProfileSchema, documentsWorkerSchema, bussinesSchema } from "./worker.validation.js"
 
 
 dotenv.config();
@@ -268,7 +268,10 @@ export async function addDocuments(req, res, next)
 
         await db.query("BEGIN")
 
-        const user_documents = await db.query("INSERT INTO user_documents  (user_id, ci_image_url, ci_expiration_date, selfie_ci_person) VALUES ($1, $2, $3, $4) RETURNING *", [user_id, ci_image_url, ci_expiration_date, selfie_ci_person])
+        const user_documents = await db.query("INSERT INTO user_documents (user_id, ci_image_url, ci_expiration_date, selfie_ci_person) VALUES ($1, $2, $3, $4) RETURNING *", [user_id, ci_image_url, ci_expiration_date, selfie_ci_person])
+
+        console.log("Dupa insert into user_documents")
+
 
         if (user_documents.rows.length === 0)
         {
@@ -276,11 +279,13 @@ export async function addDocuments(req, res, next)
             return res.status(500).json({message: "Documentele nu au fost incarcate"})
         }
 
+
         await db.query("COMMIT")
         
         return res.status(200).json(user_documents)
     }
     catch(error){
+      console.error(error);
         if (error instanceof yup.ValidationError)
         {
             await db.query("ROLLBACK")
@@ -291,3 +296,83 @@ export async function addDocuments(req, res, next)
         db.release()
     }
 }
+
+
+export async function registerBussines(req, res, next)
+{
+  const db = await pool.connect();
+
+  const {name_bussines, certificate_registration, type_bussines, cif, address} = req.body
+  
+  const user_id = req.user.id;
+
+  try{
+    await bussinesSchema.validate(req.body, {abortEarly: false})
+    
+    const bussinesType = await db.query("SELECT * FROM type_bussines");
+    
+    if (bussinesType.rows.length === 0) return res.status(404).json({message: "Nici un rezultat."});
+
+    let exists = false
+
+    for (const b of bussinesType.rows)
+    {
+      if (type_bussines === b.type_name)
+      {
+        exists = true
+        break
+      }
+    }
+
+
+
+    if (!exists){
+      return res.status(404).json({message: "Va rog alegeti o forma de lucru"})
+    }
+
+
+   
+    console.log("Inainte de user documents")
+    const user_documents_id = await db.query("SELECT id FROM user_documents WHERE user_id = $1", [user_id])
+  
+
+    if (user_documents_id.rows.length === 0) return res.status(404).json({message: "Creati mai intai profilul!"})
+
+    console.log("Dupa 2")
+    
+    await db.query("BEGIN");
+
+    const bussines_documents = await db.query("INSERT INTO bussines_documents (user_id, user_documents_id, name_bussines, registration_certificate_image_url, cif, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id ", [user_id, user_documents_id.rows[0].id, name_bussines,certificate_registration, cif, address])
+    
+    if (bussines_documents.rows.length === 0){
+      await db.query("ROLLBACK");
+      return res.status(500).json({message: "Operatiunea nu a reusit"});
+    }
+
+    const worker_type_bussines = await db.query("INSERT INTO worker_type_bussines (user_id, bussines_id, type_id) VALUES ($1, $2, $3) RETURNING *", [user_id, bussines_documents.rows[0].id, bussinesType.rows[0].id])
+
+    if (worker_type_bussines.rows.length === 0) {
+      await db.query("ROLLBACK")
+      return res.status(500).json({message: "Operatiunea nu a reusit"})
+    }
+
+    await db.query("COMMIT");
+
+    return res.status(200).json({message: "Ati inregistrat cu succes firma."})
+  }
+
+  catch(error){
+    console.log(error)
+     if (error instanceof yup.ValidationError)
+        {
+            await db.query("ROLLBACK")
+            return res.status(500).json({message: error.message})
+        }
+  }
+  finally{
+    db.release()
+  }
+
+}
+
+
