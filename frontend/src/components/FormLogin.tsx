@@ -22,11 +22,11 @@ type Props = {
   setIsLoggedForm: (option: boolean) => void,
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  login: (e: React.FormEvent<HTMLFormElement>) => void;
+  loginProvider: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export default function FormLogin({ value, errors, touched, isLoggedForm, errorsLogin, 
-  setIsLoggedForm, handleChange, handleBlur, login }: Props) {
+  setIsLoggedForm, handleChange, handleBlur, loginProvider }: Props) {
 
     useEffect(() => {
       if (!isLoggedForm)
@@ -39,7 +39,7 @@ export default function FormLogin({ value, errors, touched, isLoggedForm, errors
       <form
         action=""
         className="bg-black/55 rounded-xl px-10 flex flex-col justify-center gap-2"
-        onSubmit={login}
+        onSubmit={loginProvider}
       >
         <LogoSectionForm />
         <InputEmail value={value} handleChange={handleChange} errors = {errors} touched = {touched} handleBlur = {handleBlur} />

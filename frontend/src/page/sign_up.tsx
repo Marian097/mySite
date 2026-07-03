@@ -1,10 +1,10 @@
-import FormWorker from "../components/SignUpWorker.tsx";
-import FormLogin from "../components/FormLogin";
+import FormWorker from "../components/SignUpProvider.tsx";
+import FormLogin from "../components/FormLogin.tsx";
 import Header from "../components/Header.tsx";
-import type { User } from "../types/AuthTypes/User";
-import type { Errors } from "../types/AuthTypes/Errors";
-import type { Touched } from "../types/AuthTypes/Touched";
-import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
+import type { User } from "../types/AuthTypes/User.ts";
+import type { Errors } from "../types/AuthTypes/Errors.ts";
+import type { Touched } from "../types/AuthTypes/Touched.ts";
+import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin.ts";
 import { Routes, Route } from "react-router";
 
 type Props = {
@@ -17,11 +17,11 @@ type Props = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setIsLoggedForm: (option: boolean) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  singUp: (e: React.FormEvent<HTMLFormElement>) => void;
-  login: (e: React.FormEvent<HTMLFormElement>) => void;
+  singUpProvider: (e: React.FormEvent<HTMLFormElement>) => void;
+  loginProvider: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export default function Sing_up({
+export default function Sign_up({
   value,
   errors,
   touched,
@@ -31,8 +31,8 @@ export default function Sing_up({
   setIsLoggedForm,
   handleChange,
   handleBlur,
-  singUp,
-  login,
+  singUpProvider,
+  loginProvider,
 }: Props) {
   return (
     <div>
@@ -50,7 +50,7 @@ export default function Sing_up({
               touched={touched}
               handleChange={handleChange}
               handleBlur={handleBlur}
-              singUp={singUp}
+              singUpProvider={singUpProvider}
               isLoggedForm={isLoggedForm}
               setIsLoggedForm={setIsLoggedForm}
               errorsLogin={errorsLogin}
@@ -63,7 +63,7 @@ export default function Sing_up({
           element={
             <FormLogin
               value={value}
-              login={login}
+              loginProvider={loginProvider}
               errors={errors}
               touched={touched}
               handleChange={handleChange}

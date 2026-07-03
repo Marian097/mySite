@@ -21,7 +21,7 @@ type Props = {
   setIsLoggedForm: (option: boolean) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  singUp: (e: React.FormEvent<HTMLFormElement>) => void;
+  singUpProvider: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export default function FormSingUp({
@@ -34,7 +34,7 @@ export default function FormSingUp({
   setIsLoggedForm,
   handleChange,
   handleBlur,
-  singUp,
+  singUpProvider,
 }: Props) {
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function FormSingUp({
       <form
         action=""
         className="bg-black/55 rounded-xl px-10 flex flex-col justify-center gap-2"
-        onSubmit={singUp}
+        onSubmit={singUpProvider}
       >
         <LogoSectionForm />
         <InputUsername

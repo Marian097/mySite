@@ -1,9 +1,11 @@
-import Sing_up from "./page/Sing_up";
+import Sing_up from "./page/sign_up.tsx";
 import useAuthForm from "./hooks/useAuthForm.ts";
 import useCharts from "./hooks/useCharts.ts";
-import AdminPanel from "./page/AdminPanel.tsx";
+import AdminPanel from "./page/admin_panel.tsx";
 import hooksWorker from "./hooks/useWorkers.ts";
 import { Routes, Route } from "react-router";
+import VerifyIdentity from "./page/verify_identity.tsx";
+import ProgressBar from "./components/ProgresBar.tsx";
 // import ExplorePage from "./page/ExplorePage.tsx";
 
 function App() {
@@ -13,7 +15,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
+        {/* <Route
           path="/*"
           element={
             <Sing_up
@@ -23,8 +25,8 @@ function App() {
               touched={render.touched}
               handleChange={render.handleChange}
               handleBlur={render.handleBlur}
-              singUp={render.signUp}
-              login={render.login}
+              singUpProvider={render.signUpProvider}
+              loginProvider={render.loginProvider}
               isLoggedForm={render.isLoggedForm}
               setIsLoggedForm={render.setIsLoggedForm}
               errorsLogin={render.errorsLogin}
@@ -71,7 +73,8 @@ function App() {
               handleRejectUser={workers.handleRejectUser}
             />
           }
-        />
+        /> */}
+        <Route path="/" element={<VerifyIdentity/>}/>
       </Routes>
     </>
   );

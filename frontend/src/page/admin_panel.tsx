@@ -41,7 +41,7 @@ type Props = {
   getWorkerByCI_expiring: () => void;
   getWorkers: () => void;
 };
-export default function AdminPanel({
+export default function admin_panel({
   error,
   workers,
   admin,

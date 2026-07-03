@@ -1,11 +1,11 @@
 import { useState } from "react";
 import type { User } from "../types/AuthTypes/User";
-// import type { Admin } from "../types/AuthTypes/Admin"
+import type { Admin } from "../types/AuthTypes/Admin"
 import * as yup from "yup";
 import type { Touched } from "../types/AuthTypes/Touched";
 import type { Errors } from "../types/AuthTypes/Errors";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 
 const passRegex =
@@ -30,7 +30,7 @@ const loginSchema = yup.object({
 
 export default function useAuthForm() {
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const [message, setMessage] = useState("")
 
@@ -62,7 +62,7 @@ export default function useAuthForm() {
 
   const [logged_in, setLogged_in] = useState<boolean>(false)
 
-  // const [admin, setAdmin] = useState<Admin[]>([])
+  const [admin, setAdmin] = useState<Admin[]>([])
 
 
   // 🔹 CHANGE
@@ -114,7 +114,7 @@ export default function useAuthForm() {
   }
 
   // 🔹 SIGN UP
-  async function signUp(e: React.FormEvent<HTMLFormElement>) {
+  async function signUpProvider(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
@@ -173,7 +173,125 @@ export default function useAuthForm() {
   }
 
   // 🔹 LOGIN
-  async function login(e: React.FormEvent<HTMLFormElement>) {
+  async function loginProvider(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    try {
+      const user = {
+        email: values.email,
+        password: values.password,
+      };
+
+      await loginSchema.validate(user, { abortEarly: false });
+      setErrorsLogin({
+        email: "",
+        password: "",
+      });
+
+
+
+      const response = await fetch("http://localhost:4000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+
+
+    
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Eroare la login");
+      }
+
+      localStorage.setItem("token", data.token);
+
+      setLogged_in(true)
+      navigate("/verify-identity")
+
+    } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        const newErrors: ErrorsLogin = {
+          email: "",
+          password: "",
+        };
+        error.inner.forEach((err) => {
+          const fields = error.path as keyof ErrorsLogin;
+          if (fields && !newErrors[fields]) {
+            newErrors[fields] = err.message;
+          }
+        });
+        setErrorsLogin(newErrors);
+        setTouched({
+          name: true,
+          email: true,
+          password: true,
+        });
+      }
+    }
+  }
+
+
+   // 🔹 LOGIN
+  async function loginClient(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    try {
+      const user = {
+        email: values.email,
+        password: values.password,
+      };
+
+      await loginSchema.validate(user, { abortEarly: false });
+      setErrorsLogin({
+        email: "",
+        password: "",
+      });
+
+
+
+      const response = await fetch("http://localhost:4000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+
+
+    
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Eroare la login");
+      }
+
+      localStorage.setItem("token", data.token);
+
+
+      setLogged_in(true)
+
+
+    } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        const newErrors: ErrorsLogin = {
+          email: "",
+          password: "",
+        };
+        error.inner.forEach((err) => {
+          const fields = error.path as keyof ErrorsLogin;
+          if (fields && !newErrors[fields]) {
+            newErrors[fields] = err.message;
+          }
+        });
+        setErrorsLogin(newErrors);
+        setTouched({
+          name: true,
+          email: true,
+          password: true,
+        });
+      }
+    }
+  }
+   
+
+  async function loginAdmin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       const user = {
@@ -207,26 +325,26 @@ export default function useAuthForm() {
 
 
 
-      // const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token")
 
       
-      // if (!token) throw new Error ("token lipsa");
+      if (!token) throw new Error ("token lipsa");
       
-      // const response_admin = await fetch("http://localhost:4000/api/users/admin/profile", {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // })
+      const response_admin = await fetch("http://localhost:4000/api/users/admin/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
 
-      // if (!response_admin.ok) throw new Error("Nu s-au putut încărca profilele admin");
+      if (!response_admin.ok) throw new Error("Nu s-au putut încărca profilele admin");
 
-      // const admin_profiles = await response_admin.json()
+      const admin_profiles = await response_admin.json()
 
-      // setAdmin(admin_profiles)
+      setAdmin(admin_profiles)
 
       setLogged_in(true)
 
-      // navigate("/admin")
+      navigate("/admin")
 
     } catch (error) {
       if (error instanceof yup.ValidationError) {
@@ -258,11 +376,11 @@ export default function useAuthForm() {
     isLoggedForm,
     message,
     logged_in,
-    // admin,
+    admin,
     setIsLoggedForm,
     handleChange,
     handleBlur,
-    signUp,
-    login,
+    signUpProvider,
+    loginProvider,
   };
 }
