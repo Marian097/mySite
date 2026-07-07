@@ -1,17 +1,18 @@
-import Sing_up from "./page/sign_up.tsx";
-import useAuthForm from "./hooks/useAuthForm.ts";
-import useCharts from "./hooks/useCharts.ts";
-import AdminPanel from "./page/admin_panel.tsx";
-import hooksWorker from "./hooks/useWorkers.ts";
+// import Sing_up from "./page/sign_up.tsx";
+// import useAuthForm from "./hooks/useAuthForm.ts";
+// import useCharts from "./hooks/useCharts.ts";
+// import AdminPanel from "./page/admin_panel.tsx";
+// import hooksWorker from "./hooks/useWorkers.ts";
+import hooksIdentity from "./hooks/useIdentityForm.ts"
 import { Routes, Route } from "react-router";
 import VerifyIdentity from "./page/verify_identity.tsx";
-import ProgressBar from "./components/ProgresBar.tsx";
 // import ExplorePage from "./page/ExplorePage.tsx";
 
 function App() {
-  const render = useAuthForm();
-  const workers = hooksWorker();
-  const charts = useCharts();
+  // const render = useAuthForm();
+  // const workers = hooksWorker();
+  // const charts = useCharts();
+  const identity = hooksIdentity();
   return (
     <>
       <Routes>
@@ -74,7 +75,18 @@ function App() {
             />
           }
         /> */}
-        <Route path="/" element={<VerifyIdentity/>}/>
+        <Route
+          path="/"
+          element={
+            <VerifyIdentity
+              values={identity.values}
+              errors={identity.errors}
+              touched={identity.touched}
+              handleChange={identity.handleChange}
+              handleBlur={identity.handleBlur}
+            />
+          }
+        />
       </Routes>
     </>
   );

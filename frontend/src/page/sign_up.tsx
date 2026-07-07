@@ -1,4 +1,4 @@
-import FormWorker from "../components/SignUpProvider.tsx";
+import FormSignUp from "../components/SignUpProvider.tsx";
 import FormLogin from "../components/FormLogin.tsx";
 import Header from "../components/Header.tsx";
 import type { User } from "../types/AuthTypes/User.ts";
@@ -43,7 +43,7 @@ export default function Sign_up({
         <Route
           path="/sign-up"
           element={
-            <FormWorker
+            <FormSignUp
               message={message}
               value={value}
               errors={errors}
