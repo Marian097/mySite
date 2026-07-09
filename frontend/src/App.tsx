@@ -1,22 +1,22 @@
-// import Sing_up from "./page/sign_up.tsx";
-// import useAuthForm from "./hooks/useAuthForm.ts";
+import Sing_up from "./page/sign_up.tsx";
+import useAuthForm from "./hooks/useAuthForm.ts";
 // import useCharts from "./hooks/useCharts.ts";
 // import AdminPanel from "./page/admin_panel.tsx";
 // import hooksWorker from "./hooks/useWorkers.ts";
 import hooksIdentity from "./hooks/useIdentityForm.ts"
 import { Routes, Route } from "react-router";
 import VerifyIdentity from "./page/verify_identity.tsx";
-// import ExplorePage from "./page/ExplorePage.tsx";
+
 
 function App() {
-  // const render = useAuthForm();
+  const render = useAuthForm();
   // const workers = hooksWorker();
   // const charts = useCharts();
   const identity = hooksIdentity();
   return (
     <>
       <Routes>
-        {/* <Route
+        <Route
           path="/*"
           element={
             <Sing_up
@@ -35,7 +35,7 @@ function App() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/admin"
           element={
             <AdminPanel
@@ -76,7 +76,7 @@ function App() {
           }
         /> */}
         <Route
-          path="/"
+          path="/identity-verification"
           element={
             <VerifyIdentity
               values={identity.values}
@@ -84,6 +84,10 @@ function App() {
               touched={identity.touched}
               handleChange={identity.handleChange}
               handleBlur={identity.handleBlur}
+              handleSubmitIdentity = {identity.handleSubmitIdentity}
+              message = {identity.message}
+              isSteps = {identity.isSteps}
+              setIsSteps = {identity.setIsSteps}
             />
           }
         />

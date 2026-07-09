@@ -24,7 +24,7 @@ const schema = yup.object({
 
 export default function useIdentityForm() {
   const [values, setValues] = useState<Identity>({
-    ci_image: "",
+    ci_image: null,
     date: "",
     ci_selfie: "",
   });
@@ -42,6 +42,9 @@ export default function useIdentityForm() {
   })
 
   const [message, setMessage] = useState<string>("")
+
+
+  const [isSteps, setIsSteps] = useState<number>(0)
 
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -84,7 +87,7 @@ export default function useIdentityForm() {
   }
 
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+  async function handleSubmitIdentity(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault()
 
     try{
@@ -107,6 +110,7 @@ export default function useIdentityForm() {
         const res = await response.json();
 
         setMessage(res)
+       
     }
     catch(err){
         if (err instanceof Error) setMessage(err.message)
@@ -118,7 +122,10 @@ export default function useIdentityForm() {
     values,
     errors,
     touched,
-    handleSubmit,
+    message,
+    isSteps, 
+    setIsSteps,
+    handleSubmitIdentity,
     handleChange,
     handleBlur,
   };

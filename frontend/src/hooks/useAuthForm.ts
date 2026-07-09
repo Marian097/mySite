@@ -145,6 +145,8 @@ export default function useAuthForm() {
 
       setMessage(Array.isArray(data.message) ? data.message.join(", "): data.message)
 
+      navigate("/identity-verification")
+
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: Errors = {

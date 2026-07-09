@@ -1,5 +1,5 @@
 export type Identity = {
-    ci_image: string;
+    ci_image: File | null;
     date: string;
-    ci_selfie: string;
+    ci_selfie: string | null;
 }

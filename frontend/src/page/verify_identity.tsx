@@ -10,11 +10,15 @@ type Props = {
    values: Identity,
    errors: Error,
    touched: Touched,
+   message: string,
+   isSteps: number,
+  handleSubmitIdentity: (e: React.FormEvent<HTMLFormElement>) => void;
+   setIsSteps: (step: number) => void;
    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
    handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export default function verify_identity({values, errors, touched, handleChange, handleBlur} : Props) {
+export default function verify_identity({values, errors, touched, isSteps, handleChange, handleBlur, setIsSteps, handleSubmitIdentity} : Props) {
   return (
     <div>
       <div className = "grid">
@@ -28,10 +32,10 @@ export default function verify_identity({values, errors, touched, handleChange, 
         </div>
         <div className = "flex bg-[#fafbfe]">
           <div>
-            <ProgresBar />
+            <ProgresBar isSteps = {isSteps}/>
           </div>
-          <div className = " flex justify-center w-full">
-            <FormIdentity values = {values} errors = {errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur}/>
+          <div className = " flex justify-center w-full h-auto">
+            <FormIdentity values = {values} errors = {errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} setIsSteps = {setIsSteps} handleSubmitIdentity = {handleSubmitIdentity}/>
           </div>
         </div>
       </div>
