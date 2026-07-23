@@ -1,16 +1,50 @@
 import { Router } from "express";
 
-import { createProfile, updateProfile, deleteProfile, addDocuments, registerBussines} from "./worker.controller.js"
+import {
+  createProfile,
+  updateProfile,
+  deleteProfile,
+  addDocuments,
+  registerBussines,
+} from "./worker.controller.js";
 
-import { verifiedToken } from "../../../middleware/jwt.middleware.js"
-import { verifyProvider } from "../../../middleware/requireRole.js"
+import { verifiedToken } from "../../../middleware/jwt.middleware.js";
+import { verifyProvider } from "../../../middleware/requireRole.js";
+import { upload } from "../../../middleware/uploads.middleware.js";
 
+export const workerRouter = Router();
 
-
-export const workerRouter = Router()
-
-workerRouter.post("/create/worker/profile", verifiedToken, verifyProvider , createProfile)
-workerRouter.patch("/update/worker/profile", verifiedToken, verifyProvider, updateProfile)
-workerRouter.delete("/update/worker/profile", verifiedToken, verifyProvider, deleteProfile )
-workerRouter.post("/worker/documents", verifiedToken, verifyProvider, addDocuments)
-workerRouter.post("/bussines/documents", verifiedToken, verifyProvider, registerBussines)
+workerRouter.post(
+  "/create/worker/profile",
+  verifiedToken,
+  verifyProvider,
+  createProfile,
+);
+workerRouter.patch(
+  "/update/worker/profile",
+  verifiedToken,
+  verifyProvider,
+  updateProfile,
+);
+workerRouter.delete(
+  "/update/worker/profile",
+  verifiedToken,
+  verifyProvider,
+  deleteProfile,
+);
+workerRouter.post(
+  "/worker/documents",
+  verifiedToken,
+  verifyProvider,
+  upload.fields([
+    { name: "ci_image", maxCount: 1 },
+    { name: "ci_selfie", maxCount: 1 },
+  ]),
+  addDocuments,
+);
+workerRouter.post(
+  "/bussines/documents",
+  verifiedToken,
+  verifyProvider,
+  registerBussines,
+);

@@ -13,6 +13,7 @@ type Props = {
   values: Identity;
   errors: Error;
   touched: Touched;
+  response: string;
   handleSubmitIdentity: (e: React.FormEvent<HTMLFormElement>) => void;
   setIsSteps: (step: number) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -33,11 +34,15 @@ export default function FormIdentity({
     setIsSteps(1);
   }, []);
 
+  console.log("FormIdentity render");
   return (
     <form
       className="bg-white rounded-md shadow-xl w-3xl h-auto py-3 mt-3"
       encType="multipart/form-data"
-      onSubmit={(e) => handleSubmitIdentity(e)}
+      onSubmit={(e) =>{
+        console.log("formsubmit")
+        handleSubmitIdentity(e)
+      } }
     >
       <div className="flex items-center pl-3">
         <div>
@@ -85,7 +90,6 @@ export default function FormIdentity({
                 name="ci_image"
                 id=""
                 className="opacity-0"
-                value={values.ci_image}
                 onBlur={handleBlur}
                 onChange={handleChange}
               />
@@ -99,7 +103,7 @@ export default function FormIdentity({
               <span className="font-bold font-nunito text-xs text-[#999AA9]">
                 Format acceptat: JPG, PNG - Max. 5MB{" "}
               </span>
-              <span className = "border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  ">{values.ci_image.split("\\").pop()}</span>
+              <span className = "border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  ">{values.ci_image?.name}</span>
             </div>
           </div>
           <div className="bg-[#fbfbfc] border-2 border-[#eff1f5] rounded-xl">
@@ -183,7 +187,6 @@ export default function FormIdentity({
               name="ci_selfie"
               id=""
               className="opacity-0"
-              value={values.ci_selfie}
               onBlur={handleBlur}
               onChange={handleChange}
             />
@@ -197,7 +200,7 @@ export default function FormIdentity({
             <span className="font-bold font-nunito text-xs text-[#999AA9]">
               Format acceptat: JPG, PNG - Max. 5MB{" "}
             </span>
-            <span className = "border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  ">{values.ci_selfie.split("\\").pop()}</span>
+            <span className = "border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  ">{values.ci_selfie?.name}</span>
           </div>
           
         </div>
@@ -212,13 +215,13 @@ export default function FormIdentity({
       </div>
       <div className="border-b-2 border-[#e7eaf3] mt-6"></div>
       <div className="grid grid-cols-4 gap-x-3 px-4 mx-4 py-2 mt-4">
-        <div className="col-span-1 hover:bg-[#fbfbfc] focus-visible:outline-[#fbfbfc62] focus-visible:outline-2 flex justify-center border-2 rounded-md font-semibold border-[#eff1f5]  bg-white-500 px-3 py-1.5 text-sm/6 text-[#1D1F42]">
-          <button>Anulează</button>
+        <div>
+          <button type= "button" className = "col-span-1 hover:bg-[#fbfbfc] focus-visible:outline-[#fbfbfc62] focus-visible:outline-2 flex justify-center border-2 rounded-md font-semibold border-[#eff1f5]  bg-white-500 px-3 py-1.5 text-sm/6 text-[#1D1F42]">Anulează</button>
         </div>
         <div></div>
-        <div className="col-span-2 flex w-full items-center gap-x-2 justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-          <button type = "submit">Continuă</button>
-          <img src={forward} alt="" className="h-5" />
+        <div>
+          <button type = "submit" className = "col-span-2 flex w-full items-center gap-x-2 justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Continuă<img src={forward} alt="" className="h-5" /></button>
+    
         </div>
       </div>
     </form>

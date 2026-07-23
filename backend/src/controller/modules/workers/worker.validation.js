@@ -9,9 +9,9 @@ const regex_date =
   /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 export const documentsWorkerSchema = yup.object({
-  ci_image_url: yup.string().required("Poza de buletin este obligatorie"),
-  ci_expiration_date: yup.string().matches(regex_date, "Format data invalid" ),
-  selfie_ci_person: yup.string().required("Va rog sa confirmati identitatea")});
+  ci_image: yup.mixed().required("Poza de buletin este obligatorie"),
+  date: yup.string().matches(regex_date, "Format data invalid" ),
+  ci_selfie: yup.mixed().required("Va rog sa confirmati identitatea")});
 
 
 export const workerProfileSchema = yup.object({

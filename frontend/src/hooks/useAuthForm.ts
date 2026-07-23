@@ -145,6 +145,8 @@ export default function useAuthForm() {
 
       setMessage(Array.isArray(data.message) ? data.message.join(", "): data.message)
 
+      localStorage.setItem("token", data.token)
+
       navigate("/identity-verification")
 
     } catch (err) {

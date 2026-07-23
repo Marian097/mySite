@@ -160,7 +160,6 @@ export async function hasAcceptUserDocuments(req, res, next) {
       [true, date_now, user_id, "Success", documents_id],
     );
 
-    console.log("Dupa verificarea documentelor");
 
     if (update_verified.rows.length === 0) {
       await db.query("ROLLBACK");

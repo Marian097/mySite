@@ -259,21 +259,35 @@ export async function deleteProfile(req, res, next) {
 export async function addDocuments(req, res, next) {
   const db = await pool.connect();
 
-  const { ci_image_url, ci_expiration_date, selfie_ci_person } = req.body;
+  console.log(req.body);
+  console.log(req.files);
+  const date = req.body.date;
 
+  const ci_image = req.files.ci_image[0].path;
+  const ci_selfie = req.files.ci_selfie[0].path;
   const user_id = req.user.id;
 
+  const documentIdentity = {
+    ci_image,
+    ci_selfie,
+    date,
+  };
+
   try {
-    await documentsWorkerSchema.validate(req.body, { abortEarly: false });
+    console.log("eroare inainte de validare backend");
+    await documentsWorkerSchema.validate(documentIdentity, {
+      abortEarly: false,
+    });
 
     await db.query("BEGIN");
 
+    console.log("ianainte de baza de date");
     const user_documents = await db.query(
       "INSERT INTO user_documents (user_id, ci_image_url, ci_expiration_date, selfie_ci_person) VALUES ($1, $2, $3, $4) RETURNING *",
-      [user_id, ci_image_url, ci_expiration_date, selfie_ci_person],
+      [user_id, ci_image, date, ci_selfie],
     );
 
-    console.log("Dupa insert into user_documents");
+    console.log("Dupa ce am incarcat datele in baza de date");
 
     if (user_documents.rows.length === 0) {
       await db.query("ROLLBACK");
@@ -286,11 +300,11 @@ export async function addDocuments(req, res, next) {
 
     return res.status(200).json(user_documents);
   } catch (error) {
+    await db.query("ROLLBACK");
+
     console.error(error);
-    if (error instanceof yup.ValidationError) {
-      await db.query("ROLLBACK");
-      return res.status(500).json({ message: error.message });
-    }
+
+    return next(error);
   } finally {
     db.release();
   }
@@ -340,7 +354,6 @@ export async function registerBussines(req, res, next) {
     if (user_documents_id.rows.length === 0)
       return res.status(404).json({ message: "Creati mai intai profilul!" });
 
-    
     await db.query("BEGIN");
 
     const bussines_documents = await db.query(

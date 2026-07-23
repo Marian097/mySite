@@ -56,6 +56,7 @@ export async function registerProvider(req, res, next) {
     const username = result.rows[0].name;
     const user_id = result.rows[0].id;
 
+
     const get_roles = await db.query("SELECT * FROM roles WHERE role_name = $1", [role]);
 
     let exists = false;
@@ -90,11 +91,24 @@ export async function registerProvider(req, res, next) {
       return res.status(404).json({ message: "Va rog selectati un rol valid" });
     }
 
+     const user = {
+      id: user_id,
+      email: email,
+    };
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET lipsește din variabilele de mediu");
+    }
+
+    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "15m" });
+
     await db.query("COMMIT");
 
     return res.status(201).json({
       message: `Salut ${username}! Te-ai inregistrat cu succes!`,
+      token: token
     });
+    
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       await db.query("ROLLBACK");
@@ -175,7 +189,6 @@ export async function registerClient(req, res, next) {
         [user_id, role_id]
       );
 
-      console.log(user_roles.rows.length)
 
       if (user_roles.rows.length === 0) {
         await db.query("ROLLBACK");

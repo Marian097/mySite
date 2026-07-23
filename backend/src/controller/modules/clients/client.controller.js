@@ -67,7 +67,6 @@ export async function filterProfile(req, res, next) {
   `;
     const filterProfile = await db.query(query, values);
 
-    console.log("Debug_3");
 
     if (filterProfile.rows.length === 0) {
       return res.status(404).json({ message: "Nici un rezultat" });

@@ -85,7 +85,7 @@ function App() {
               handleChange={identity.handleChange}
               handleBlur={identity.handleBlur}
               handleSubmitIdentity = {identity.handleSubmitIdentity}
-              message = {identity.message}
+              response = {identity.response}
               isSteps = {identity.isSteps}
               setIsSteps = {identity.setIsSteps}
             />
