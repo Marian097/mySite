@@ -1,5 +1,6 @@
 import type { Identity } from "../types/AuthTypes/Identity";
 import {useState} from "react";
+import { useNavigate } from "react-router";
 
 
 import * as yup from "yup";
@@ -24,6 +25,7 @@ const schema = yup.object({
 
 export default function useIdentityForm() {
     
+  const navigate = useNavigate()
 
   const [values, setValues] = useState<Identity>({
     ci_image: null,
@@ -42,6 +44,8 @@ export default function useIdentityForm() {
     date: false,
     ci_selfie: false,
   })
+
+
 
   const [response, setResponse] = useState<string>("")
 
@@ -98,28 +102,16 @@ export default function useIdentityForm() {
 
 
   async function handleSubmitIdentity(e: React.FormEvent<HTMLFormElement>){
-    e.preventDefault()
+    e.preventDefault() 
 
-    console.log(values)
     const formData = new FormData()
 
-    console.log("1. A intrat în submit");
-
-    console.log("SUBMIT VALUES", {
-  ci_image: values.ci_image?.name,
-  date: values.date,
-  ci_selfie: values.ci_selfie?.name,
-});
 
     try{
-         console.log("2. Values:", values);
-         console.log("same object?", values);
         await schema.validate(values, {abortEarly: false})
-        console.log("after validate");
 
-        console.log("3. Validarea a trecut");
         const token = localStorage.getItem("token");
-         console.log("4. Token:", token);
+
         if (!token) throw new Error ("Token lipsă");
 
         if (values.ci_image && values.ci_selfie && values.date)
@@ -129,9 +121,6 @@ export default function useIdentityForm() {
             formData.append("date", values.date)
         }
      
-        console.log(Array.from(formData.entries()))
-        console.log("asmdoimasa")
-
         const response = await fetch("http://localhost:4000/api/users/worker/documents", {
             method: "POST",
             headers: {
@@ -140,15 +129,15 @@ export default function useIdentityForm() {
             body: formData  
         })
 
-        console.log("5. Trimit request-ul");
         if (!response.ok) throw new Error ("A intervenit o eroare la prelucrarea datelor")
         
         const res = await response.json();
 
         setResponse(res.message)
+
+        navigate("/bussiness")
     }
     catch(err){
-          console.error("EROARE:", err);
         if (err instanceof Error) setResponse(err.message)
             
     }

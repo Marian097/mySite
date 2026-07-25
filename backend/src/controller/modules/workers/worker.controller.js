@@ -259,8 +259,6 @@ export async function deleteProfile(req, res, next) {
 export async function addDocuments(req, res, next) {
   const db = await pool.connect();
 
-  console.log(req.body);
-  console.log(req.files);
   const date = req.body.date;
 
   const ci_image = req.files.ci_image[0].path;
@@ -313,13 +311,16 @@ export async function addDocuments(req, res, next) {
 export async function registerBussines(req, res, next) {
   const db = await pool.connect();
 
-  const {
-    name_bussines,
-    certificate_registration,
-    type_bussines,
-    cif,
-    address,
-  } = req.body;
+  const name_bussines = req.body.name_bussines;
+  const certificate_registration = req.files[0].path;
+  const type_bussines = req.body.type_bussines;
+  const cif = req.body.cif;
+  const address = req.body.address;
+  const postal_code = req.body.postal_code;
+
+  const country = req.body.country;
+  const county = req.body.county;
+  const city = req.body.city;
 
   const user_id = req.user.id;
 
@@ -357,7 +358,7 @@ export async function registerBussines(req, res, next) {
     await db.query("BEGIN");
 
     const bussines_documents = await db.query(
-      "INSERT INTO bussines_documents (user_id, user_documents_id, name_bussines, registration_certificate_image_url, cif, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id ",
+      "INSERT INTO bussines_documents (user_id, user_documents_id, name_bussines, registration_certificate_image_url, cif, address, postal_code, country, county, city,  ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id ",
       [
         user_id,
         user_documents_id.rows[0].id,
@@ -365,6 +366,10 @@ export async function registerBussines(req, res, next) {
         certificate_registration,
         cif,
         address,
+        postal_code,
+        country,
+        county,
+        city,
       ],
     );
 

@@ -147,7 +147,7 @@ export default function useAuthForm() {
 
       localStorage.setItem("token", data.token)
 
-      navigate("/identity-verification")
+      navigate("/verification")
 
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -381,6 +381,8 @@ export default function useAuthForm() {
     message,
     logged_in,
     admin,
+    loginAdmin,
+    loginClient,
     setIsLoggedForm,
     handleChange,
     handleBlur,

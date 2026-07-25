@@ -5,7 +5,6 @@ import type { User } from "../types/AuthTypes/User.ts";
 import type { Errors } from "../types/AuthTypes/Errors.ts";
 import type { Touched } from "../types/AuthTypes/Touched.ts";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin.ts";
-import { Routes, Route } from "react-router";
 
 type Props = {
   value: User;
@@ -36,45 +35,31 @@ export default function Sign_up({
 }: Props) {
   return (
     <div>
-      <Header
+      <Header />
+      <FormSignUp
+        message={message}
+        value={value}
+        errors={errors}
+        touched={touched}
+        handleChange={handleChange}
+        handleBlur={handleBlur}
+        singUpProvider={singUpProvider}
+        isLoggedForm={isLoggedForm}
+        setIsLoggedForm={setIsLoggedForm}
+        errorsLogin={errorsLogin}
       />
 
-      <Routes>
-        <Route
-          path="/sign-up"
-          element={
-            <FormSignUp
-              message={message}
-              value={value}
-              errors={errors}
-              touched={touched}
-              handleChange={handleChange}
-              handleBlur={handleBlur}
-              singUpProvider={singUpProvider}
-              isLoggedForm={isLoggedForm}
-              setIsLoggedForm={setIsLoggedForm}
-              errorsLogin={errorsLogin}
-            />
-          }
-        />
-
-        <Route
-          path="/login"
-          element={
-            <FormLogin
-              value={value}
-              loginProvider={loginProvider}
-              errors={errors}
-              touched={touched}
-              handleChange={handleChange}
-              handleBlur={handleBlur}
-              isLoggedForm={isLoggedForm}
-              setIsLoggedForm={setIsLoggedForm}
-              errorsLogin={errorsLogin}
-            />
-          }
-        />
-      </Routes>
+      <FormLogin
+        value={value}
+        loginProvider={loginProvider}
+        errors={errors}
+        touched={touched}
+        handleChange={handleChange}
+        handleBlur={handleBlur}
+        isLoggedForm={isLoggedForm}
+        setIsLoggedForm={setIsLoggedForm}
+        errorsLogin={errorsLogin}
+      />
     </div>
   );
 }

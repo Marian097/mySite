@@ -4,6 +4,7 @@ import useAuthForm from "./hooks/useAuthForm.ts";
 // import AdminPanel from "./page/admin_panel.tsx";
 // import hooksWorker from "./hooks/useWorkers.ts";
 import hooksIdentity from "./hooks/useIdentityForm.ts"
+import hooksBussiness from "./hooks/useBussinesForm.ts"
 import { Routes, Route } from "react-router";
 import VerifyIdentity from "./page/verify_identity.tsx";
 
@@ -13,6 +14,7 @@ function App() {
   // const workers = hooksWorker();
   // const charts = useCharts();
   const identity = hooksIdentity();
+  const bussiness = hooksBussiness ();
   return (
     <>
       <Routes>
@@ -76,7 +78,7 @@ function App() {
           }
         /> */}
         <Route
-          path="/identity-verification"
+          path="/verification/*"
           element={
             <VerifyIdentity
               values={identity.values}
@@ -88,6 +90,12 @@ function App() {
               response = {identity.response}
               isSteps = {identity.isSteps}
               setIsSteps = {identity.setIsSteps}
+              valuesBussiness = {bussiness.values}
+              errorsBussiness = {bussiness.error}
+              touchedBussiness = {bussiness.touched}
+              handleChangeBussiness = {bussiness.handleChange}
+              handleBlurBussiness = {bussiness.handleBlur}
+              handleSubmitFiscalData = {bussiness.handleSubmitFiscalData}
             />
           }
         />

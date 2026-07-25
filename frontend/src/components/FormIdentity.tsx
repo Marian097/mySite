@@ -7,7 +7,8 @@ import forward from "../assets/image/arrow forward.svg";
 import type { Identity } from "../types/AuthTypes/Identity";
 import type { Error } from "../hooks/useIdentityForm";
 import type { Touched } from "../hooks/useIdentityForm";
-import { useEffect } from "react";
+import { useEffect } from "react"
+ 
 
 type Props = {
   values: Identity;
@@ -25,16 +26,14 @@ export default function FormIdentity({
   errors,
   touched,
   handleChange,
-  setIsSteps,
   handleBlur,
   handleSubmitIdentity,
+  setIsSteps,
 }: Props) {
-  
   useEffect(() => {
-    setIsSteps(1);
-  }, []);
-
-  console.log("FormIdentity render");
+    setIsSteps(1)
+  }, [])
+  
   return (
     <form
       className="bg-white rounded-md shadow-xl w-3xl h-auto py-3 mt-3"
@@ -88,7 +87,6 @@ export default function FormIdentity({
               <input
                 type="file"
                 name="ci_image"
-                id=""
                 className="opacity-0"
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -144,9 +142,9 @@ export default function FormIdentity({
           </div>
         </div>
         <div>
-          {touched.date && errors.date ? (
-            <p className = "text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errors.date}`}</p>
-          ): <p className = "text-green-500 font-bold font-nunito text-xs sm:text-sm">Ați ales cu succes data</p>}
+           {touched.date && errors.date && (
+          <p className = "text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errors.ci_selfie}`}</p>
+        )}
         </div>
         <div className="py-3">
           <div className="flex items-center">
@@ -192,7 +190,7 @@ export default function FormIdentity({
             />
           </div>
           <div className="flex justify-center">
-            <h4 className="border bg-[#fafafa] border-[#eff1f5]  py-1 px-3 rounded-md font-bold font-nunito text-xs sm:text-sm text-[#1D1F42]">
+            <h4 className="border bg-[#fafafa] border-[#eff1f5] py-1 px-3 rounded-md font-bold font-nunito text-xs sm:text-sm text-[#1D1F42]">
               Alege fișier
             </h4>
           </div>
@@ -210,7 +208,7 @@ export default function FormIdentity({
       </div>
       <div>
         {touched.ci_selfie && errors.ci_selfie && (
-          <p className = "text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errors.ci_selfie}`}</p>
+          <p className = "text-[#999AA9] font-bold font-nunito text-xs sm:text-sm ml-5">{`*${errors.ci_selfie}`}</p>
         )}
       </div>
       <div className="border-b-2 border-[#e7eaf3] mt-6"></div>
