@@ -3,6 +3,7 @@ import { Router } from "express";
 import { registerProvider, Login, registerClient, registerAdmin } from "./auth.controller.js"
 
 
+
 export const authRouter = Router()
 
 authRouter.post("/sign-up/provider", registerProvider)

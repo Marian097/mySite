@@ -135,7 +135,7 @@ export default function useIdentityForm() {
 
         setResponse(res.message)
 
-        navigate("/bussiness")
+        navigate("/informații-fiscale")
     }
     catch(err){
         if (err instanceof Error) setResponse(err.message)

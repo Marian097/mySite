@@ -25,17 +25,17 @@ export async function registerProvider(req, res, next) {
 
     await db.query("BEGIN");
 
-    const verified_email = await db.query("SELECT email FROM users");
+    const verified_email = await db.query("SELECT id FROM users WHERE email = $1", [email]);
 
     let existsEmail = false;
 
-    for (let e of verified_email.rows)
+    if (verified_email.rows.length > 0)
     {
-      if (email === e.email)
-      {
+    
         existsEmail = true
-        break
-      }
+        return res.status(409).json({
+         message: "Sunteți deja înregistrat" 
+    })
     }
 
     if (existsEmail)
@@ -313,7 +313,7 @@ export async function Login(req, res) {
 
     await loginSchema.validate(req.body, { abortEarly: false });
 
-    const results = await db.query("SELECT * FROM users WHERE email = $1", [
+    const results = await db.query("SELECT u.id,  u.password_hash, u.email, r.role_name AS role FROM users u JOIN user_roles ur ON ur.user_id = u.id JOIN roles r ON r.id = ur.role_id WHERE email = $1", [
       email,
     ]);
 
@@ -336,6 +336,7 @@ export async function Login(req, res) {
     const user = {
       id: dbUser.id,
       email: dbUser.email,
+      role: dbUser.role
     };
 
     if (!process.env.JWT_SECRET) {

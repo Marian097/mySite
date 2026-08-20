@@ -7,7 +7,7 @@ import type { Error } from "../hooks/useIdentityForm";
 import type { Touched } from "../hooks/useIdentityForm";
 import FormFiscal from "../components/FormFiscal";
 import type { Fiscal, Errors, TouchedBussines } from "../hooks/useBussinesForm";
-import { Routes, Route } from "react-router";
+
 
 type Props = {
   values: Identity;
@@ -64,37 +64,26 @@ export default function verify_identity({
             <ProgresBar isSteps={isSteps} />
           </div>
           <div className="flex justify-center w-full h-auto">
-            <Routes>
-              <Route
-                path="/identity"
-                element={
-                  <FormIdentity
-                    values={values}
-                    errors={errors}
-                    touched={touched}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    setIsSteps={setIsSteps}
-                    handleSubmitIdentity={handleSubmitIdentity}
-                    response={response}
-                  />
-                }
-              />
-              <Route
-                path="/bussiness"
-                element={
-                  <FormFiscal
-                    setIsSteps={setIsSteps}
-                    valuesBussiness={valuesBussiness}
-                    errorsBussiness={errorsBussiness}
-                    touchedBussiness={touchedBussiness}
-                    handleChangeBussiness={handleChangeBussiness}
-                    handleBlurBussiness={handleBlurBussiness}
-                    handleSubmitFiscalData={handleSubmitFiscalData}
-                  />
-                }
-              />
-            </Routes>
+            <FormIdentity
+              values={values}
+              errors={errors}
+              touched={touched}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              setIsSteps={setIsSteps}
+              handleSubmitIdentity={handleSubmitIdentity}
+              response={response}
+            />
+
+            <FormFiscal
+              setIsSteps={setIsSteps}
+              valuesBussiness={valuesBussiness}
+              errorsBussiness={errorsBussiness}
+              touchedBussiness={touchedBussiness}
+              handleChangeBussiness={handleChangeBussiness}
+              handleBlurBussiness={handleBlurBussiness}
+              handleSubmitFiscalData={handleSubmitFiscalData}
+            />
           </div>
         </div>
       </div>

@@ -1,44 +1,65 @@
-import Sing_up from "./page/sign_up.tsx";
+import AuthPage from "./page/AuthPage.tsx";
 import useAuthForm from "./hooks/useAuthForm.ts";
-// import useCharts from "./hooks/useCharts.ts";
-// import AdminPanel from "./page/admin_panel.tsx";
-// import hooksWorker from "./hooks/useWorkers.ts";
-import hooksIdentity from "./hooks/useIdentityForm.ts"
-import hooksBussiness from "./hooks/useBussinesForm.ts"
+import useCharts from "./hooks/useCharts.ts";
+import AdminPanel from "./page/AdminPanel.tsx";
+import hooksWorker from "./hooks/useWorkers.ts";
+import hooksIdentity from "./hooks/useIdentityForm.ts";
+import hooksBussiness from "./hooks/useBussinesForm.ts";
 import { Routes, Route } from "react-router";
-import VerifyIdentity from "./page/verify_identity.tsx";
-
+import AccountSetup from "./page/AccountSetup.tsx";
+import AuthHeader from "./components/AuthHeader.tsx";
 
 function App() {
   const render = useAuthForm();
-  // const workers = hooksWorker();
-  // const charts = useCharts();
+  const workers = hooksWorker();
+  const charts = useCharts();
   const identity = hooksIdentity();
-  const bussiness = hooksBussiness ();
+  const bussiness = hooksBussiness();
   return (
     <>
+      <AuthHeader setIsLoggedForm={render.setIsLoggedForm} />
       <Routes>
         <Route
-          path="/*"
+          path="/"
           element={
-            <Sing_up
+            <AuthPage
               message={render.message}
               value={render.values}
               errors={render.errors}
               touched={render.touched}
+              isLoggedForm={render.isLoggedForm}
               handleChange={render.handleChange}
               handleBlur={render.handleBlur}
               singUpProvider={render.signUpProvider}
-              loginProvider={render.loginProvider}
-              isLoggedForm={render.isLoggedForm}
-              setIsLoggedForm={render.setIsLoggedForm}
               errorsLogin={render.errorsLogin}
+              login = {render.login}
+            />
+          }
+        />{" "}
+        <Route
+          path="/verificare-informații/*"
+          element={
+            <AccountSetup
+              values={identity.values}
+              errors={identity.errors}
+              touched={identity.touched}
+              handleChange={identity.handleChange}
+              handleBlur={identity.handleBlur}
+              handleSubmitIdentity={identity.handleSubmitIdentity}
+              response={identity.response}
+              isSteps={identity.isSteps}
+              setIsSteps={identity.setIsSteps}
+              valuesBussiness={bussiness.values}
+              errorsBussiness={bussiness.error}
+              touchedBussiness={bussiness.touched}
+              handleChangeBussiness={bussiness.handleChange}
+              handleBlurBussiness={bussiness.handleBlur}
+              handleSubmitFiscalData={bussiness.handleSubmitFiscalData}
             />
           }
         />
-
-        {/* <Route
-          path="/admin"
+        <Route
+          path="/panou-administrare"
           element={
             <AdminPanel
               error={workers.error}
@@ -74,28 +95,6 @@ function App() {
               getStats={charts.getStats}
               handleAcceptUser={workers.handleAcceptUser}
               handleRejectUser={workers.handleRejectUser}
-            />
-          }
-        /> */}
-        <Route
-          path="/verification/*"
-          element={
-            <VerifyIdentity
-              values={identity.values}
-              errors={identity.errors}
-              touched={identity.touched}
-              handleChange={identity.handleChange}
-              handleBlur={identity.handleBlur}
-              handleSubmitIdentity = {identity.handleSubmitIdentity}
-              response = {identity.response}
-              isSteps = {identity.isSteps}
-              setIsSteps = {identity.setIsSteps}
-              valuesBussiness = {bussiness.values}
-              errorsBussiness = {bussiness.error}
-              touchedBussiness = {bussiness.touched}
-              handleChangeBussiness = {bussiness.handleChange}
-              handleBlurBussiness = {bussiness.handleBlur}
-              handleSubmitFiscalData = {bussiness.handleSubmitFiscalData}
             />
           }
         />
