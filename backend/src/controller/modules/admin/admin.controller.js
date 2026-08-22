@@ -587,6 +587,7 @@ export async function calculateProcentWorkersApproved(req, res, next) {
   try {
     const initialApproved = Number(initialValueApproved);
 
+
     if (!initialApproved || initialApproved <= 0) {
       return res.status(400).json({
         message: "Nu se poate calcula procentul",

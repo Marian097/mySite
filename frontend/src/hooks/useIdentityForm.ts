@@ -1,6 +1,6 @@
 import type { Identity } from "../types/AuthTypes/Identity";
 import {useState} from "react";
-import { useNavigate } from "react-router";
+
 
 
 import * as yup from "yup";
@@ -25,7 +25,6 @@ const schema = yup.object({
 
 export default function useIdentityForm() {
     
-  const navigate = useNavigate()
 
   const [values, setValues] = useState<Identity>({
     ci_image: null,
@@ -50,7 +49,6 @@ export default function useIdentityForm() {
   const [response, setResponse] = useState<string>("")
 
 
-  const [isSteps, setIsSteps] = useState<number>(0)
 
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -134,8 +132,8 @@ export default function useIdentityForm() {
         const res = await response.json();
 
         setResponse(res.message)
+        
 
-        navigate("/informații-fiscale")
     }
     catch(err){
         if (err instanceof Error) setResponse(err.message)
@@ -149,8 +147,6 @@ export default function useIdentityForm() {
     errors,
     touched,
     response,
-    isSteps, 
-    setIsSteps,
     handleSubmitIdentity,
     handleChange,
     handleBlur,

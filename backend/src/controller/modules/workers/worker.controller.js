@@ -402,3 +402,42 @@ export async function registerBussines(req, res, next) {
     db.release();
   }
 }
+
+export async function updateStep(req, res)
+{
+
+  const db = await pool.connect()
+  
+  try{
+    const { step } = req.body;
+    const user_id = req.user.id
+
+    if (!step)
+    {
+      return res.status(500).json({message: "A intervenit o eroare la înregistrare"})
+    }
+
+    await db.query("BEGIN")
+
+
+    const isStep = await db.query("UPDATE verification_progress SET verification_step = $1 WHERE user_id = $2 RETURNING verification_step", [step, user_id])
+
+    if (isStep.rows.length === 0)
+    {
+      await db.query("ROLLBACK");
+      return res.status(500).json({message: "Progresul nu a fost înregistrat"})
+    }
+
+     await db.query("COMMIT");
+
+    return res.status(200).json(isStep.rows[0].verification_step)
+  }
+  catch(err){
+    console.log(err.message)
+    await db.query("ROLLBACK")
+    return res.status(500).json({message: err.message})
+  }
+  finally{
+    db.release();
+  }
+}

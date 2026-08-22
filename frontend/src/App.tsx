@@ -7,7 +7,6 @@ import hooksIdentity from "./hooks/useIdentityForm.ts";
 import hooksBussiness from "./hooks/useBussinesForm.ts";
 import { Routes, Route } from "react-router";
 import AccountSetup from "./page/AccountSetup.tsx";
-import AuthHeader from "./components/AuthHeader.tsx";
 
 function App() {
   const render = useAuthForm();
@@ -17,12 +16,12 @@ function App() {
   const bussiness = hooksBussiness();
   return (
     <>
-      <AuthHeader setIsLoggedForm={render.setIsLoggedForm} />
       <Routes>
         <Route
           path="/"
           element={
             <AuthPage
+              setIsLoggedForm={render.setIsLoggedForm}
               message={render.message}
               value={render.values}
               errors={render.errors}
@@ -43,12 +42,13 @@ function App() {
               values={identity.values}
               errors={identity.errors}
               touched={identity.touched}
+              updateStep = {render.updateStep}
               handleChange={identity.handleChange}
               handleBlur={identity.handleBlur}
               handleSubmitIdentity={identity.handleSubmitIdentity}
               response={identity.response}
-              isSteps={identity.isSteps}
-              setIsSteps={identity.setIsSteps}
+              isSteps={render.isSteps}
+              setIsSteps={render.setIsSteps}
               valuesBussiness={bussiness.values}
               errorsBussiness={bussiness.error}
               touchedBussiness={bussiness.touched}

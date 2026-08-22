@@ -5,10 +5,11 @@ import { useEffect } from "react";
 import type { Fiscal, Errors, TouchedBussines } from "../hooks/useBussinesForm";
 
 type Props = {
-  setIsSteps: (step: number) => void;
   valuesBussiness: Fiscal;
   errorsBussiness: Errors;
   touchedBussiness: TouchedBussines;
+  updateStep: (step: string) => void;
+  isSteps: string;
   handleChangeBussiness: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
@@ -18,7 +19,8 @@ type Props = {
   handleSubmitFiscalData: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 export default function FormFiscal({
-  setIsSteps,
+  updateStep,
+  isSteps,
   valuesBussiness,
   errorsBussiness,
   touchedBussiness,
@@ -27,7 +29,7 @@ export default function FormFiscal({
   handleSubmitFiscalData,
 }: Props) {
   useEffect(() => {
-    setIsSteps(2);
+    updateStep(isSteps);
   }, []);
 
   return (
@@ -85,7 +87,6 @@ export default function FormFiscal({
                 value={valuesBussiness.type_bussines}
                 onBlur={handleBlurBussiness}
                 onChange={handleChangeBussiness}
-                defaultValue=""
                 className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
               >
                 <option value="" disabled>
@@ -194,7 +195,6 @@ export default function FormFiscal({
                   <select
                     id="judet"
                     name="judet"
-                    defaultValue=""
                     value={valuesBussiness.county}
                     onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
@@ -244,7 +244,6 @@ export default function FormFiscal({
                     value={valuesBussiness.country}
                     onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
-                    defaultValue="ro"
                     className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                   >
                     <option value="ro">România</option>

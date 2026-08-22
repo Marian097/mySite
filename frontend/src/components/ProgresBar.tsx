@@ -1,7 +1,7 @@
 import  GDPR  from "../assets/image/GDPR.png"
 
 type Props = {
-   isSteps: number,
+   isSteps: string,
 }
 
 
@@ -9,27 +9,27 @@ export default function ProgresBar({isSteps}: Props) {
   return (
     <div className = "min-h-screen flex flex-col w-44 px-3 bg-[#fafbfe]">
       <div className = "flex gap-x-3">
-        <div className = {`border-2 flex items-center justify-center rounded-full w-8 h-8 border-[#e7eaf3] font-bold font-nunito text-xs sm:text-sm ${isSteps >= 1 ? `text-[white] bg-[#5659ee] ` : `text-[#838ea6]` }`}><span>1</span></div>
+        <div className = {`border-2 flex items-center justify-center rounded-full w-8 h-8 border-[#e7eaf3] font-bold font-nunito text-xs sm:text-sm ${isSteps >= "1" ? `text-[white] bg-[#5659ee] ` : `text-[#838ea6]` }`}><span>1</span></div>
         <div>
           <div className = "text-sm">
-            <h4 className = {`font-bold font-nunito ${isSteps >= 1 ? `text-[#5659ee]`: `text-[#727893]`}`}>Verificare identitate</h4>
+            <h4 className = {`font-bold font-nunito ${isSteps >= "1" ? `text-[#5659ee]`: `text-[#727893]`}`}>Verificare identitate</h4>
             <span className = "text-xs font-extralight font-nunito text-[#6f7ea0]">Documentele tale</span>
           </div>   
         </div>
       </div>
-      <div className={`ml-3.5 h-12 w-0.5 ${isSteps >= 1 ? `bg-[#5659ee]` : `bg-[#e7eaf3]`}`}></div>
+      <div className={`ml-3.5 h-12 w-0.5 ${isSteps >= "1" ? `bg-[#5659ee]` : `bg-[#e7eaf3]`}`}></div>
       <div  className = "flex gap-x-3 mt-2">
-        <div className = {`border-2 flex items-center justify-center rounded-full w-8 h-8 border-[#e7eaf3] font-bold font-nunito text-xs sm:text-sm ${isSteps >= 2 ? `text-[white] bg-[#5659ee] ` : `text-[#838ea6]` }`}>2</div>
+        <div className = {`border-2 flex items-center justify-center rounded-full w-8 h-8 border-[#e7eaf3] font-bold font-nunito text-xs sm:text-sm ${isSteps >= "2" ? `text-[white] bg-[#5659ee] ` : `text-[#838ea6]` }`}>2</div>
         <div className = "text-sm">
-          <h4 className = {`font-bold font-nunito ${isSteps >= 2 ? `text-[#5659ee]`: `text-[#727893]`}`}>Date fiscale</h4>
+          <h4 className = {`font-bold font-nunito ${isSteps >= "2" ? `text-[#5659ee]`: `text-[#727893]`}`}>Date fiscale</h4>
           <span className = "text-xs font-extralight font-nunito text-[#6f7ea0]">Informații despre firmă</span>
         </div>
       </div>
-      <div className={`ml-3.5 h-12 w-0.5 ${isSteps >= 2 ? `bg-[#5659ee]` : `bg-[#e7eaf3]`}`}></div>
+      <div className={`ml-3.5 h-12 w-0.5 ${isSteps >= "2" ? `bg-[#5659ee]` : `bg-[#e7eaf3]`}`}></div>
       <div className = "flex gap-x-3 mt-2">
-        <div  className = {`border-2 flex items-center justify-center rounded-full w-8 h-8 border-[#e7eaf3] font-bold font-nunito text-xs sm:text-sm ${isSteps >= 3 ? `text-[white] bg-[#5659ee] ` : `text-[#838ea6]` }`}>3</div>
+        <div  className = {`border-2 flex items-center justify-center rounded-full w-8 h-8 border-[#e7eaf3] font-bold font-nunito text-xs sm:text-sm ${isSteps >= "3" ? `text-[white] bg-[#5659ee] ` : `text-[#838ea6]` }`}>3</div>
         <div className = "text-sm">
-          <h4 className = {`font-bold font-nunito ${isSteps >= 3 ? `text-[#5659ee]`: `text-[#727893]`}`}>Profil muncitor</h4>
+          <h4 className = {`font-bold font-nunito ${isSteps >= "3" ? `text-[#5659ee]`: `text-[#727893]`}`}>Profil muncitor</h4>
           <span className = "text-xs font-extralight font-nunito text-[#6f7ea0]">Detaliile profilului tău</span>
         </div>    
       </div>

@@ -6,6 +6,7 @@ import {
   deleteProfile,
   addDocuments,
   registerBussines,
+  updateStep
 } from "./worker.controller.js";
 
 import { verifiedToken } from "../../../middleware/jwt.middleware.js";
@@ -42,9 +43,17 @@ workerRouter.post(
   ]),
   addDocuments,
 );
+
 workerRouter.post(
   "/bussines/documents",
   verifiedToken,
   verifyProvider,
   registerBussines,
+);
+
+workerRouter.put(
+  "/worker/documents/step",
+  verifiedToken,
+  verifyProvider,
+  updateStep,
 );

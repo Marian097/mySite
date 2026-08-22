@@ -1,12 +1,12 @@
 import { useState } from "react";
 import type { User } from "../types/AuthTypes/User";
-// import type { Admin } from "../types/AuthTypes/Admin"
 import * as yup from "yup";
 import type { Touched } from "../types/AuthTypes/Touched";
 import type { Errors } from "../types/AuthTypes/Errors";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin";
 import { useNavigate } from "react-router";
 import {jwtDecode} from "jwt-decode";
+import type { Admin } from "../types/AuthTypes/Admin";
 
 
 const passRegex =
@@ -33,14 +33,20 @@ interface JwtPayload {
   id: string;
   email: string;
   role: string;
+  username:string;
+  profile_image:string;
   iat: number;
   exp: number;
+  step: string;
 }
+
 export default function useAuthForm() {
 
   const navigate = useNavigate()
 
   const [message, setMessage] = useState("")
+  
+  const [isSteps, setIsSteps] = useState<string>("")
 
   const [values, setValues] = useState<User>({
     name: "",
@@ -68,9 +74,7 @@ export default function useAuthForm() {
 
   const [isLoggedForm, setIsLoggedForm] = useState<boolean>(false);
 
-  const [logged_in, setLogged_in] = useState<boolean>(false)
-
-  // const [admin, setAdmin] = useState<Admin[]>([])
+  const [admin, setAdmin] = useState<Admin[]>([])
 
 
   // 🔹 CHANGE
@@ -217,10 +221,27 @@ export default function useAuthForm() {
 
       const decoded = jwtDecode<JwtPayload>(data.token)
 
-      console.log(decoded)
 
-      setLogged_in(true)
-      navigate("/date-personale")
+      console.log(decoded.role)
+
+      if (decoded.role == "Admin")
+      {
+        const {id, username, role, profile_image} = decoded;
+        setAdmin(prev => [
+          ...prev,
+          { id, username, role, profile_image }
+        ])
+
+        navigate("/panou-administrare")
+      }
+
+       if (decoded.role == "Prestator")
+      {
+         setIsSteps(decoded.step)
+         navigate("/verificare-informații") 
+      }
+
+     
 
     } catch (error) {
       if (error instanceof yup.ValidationError) {
@@ -244,8 +265,36 @@ export default function useAuthForm() {
     }
   }
 
-
- 
+   async function updateStep(step: string) {
+        try {
+  
+          const token = localStorage.getItem("token");
+  
+          if (!token) throw new Error("Token lipsă");
+  
+  
+          const response = await fetch(
+            "http://localhost:4000/api/users/worker/documents/step",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({step}),
+            },
+          );
+  
+  
+          if (!response.ok) throw new Error("Progresul nu a fost înrtegistrat");
+         
+          const res = await response.json();
+          
+          setIsSteps(res)
+        } catch (err) {
+          console.log(err)
+        }
+      }
 
   return {
     values,
@@ -254,8 +303,10 @@ export default function useAuthForm() {
     touched,
     isLoggedForm,
     message,
-    logged_in,
-    // admin,
+    admin,
+    isSteps,
+    updateStep, 
+    setIsSteps,
     setIsLoggedForm,
     handleChange,
     handleBlur,

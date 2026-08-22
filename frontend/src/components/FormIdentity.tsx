@@ -15,7 +15,7 @@ type Props = {
   touched: Touched;
   response: string;
   handleSubmitIdentity: (e: React.FormEvent<HTMLFormElement>) => void;
-  setIsSteps: (step: number) => void;
+  setIsSteps: (step: string) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
@@ -30,7 +30,7 @@ export default function FormIdentity({
   setIsSteps,
 }: Props) {
   useEffect(() => {
-    setIsSteps(1);
+    setIsSteps("1");
   }, []);
 
   return (
@@ -227,6 +227,7 @@ export default function FormIdentity({
           <div>
             <button
               type="submit"
+              onClick = {() => setIsSteps("2")}
               className="col-span-2 flex w-full items-center gap-x-2 justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
               Continuă

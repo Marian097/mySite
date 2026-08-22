@@ -1,5 +1,5 @@
 type Props = {
-  isSteps: number;
+  isSteps: string;
 };
 
 export default function PageHeader({ isSteps }: Props) {

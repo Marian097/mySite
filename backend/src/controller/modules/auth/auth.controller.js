@@ -91,9 +91,19 @@ export async function registerProvider(req, res, next) {
       return res.status(404).json({ message: "Va rog selectati un rol valid" });
     }
 
+
+    const isSteps = await db.query("INSERT INTO verification_progress( user_id ) VALUES ($1) RETURNING verification_step ", [user_id])
+
+    if (isSteps.rows.length === 0)
+    {
+      await db.query("ROLLBACK")
+      return res.status(500).json({ message: "Nu a fost înregistrat progresul" });
+    }
+
      const user = {
       id: user_id,
       email: email,
+      step: isSteps.rows[0].verification_step
     };
 
     if (!process.env.JWT_SECRET) {
@@ -227,7 +237,6 @@ export async function registerAdmin(req, res, next)
 
   try{
 
-    console.log("Prima linie din try")
     await userSchema.validate(req.body, {abortEarly: false})
 
     const password_hash = await argon2.hash(password);
@@ -313,7 +322,7 @@ export async function Login(req, res) {
 
     await loginSchema.validate(req.body, { abortEarly: false });
 
-    const results = await db.query("SELECT u.id,  u.password_hash, u.email, r.role_name AS role FROM users u JOIN user_roles ur ON ur.user_id = u.id JOIN roles r ON r.id = ur.role_id WHERE email = $1", [
+    const results = await db.query("SELECT u.id, u.password_hash, u.email, r.role_name AS role FROM users u JOIN user_roles ur ON ur.user_id = u.id JOIN roles r ON r.id = ur.role_id WHERE email = $1", [
       email,
     ]);
 
@@ -333,11 +342,20 @@ export async function Login(req, res) {
         .status(401)
         .json({ message: "Email sau parola sunt incorecte" });
 
+    const isStep = await db.query("SELECT verification_step AS step FROM verification_progress WHERE user_id = $1", [dbUser.id])
+
     const user = {
       id: dbUser.id,
       email: dbUser.email,
-      role: dbUser.role
+      role: dbUser.role,
+      step: isStep.rows[0]?.step
     };
+
+    if (dbUser.role === "Admin")
+    {
+      const profileImg = await db.query("SELECT ci_image_url AS profile_image FROM admin_profiles WHERE user_id = $1", [dbUser.id]);
+      user.profile_image = profileImg.rows[0].profile_image;
+    }
 
     if (!process.env.JWT_SECRET) {
       throw new Error("JWT_SECRET lipsește din variabilele de mediu");

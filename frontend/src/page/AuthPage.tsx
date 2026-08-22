@@ -4,6 +4,7 @@ import type { User } from "../types/AuthTypes/User.ts";
 import type { Errors } from "../types/AuthTypes/Errors.ts";
 import type { Touched } from "../types/AuthTypes/Touched.ts";
 import type { ErrorsLogin } from "../types/AuthTypes/ErrorsLogin.ts";
+import AuthHeader from "../components/AuthHeader.tsx"
 
 type Props = {
   value: User;
@@ -16,6 +17,7 @@ type Props = {
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
   singUpProvider: (e: React.FormEvent<HTMLFormElement>) => void;
   login: (e: React.FormEvent<HTMLFormElement>) => void;
+  setIsLoggedForm: (value: boolean) => void;
 };
 
 export default function Sign_up({
@@ -25,6 +27,7 @@ export default function Sign_up({
   errorsLogin,
   message,
   isLoggedForm,
+  setIsLoggedForm,
   handleChange,
   handleBlur,
   singUpProvider,
@@ -32,6 +35,7 @@ export default function Sign_up({
 }: Props) {
   return (
     <div>
+      <AuthHeader setIsLoggedForm={setIsLoggedForm} />
       {isLoggedForm ? (
         <>
           <FormLogin

@@ -157,21 +157,25 @@ export default function useBussinesForm() {
           {
             method: "POST",
             headers: {
-              Authorization: `Bearer${token}`,
+              Authorization: `Bearer ${token}`,
             },
             body: formData,
           },
         );
 
+       
+
         if (!response.ok) throw new Error("A intervenit o eroare la prelucrarea datelor");
-
         const res = await response.json();
-
+        
+        
         setResponse(res.message);
       } catch (err) {
         if (err instanceof Error) setResponse(err.message);
       }
     }
+
+    
 
   return {
     response,

@@ -14,9 +14,10 @@ type Props = {
   errors: Error;
   touched: Touched;
   response: string;
-  isSteps: number;
+  isSteps: string;
+  updateStep: (step: string) => void;
   handleSubmitIdentity: (e: React.FormEvent<HTMLFormElement>) => void;
-  setIsSteps: (step: number) => void;
+  setIsSteps: (step: string) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
   valuesBussiness: Fiscal;
@@ -40,6 +41,7 @@ export default function verify_identity({
   handleChangeBussiness,
   handleBlurBussiness,
   handleSubmitFiscalData,
+  updateStep,
   touched,
   isSteps,
   response,
@@ -48,6 +50,7 @@ export default function verify_identity({
   setIsSteps,
   handleSubmitIdentity,
 }: Props) {
+
   return (
     <div>
       <div className="grid">
@@ -64,26 +67,35 @@ export default function verify_identity({
             <ProgresBar isSteps={isSteps} />
           </div>
           <div className="flex justify-center w-full h-auto">
-            <FormIdentity
-              values={values}
-              errors={errors}
-              touched={touched}
-              handleChange={handleChange}
-              handleBlur={handleBlur}
-              setIsSteps={setIsSteps}
-              handleSubmitIdentity={handleSubmitIdentity}
-              response={response}
-            />
+            {isSteps === "1" && (
+              <>
+                <FormIdentity
+                  values={values}
+                  errors={errors}
+                  touched={touched}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  setIsSteps={setIsSteps}
+                  handleSubmitIdentity={handleSubmitIdentity}
+                  response={response}
+                />
+              </>
+            )}
 
-            <FormFiscal
-              setIsSteps={setIsSteps}
-              valuesBussiness={valuesBussiness}
-              errorsBussiness={errorsBussiness}
-              touchedBussiness={touchedBussiness}
-              handleChangeBussiness={handleChangeBussiness}
-              handleBlurBussiness={handleBlurBussiness}
-              handleSubmitFiscalData={handleSubmitFiscalData}
-            />
+            {isSteps === "2" && (
+              <>
+                <FormFiscal
+                  updateStep = {updateStep}
+                  isSteps = {isSteps}
+                  valuesBussiness={valuesBussiness}
+                  errorsBussiness={errorsBussiness}
+                  touchedBussiness={touchedBussiness}
+                  handleChangeBussiness={handleChangeBussiness}
+                  handleBlurBussiness={handleBlurBussiness}
+                  handleSubmitFiscalData={handleSubmitFiscalData}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
