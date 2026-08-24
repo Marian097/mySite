@@ -311,21 +311,24 @@ export async function addDocuments(req, res, next) {
 export async function registerBussines(req, res, next) {
   const db = await pool.connect();
 
-  const name_bussines = req.body.name_bussines;
-  const certificate_registration = req.files[0].path;
-  const type_bussines = req.body.type_bussines;
-  const cif = req.body.cif;
-  const address = req.body.address;
-  const postal_code = req.body.postal_code;
-
-  const country = req.body.country;
-  const county = req.body.county;
-  const city = req.body.city;
-
-  const user_id = req.user.id;
+  console.log("sunt in backend")
 
   try {
+    const name_bussines = req.body.name_bussines;
+    const certificate_registration = req.files[0].path;
+    const type_bussines = req.body.type_bussines;
+    const cif = req.body.cif;
+    const address = req.body.address;
+    const postal_code = req.body.postal_code;
+
+    const country = req.body.country;
+    const county = req.body.county;
+    const city = req.body.city;
+
+    const user_id = req.user.id;
     await bussinesSchema.validate(req.body, { abortEarly: false });
+
+    console.log("sunt in backend in try")
 
     const bussinesType = await db.query("SELECT * FROM type_bussines");
 
@@ -403,41 +406,41 @@ export async function registerBussines(req, res, next) {
   }
 }
 
-export async function updateStep(req, res)
-{
+export async function updateStep(req, res) {
+  const db = await pool.connect();
 
-  const db = await pool.connect()
-  
-  try{
+  try {
     const { step } = req.body;
-    const user_id = req.user.id
+    const user_id = req.user.id;
 
-    if (!step)
-    {
-      return res.status(500).json({message: "A intervenit o eroare la înregistrare"})
+    if (!step) {
+      return res
+        .status(500)
+        .json({ message: "A intervenit o eroare la înregistrare" });
     }
 
-    await db.query("BEGIN")
+    await db.query("BEGIN");
 
+    const isStep = await db.query(
+      "UPDATE verification_progress SET verification_step = $1 WHERE user_id = $2 RETURNING verification_step",
+      [step, user_id],
+    );
 
-    const isStep = await db.query("UPDATE verification_progress SET verification_step = $1 WHERE user_id = $2 RETURNING verification_step", [step, user_id])
-
-    if (isStep.rows.length === 0)
-    {
+    if (isStep.rows.length === 0) {
       await db.query("ROLLBACK");
-      return res.status(500).json({message: "Progresul nu a fost înregistrat"})
+      return res
+        .status(500)
+        .json({ message: "Progresul nu a fost înregistrat" });
     }
 
-     await db.query("COMMIT");
+    await db.query("COMMIT");
 
-    return res.status(200).json(isStep.rows[0].verification_step)
-  }
-  catch(err){
-    console.log(err.message)
-    await db.query("ROLLBACK")
-    return res.status(500).json({message: err.message})
-  }
-  finally{
+    return res.status(200).json(isStep.rows[0].verification_step);
+  } catch (err) {
+    console.log(err.message);
+    await db.query("ROLLBACK");
+    return res.status(500).json({ message: err.message });
+  } finally {
     db.release();
   }
 }

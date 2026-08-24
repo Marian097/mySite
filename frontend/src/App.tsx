@@ -42,6 +42,8 @@ function App() {
               values={identity.values}
               errors={identity.errors}
               touched={identity.touched}
+              counties = {bussiness.counties}
+              getCounties= {bussiness.getCounties}
               updateStep = {render.updateStep}
               handleChange={identity.handleChange}
               handleBlur={identity.handleBlur}

@@ -44,10 +44,17 @@ workerRouter.post(
   addDocuments,
 );
 
+
+
 workerRouter.post(
   "/bussines/documents",
   verifiedToken,
   verifyProvider,
+  upload.fields([
+    {
+      name: "certificate_registration", maxCount: 1 
+    }
+  ]),
   registerBussines,
 );
 

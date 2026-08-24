@@ -6,7 +6,7 @@ import type { Identity } from "../types/AuthTypes/Identity";
 import type { Error } from "../hooks/useIdentityForm";
 import type { Touched } from "../hooks/useIdentityForm";
 import FormFiscal from "../components/FormFiscal";
-import type { Fiscal, Errors, TouchedBussines } from "../hooks/useBussinesForm";
+import type { Fiscal, Errors, TouchedBussines, Counties } from "../hooks/useBussinesForm";
 
 
 type Props = {
@@ -30,6 +30,8 @@ type Props = {
     e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
   handleSubmitFiscalData: (e: React.FormEvent<HTMLFormElement>) => void;
+  counties: Counties;
+  getCounties: () => void;
 };
 
 export default function verify_identity({
@@ -45,6 +47,8 @@ export default function verify_identity({
   touched,
   isSteps,
   response,
+  counties,
+  getCounties,
   handleChange,
   handleBlur,
   setIsSteps,
@@ -90,6 +94,8 @@ export default function verify_identity({
                   valuesBussiness={valuesBussiness}
                   errorsBussiness={errorsBussiness}
                   touchedBussiness={touchedBussiness}
+                  counties = {counties}
+                  getCounties = {getCounties}
                   handleChangeBussiness={handleChangeBussiness}
                   handleBlurBussiness={handleBlurBussiness}
                   handleSubmitFiscalData={handleSubmitFiscalData}

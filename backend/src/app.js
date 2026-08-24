@@ -29,6 +29,8 @@ app.use("/api/users", authRouter);
 app.use("/api/users", adminRouter);
 app.use("/api/users", workerRouter);
 
+
+
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // app.use("/api/users/profile", documentsRouter)

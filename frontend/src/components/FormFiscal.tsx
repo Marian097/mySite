@@ -2,7 +2,12 @@ import uploads from "../assets/image/uploads.png";
 import certificate from "../assets/image/certificate.png";
 import forward from "../assets/image/arrow forward.svg";
 import { useEffect } from "react";
-import type { Fiscal, Errors, TouchedBussines } from "../hooks/useBussinesForm";
+import type {
+  Fiscal,
+  Errors,
+  TouchedBussines,
+  Counties,
+} from "../hooks/useBussinesForm";
 
 type Props = {
   valuesBussiness: Fiscal;
@@ -17,6 +22,8 @@ type Props = {
     e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
   handleSubmitFiscalData: (e: React.FormEvent<HTMLFormElement>) => void;
+  counties: Counties;
+  getCounties: () => void;
 };
 export default function FormFiscal({
   updateStep,
@@ -24,12 +31,18 @@ export default function FormFiscal({
   valuesBussiness,
   errorsBussiness,
   touchedBussiness,
+  counties,
+  getCounties,
   handleChangeBussiness,
   handleBlurBussiness,
   handleSubmitFiscalData,
 }: Props) {
   useEffect(() => {
     updateStep(isSteps);
+  }, []);
+
+  useEffect(() => {
+    getCounties();
   }, []);
 
   return (
@@ -50,14 +63,14 @@ export default function FormFiscal({
           <div className="space-y-5">
             <div className="flex flex-col gap-2">
               <label
-                htmlFor="nume_firma"
+                htmlFor="name_bussines"
                 className="font-nunito text-sm font-semibold text-[#1D1F42]"
               >
                 Numele firmei
               </label>
 
               <input
-                id="nume_firma"
+                id="name_bussines"
                 name="name_bussines"
                 onBlur={handleBlurBussiness}
                 onChange={handleChangeBussiness}
@@ -75,14 +88,14 @@ export default function FormFiscal({
 
             <div className="flex flex-col gap-2">
               <label
-                htmlFor="forma_juridica"
+                htmlFor="type_bussines"
                 className="font-nunito text-sm font-semibold text-[#1D1F42]"
               >
                 Formă juridică
               </label>
 
               <select
-                id="forma_juridica"
+                id="type_bussines"
                 name="type_bussines"
                 value={valuesBussiness.type_bussines}
                 onBlur={handleBlurBussiness}
@@ -137,14 +150,14 @@ export default function FormFiscal({
 
               <div className="flex flex-col gap-2">
                 <label
-                  htmlFor="strada"
+                  htmlFor="address"
                   className="font-nunito text-sm font-semibold text-[#1D1F42]"
                 >
                   Stradă, număr
                 </label>
 
                 <input
-                  id="strada"
+                  id="address"
                   name="address"
                   type="text"
                   onBlur={handleBlurBussiness}
@@ -162,15 +175,15 @@ export default function FormFiscal({
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="localitate"
+                    htmlFor="city"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
                     Localitate
                   </label>
 
                   <input
-                    id="localitate"
-                    name="localitate"
+                    id="city"
+                    name="city"
                     type="text"
                     onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
@@ -186,23 +199,23 @@ export default function FormFiscal({
 
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="judet"
+                    htmlFor="county"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
                     Județ
                   </label>
 
                   <select
-                    id="judet"
-                    name="judet"
+                    id="county"
+                    name="county"
                     value={valuesBussiness.county}
                     onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
                     className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                   >
-                    <option value="" disabled>
-                      Selectează județul
-                    </option>
+                    {counties.nameCounties.map((c, idx) => (
+                      <option value={c} key = {idx}>{c}</option>
+                    ))}
                   </select>
                   <div>
                     {touchedBussiness.address && errorsBussiness.address && (
@@ -213,15 +226,15 @@ export default function FormFiscal({
 
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="cod_postal"
+                    htmlFor="postal_code"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
                     Cod poștal
                   </label>
 
                   <input
-                    id="cod_postal"
-                    name="cod_postal"
+                    id="postal_code"
+                    name="postal_code"
                     onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
                     type="text"
@@ -232,15 +245,15 @@ export default function FormFiscal({
 
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="tara"
+                    htmlFor="country"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
                     Țară
                   </label>
 
                   <select
-                    id="tara"
-                    name="tara"
+                    id="country"
+                    name="country"
                     value={valuesBussiness.country}
                     onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
@@ -276,7 +289,7 @@ export default function FormFiscal({
                 <input
                   type="file"
                   name="certificate_registration"
-                  id=""
+                  id="certificate_registration"
                   className="opacity-0"
                   onBlur={handleBlurBussiness}
                   onChange={handleChangeBussiness}
