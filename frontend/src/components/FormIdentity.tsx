@@ -5,33 +5,27 @@ import uploads from "../assets/image/uploads.png";
 import selfie from "../assets/image/SELFIE.png";
 import forward from "../assets/image/arrow forward.svg";
 import type { Identity } from "../types/AuthTypes/Identity";
-import type { Error } from "../hooks/useIdentityForm";
-import type { Touched } from "../hooks/useIdentityForm";
 import { useEffect } from "react";
 
 type Props = {
-  values: Identity;
-  errors: Error;
-  touched: Touched;
+  personalValues: Identity;
   response: string;
   handleSubmitIdentity: (e: React.FormEvent<HTMLFormElement>) => void;
+  isSubmmitPersonalForm: boolean;
   setIsSteps: (step: string) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 export default function FormIdentity({
-  values,
-  errors,
-  touched,
+  personalValues,
+  isSubmmitPersonalForm,
   handleChange,
-  handleBlur,
   handleSubmitIdentity,
   setIsSteps,
 }: Props) {
   useEffect(() => {
-    setIsSteps("1");
-  }, []);
+    if (isSubmmitPersonalForm) setIsSteps("2");
+  }, [isSubmmitPersonalForm]);
 
   return (
     <div className="mt-3">
@@ -56,7 +50,7 @@ export default function FormIdentity({
         <div className="mt-5 px-5">
           <div className="flex items-center">
             <h4 className="font-extrabold font-nunito text-xs sm:text-sm text-shadow-sm text-[#1D1F42]">
-              Poză buletin (față)
+              Poză buletin (față)*
             </h4>
             <div>
               <img src={info} className="h-10 mt-1" alt="" />
@@ -82,26 +76,30 @@ export default function FormIdentity({
                   </span>
                 </div>
               </div>
-              <div className="absolute">
+              <div className="relative flex">
                 <input
                   type="file"
                   name="ci_image"
-                  className="opacity-0"
-                  onBlur={handleBlur}
+                  id="ci_image"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
                   onChange={handleChange}
                 />
-              </div>
-              <div className="flex justify-center">
-                <h4 className="border bg-[#fafafa] border-[#eff1f5]  py-1 px-3 rounded-md font-bold font-nunito text-xs sm:text-sm text-[#1D1F42]">
-                  Alege fișier
-                </h4>
+
+                <div className="w-full flex justify-center">
+                  <label
+                    htmlFor="ci_image"
+                    className="border z-20 bg-[#fafafa] border-[#eff1f5] py-1 px-3 rounded-md font-bold font-nunito text-xs sm:text-sm text-[#1D1F42] cursor-pointer hover:bg-gray-100 active:scale-95 transition-all duration-150"
+                  >
+                    Alege fișier
+                  </label>
+                </div>
               </div>
               <div className="flex flex-col justify-center items-center">
                 <span className="font-bold font-nunito text-xs text-[#999AA9]">
                   Format acceptat: JPG, PNG - Max. 5MB{" "}
                 </span>
                 <span className="border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  ">
-                  {values.ci_image?.name}
+                  {personalValues.ci_image?.name}
                 </span>
               </div>
             </div>
@@ -109,16 +107,12 @@ export default function FormIdentity({
               <img src={ci} alt="" className="" />
             </div>
           </div>
-          <div>
-            {touched.ci_image && errors.ci_image && (
-              <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errors.ci_image}`}</p>
-            )}
-          </div>
+
           <div className="pt-3 mt-3">
             <div className="flex items-center">
               <div>
-                <h4 className="font-bold font font-nunito text-xs sm:text-sm text-shadow-xs text-[#1D1F42]">
-                  Data de expirare
+                <h4 className="font-extrabold font-nunito text-xs sm:text-sm text-shadow-xs text-[#1D1F42]">
+                  Data de expirare*
                 </h4>
               </div>
               <div>
@@ -136,22 +130,17 @@ export default function FormIdentity({
                 name="date"
                 id=""
                 className="border-2 rounded-md border-[#eff1f5]"
-                value={values.date}
-                onBlur={handleBlur}
+                value={personalValues.date}
                 onChange={handleChange}
               />
             </div>
           </div>
-          <div>
-            {touched.date && errors.date && (
-              <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errors.ci_selfie}`}</p>
-            )}
-          </div>
+
           <div className="py-3">
             <div className="flex items-center">
               <div>
                 <span className="font-extrabold font-nunito text-xs sm:text-sm text-shadow-xs text-[#1D1F42]">
-                  Selfie cu buletinul
+                  Selfie cu buletinul*
                 </span>
               </div>
               <div>
@@ -180,27 +169,30 @@ export default function FormIdentity({
                 </span>
               </div>
             </div>
-            <div className="absolute">
+            <div className="relative flex">
               <input
                 type="file"
                 name="ci_selfie"
-                id=""
-                className="opacity-0"
-                onBlur={handleBlur}
+                id="ci_selfie"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
                 onChange={handleChange}
               />
-            </div>
-            <div className="flex justify-center">
-              <h4 className="border bg-[#fafafa] border-[#eff1f5] py-1 px-3 rounded-md font-bold font-nunito text-xs sm:text-sm text-[#1D1F42]">
-                Alege fișier
-              </h4>
+
+              <div className="w-full flex justify-center">
+                <label
+                  htmlFor="ci_selfie"
+                  className="border z-20 bg-[#fafafa] border-[#eff1f5] py-1 px-3 rounded-md font-bold font-nunito text-xs sm:text-sm text-[#1D1F42] cursor-pointer hover:bg-gray-100 active:scale-95 transition-all duration-150"
+                >
+                  Alege fișier
+                </label>
+              </div>
             </div>
             <div className="flex flex-col items-center justify-center">
               <span className="font-bold font-nunito text-xs text-[#999AA9]">
                 Format acceptat: JPG, PNG - Max. 5MB{" "}
               </span>
               <span className="border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  ">
-                {values.ci_selfie?.name}
+                {personalValues.ci_selfie?.name}
               </span>
             </div>
           </div>
@@ -208,11 +200,7 @@ export default function FormIdentity({
             <img src={selfie} alt="" className="" />
           </div>
         </div>
-        <div>
-          {touched.ci_selfie && errors.ci_selfie && (
-            <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm ml-5">{`*${errors.ci_selfie}`}</p>
-          )}
-        </div>
+
         <div className="border-b-2 border-[#e7eaf3] mt-6"></div>
         <div className="grid grid-cols-4 gap-x-3 px-4 mx-4 py-2 mt-4">
           <div>
@@ -227,7 +215,6 @@ export default function FormIdentity({
           <div>
             <button
               type="submit"
-              onClick = {() => setIsSteps("2")}
               className="col-span-2 flex w-full items-center gap-x-2 justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
               Continuă

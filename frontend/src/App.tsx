@@ -3,17 +3,17 @@ import useAuthForm from "./hooks/useAuthForm.ts";
 import useCharts from "./hooks/useCharts.ts";
 import AdminPanel from "./page/AdminPanel.tsx";
 import hooksWorker from "./hooks/useWorkers.ts";
-import hooksIdentity from "./hooks/useIdentityForm.ts";
-import hooksBussiness from "./hooks/useBussinesForm.ts";
+import hooksPersonal from "./hooks/usePersonalForm.ts";
+import hooksFiscal from "./hooks/useFiscalForm.ts";
 import { Routes, Route } from "react-router";
 import AccountSetup from "./page/AccountSetup.tsx";
 
 function App() {
-  const render = useAuthForm();
-  const workers = hooksWorker();
+  const useAuth = useAuthForm();
+  const useWorker = hooksWorker();
   const charts = useCharts();
-  const identity = hooksIdentity();
-  const bussiness = hooksBussiness();
+  const personal = hooksPersonal();
+  const fiscal = hooksFiscal();
   return (
     <>
       <Routes>
@@ -21,17 +21,17 @@ function App() {
           path="/"
           element={
             <AuthPage
-              setIsLoggedForm={render.setIsLoggedForm}
-              message={render.message}
-              value={render.values}
-              errors={render.errors}
-              touched={render.touched}
-              isLoggedForm={render.isLoggedForm}
-              handleChange={render.handleChange}
-              handleBlur={render.handleBlur}
-              singUpProvider={render.signUpProvider}
-              errorsLogin={render.errorsLogin}
-              login = {render.login}
+              setIsLoggedForm={useAuth.setIsLoggedForm}
+              message={useAuth.message}
+              value={useAuth.values}
+              errors={useAuth.errors}
+              touched={useAuth.touched}
+              isLoggedForm={useAuth.isLoggedForm}
+              handleChange={useAuth.handleChange}
+              handleBlur={useAuth.handleBlur}
+              singUpProvider={useAuth.signUpProvider}
+              errorsLogin={useAuth.errorsLogin}
+              login={useAuth.login}
             />
           }
         />{" "}
@@ -39,24 +39,19 @@ function App() {
           path="/verificare-informații/*"
           element={
             <AccountSetup
-              values={identity.values}
-              errors={identity.errors}
-              touched={identity.touched}
-              counties = {bussiness.counties}
-              getCounties= {bussiness.getCounties}
-              updateStep = {render.updateStep}
-              handleChange={identity.handleChange}
-              handleBlur={identity.handleBlur}
-              handleSubmitIdentity={identity.handleSubmitIdentity}
-              response={identity.response}
-              isSteps={render.isSteps}
-              setIsSteps={render.setIsSteps}
-              valuesBussiness={bussiness.values}
-              errorsBussiness={bussiness.error}
-              touchedBussiness={bussiness.touched}
-              handleChangeBussiness={bussiness.handleChange}
-              handleBlurBussiness={bussiness.handleBlur}
-              handleSubmitFiscalData={bussiness.handleSubmitFiscalData}
+              personalValues={personal.values}
+              isSubmmitPersonalForm={personal.isSubmmitPersonalForm}
+              counties={fiscal.counties}
+              getCounties={fiscal.getCounties}
+              updateStep={useAuth.updateStep}
+              handleChange={personal.handleChange}
+              handleSubmitIdentity={personal.handleSubmitIdentity}
+              response={personal.response}
+              isSteps={useAuth.isSteps}
+              setIsSteps={useAuth.setIsSteps}
+              fiscalValues={fiscal.values}
+              handleChangeBussiness={fiscal.handleChange}
+              handleSubmitFiscalData={fiscal.handleSubmitFiscalData}
             />
           }
         />
@@ -64,39 +59,39 @@ function App() {
           path="/panou-administrare"
           element={
             <AdminPanel
-              error={workers.error}
-              workers={workers.workers}
-              getWorkers={workers.getWorkers}
-              getWorkersPending={workers.getWorkersPending}
-              getWorkersRejected={workers.getWorkersRejected}
-              getWorkersApprove={workers.getWorkersApproved}
-              getWorkersByEmail={workers.getWorkersByEmail}
-              getWorkerByCI_expiring={workers.getWorkerByCI_expiring}
-              email={workers.email}
-              setEmail={workers.setEmail}
-              setIsStatus={workers.setIsStatus}
-              admin={render.admin}
-              countWorkers={workers.countWorkers}
-              totalWorkers={workers.totalWorkers ?? 0}
-              procent={workers.procent ?? 0}
-              calculateProcent={workers.calculateProcent}
-              procentApproved={workers.procentApproved ?? 0}
-              approvedWorkers={workers.approvedWorkers ?? 0}
-              calculateProcentApproved={workers.calculateProcentApproved}
-              countWorkersApproved={workers.countWorkersApproved}
-              rejectedWorkers={workers.rejectedWorkers ?? 0}
-              procentRejected={workers.procentRejected ?? 0}
-              countWorkersRejected={workers.countWorkersRejected}
-              calculateProcentRejected={workers.calculateProcentRejected}
-              pendingdWorkers={workers.pendingdWorkers ?? 0}
-              procentPending={workers.procentPending ?? 0}
-              countWorkersPending={workers.countWorkersPending}
-              calculateProcentPending={workers.calculateProcentPending}
+              error={useWorker.error}
+              workers={useWorker.workers}
+              getWorkers={useWorker.getWorkers}
+              getWorkersPending={useWorker.getWorkersPending}
+              getWorkersRejected={useWorker.getWorkersRejected}
+              getWorkersApprove={useWorker.getWorkersApproved}
+              getWorkersByEmail={useWorker.getWorkersByEmail}
+              getWorkerByCI_expiring={useWorker.getWorkerByCI_expiring}
+              email={useWorker.email}
+              setEmail={useWorker.setEmail}
+              setIsStatus={useWorker.setIsStatus}
+              admin={useAuth.admin}
+              countWorkers={useWorker.countWorkers}
+              totalWorkers={useWorker.totalWorkers ?? 0}
+              procent={useWorker.procent ?? 0}
+              calculateProcent={useWorker.calculateProcent}
+              procentApproved={useWorker.procentApproved ?? 0}
+              approvedWorkers={useWorker.approvedWorkers ?? 0}
+              calculateProcentApproved={useWorker.calculateProcentApproved}
+              countWorkersApproved={useWorker.countWorkersApproved}
+              rejectedWorkers={useWorker.rejectedWorkers ?? 0}
+              procentRejected={useWorker.procentRejected ?? 0}
+              countWorkersRejected={useWorker.countWorkersRejected}
+              calculateProcentRejected={useWorker.calculateProcentRejected}
+              pendingdWorkers={useWorker.pendingdWorkers ?? 0}
+              procentPending={useWorker.procentPending ?? 0}
+              countWorkersPending={useWorker.countWorkersPending}
+              calculateProcentPending={useWorker.calculateProcentPending}
               data={charts.data}
               errCharts={charts.error}
               getStats={charts.getStats}
-              handleAcceptUser={workers.handleAcceptUser}
-              handleRejectUser={workers.handleRejectUser}
+              handleAcceptUser={useWorker.handleAcceptUser}
+              handleRejectUser={useWorker.handleRejectUser}
             />
           }
         />

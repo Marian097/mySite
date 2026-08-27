@@ -259,11 +259,12 @@ export async function deleteProfile(req, res, next) {
 export async function addDocuments(req, res, next) {
   const db = await pool.connect();
 
-  const date = req.body.date;
 
-  const ci_image = req.files.ci_image[0].path;
+  const date = req.body.date;
+  const ci_image = req.files?.ci_image?.[0].path;
   const ci_selfie = req.files.ci_selfie[0].path;
   const user_id = req.user.id;
+
 
   const documentIdentity = {
     ci_image,
@@ -272,20 +273,18 @@ export async function addDocuments(req, res, next) {
   };
 
   try {
-    console.log("eroare inainte de validare backend");
     await documentsWorkerSchema.validate(documentIdentity, {
       abortEarly: false,
     });
 
     await db.query("BEGIN");
 
-    console.log("ianainte de baza de date");
+
     const user_documents = await db.query(
       "INSERT INTO user_documents (user_id, ci_image_url, ci_expiration_date, selfie_ci_person) VALUES ($1, $2, $3, $4) RETURNING *",
       [user_id, ci_image, date, ci_selfie],
     );
 
-    console.log("Dupa ce am incarcat datele in baza de date");
 
     if (user_documents.rows.length === 0) {
       await db.query("ROLLBACK");
@@ -300,7 +299,7 @@ export async function addDocuments(req, res, next) {
   } catch (error) {
     await db.query("ROLLBACK");
 
-    console.error(error);
+    console.log(error);
 
     return next(error);
   } finally {
@@ -311,38 +310,49 @@ export async function addDocuments(req, res, next) {
 export async function registerBussines(req, res, next) {
   const db = await pool.connect();
 
-  console.log("sunt in backend")
 
   try {
+
     const name_bussines = req.body.name_bussines;
-    const certificate_registration = req.files[0].path;
+    const certificate_registration = req.files.certificate_registration[0].path;
+
+
+
     const type_bussines = req.body.type_bussines;
+   
     const cif = req.body.cif;
     const address = req.body.address;
     const postal_code = req.body.postal_code;
 
+
     const country = req.body.country;
     const county = req.body.county;
     const city = req.body.city;
+ 
 
     const user_id = req.user.id;
+
+
     await bussinesSchema.validate(req.body, { abortEarly: false });
 
-    console.log("sunt in backend in try")
-
-    const bussinesType = await db.query("SELECT * FROM type_bussines");
+    if (!certificate_registration) return res.status(400).json({message: "Cerificatul de înregistrare este obligatorie"})
+    
+      const bussinesType = await db.query("SELECT * FROM type_bussines");
 
     if (bussinesType.rows.length === 0)
       return res.status(404).json({ message: "Nici un rezultat." });
 
     let exists = false;
 
-    for (const b of bussinesType.rows) {
-      if (type_bussines === b.type_name) {
+    for (let t of bussinesType.rows)
+    {
+      if (t.type_name === type_bussines)
+      {
         exists = true;
-        break;
+        break
       }
     }
+
 
     if (!exists) {
       return res
@@ -350,18 +360,27 @@ export async function registerBussines(req, res, next) {
         .json({ message: "Va rog alegeti o forma de lucru" });
     }
 
+
+    console.log(user_id)
     const user_documents_id = await db.query(
       "SELECT id FROM user_documents WHERE user_id = $1",
       [user_id],
     );
 
+
+    console.log(user_documents_id.rows)
+
+
     if (user_documents_id.rows.length === 0)
       return res.status(404).json({ message: "Creati mai intai profilul!" });
 
+  
+
     await db.query("BEGIN");
 
+
     const bussines_documents = await db.query(
-      "INSERT INTO bussines_documents (user_id, user_documents_id, name_bussines, registration_certificate_image_url, cif, address, postal_code, country, county, city,  ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id ",
+      "INSERT INTO bussines_documents (user_id, user_documents_id, name_bussines, registration_certificate_image_url, cif, address, postal_code, country, county, city) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id ",
       [
         user_id,
         user_documents_id.rows[0].id,
@@ -397,6 +416,8 @@ export async function registerBussines(req, res, next) {
       .status(200)
       .json({ message: "Ati inregistrat cu succes firma." });
   } catch (error) {
+
+    console.log(error)
     if (error instanceof yup.ValidationError) {
       await db.query("ROLLBACK");
       return res.status(500).json({ message: error.message });
@@ -444,3 +465,26 @@ export async function updateStep(req, res) {
     db.release();
   }
 }
+
+
+// async function getRegistrationCertificate(req, res){
+//   const db = await pool.connect();
+//   const user_id = req.user.id
+//   try{
+
+//     const image = await db.query("SELECT registration_certificate_image_url FROM bussines_documents WHERE user_id = $1", [user_id])
+
+//     if(image.rows.length === 0) {
+//        return res.status(404).json({
+//         message: "Vă rog să adăugați poza cu certificatul de înregistrare al firmei"
+//       });
+//     }
+
+//     return res.status(200).
+
+
+//   }
+//   catch{
+
+//   }
+// }

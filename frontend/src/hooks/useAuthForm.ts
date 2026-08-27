@@ -76,7 +76,6 @@ export default function useAuthForm() {
 
   const [admin, setAdmin] = useState<Admin[]>([])
 
-
   // 🔹 CHANGE
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;

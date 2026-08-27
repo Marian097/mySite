@@ -47,13 +47,11 @@ workerRouter.post(
 
 
 workerRouter.post(
-  "/bussines/documents",
+  "/fiscal/documents",
   verifiedToken,
   verifyProvider,
   upload.fields([
-    {
-      name: "certificate_registration", maxCount: 1 
-    }
+    { name: 'certificate_registration', maxCount: 1}
   ]),
   registerBussines,
 );

@@ -2,24 +2,14 @@ import uploads from "../assets/image/uploads.png";
 import certificate from "../assets/image/certificate.png";
 import forward from "../assets/image/arrow forward.svg";
 import { useEffect } from "react";
-import type {
-  Fiscal,
-  Errors,
-  TouchedBussines,
-  Counties,
-} from "../hooks/useBussinesForm";
+import type { Fiscal, Counties } from "../hooks/useFiscalForm";
 
 type Props = {
-  valuesBussiness: Fiscal;
-  errorsBussiness: Errors;
-  touchedBussiness: TouchedBussines;
+  fiscalValues: Fiscal;
   updateStep: (step: string) => void;
   isSteps: string;
   handleChangeBussiness: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => void;
-  handleBlurBussiness: (
-    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
   handleSubmitFiscalData: (e: React.FormEvent<HTMLFormElement>) => void;
   counties: Counties;
@@ -28,13 +18,10 @@ type Props = {
 export default function FormFiscal({
   updateStep,
   isSteps,
-  valuesBussiness,
-  errorsBussiness,
-  touchedBussiness,
+  fiscalValues,
   counties,
   getCounties,
   handleChangeBussiness,
-  handleBlurBussiness,
   handleSubmitFiscalData,
 }: Props) {
   useEffect(() => {
@@ -72,18 +59,11 @@ export default function FormFiscal({
               <input
                 id="name_bussines"
                 name="name_bussines"
-                onBlur={handleBlurBussiness}
                 onChange={handleChangeBussiness}
                 type="text"
                 placeholder="Ex: SC Exemplu SRL"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
               />
-              <div>
-                {touchedBussiness.name_bussines &&
-                  errorsBussiness.name_bussines && (
-                    <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.name_bussines}`}</p>
-                  )}
-              </div>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -97,26 +77,17 @@ export default function FormFiscal({
               <select
                 id="type_bussines"
                 name="type_bussines"
-                value={valuesBussiness.type_bussines}
-                onBlur={handleBlurBussiness}
+                value={fiscalValues.type_bussines}
                 onChange={handleChangeBussiness}
                 className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
               >
-                <option value="" disabled>
-                  Selectează forma juridică
-                </option>
-                <option value="pfa">PFA</option>
-                <option value="ii">ÎI</option>
-                <option value="if">ÎF</option>
-                <option value="srl">SRL</option>
-                <option value="sa">SA</option>
+                <option disabled>Selectează forma juridică</option>
+                <option value="PFA">PFA</option>
+                <option value="II">ÎI</option>
+                <option value="IF">ÎF</option>
+                <option value="SRL">SRL</option>
+                <option value="SA">SA</option>
               </select>
-              <div>
-                {touchedBussiness.type_bussines &&
-                  errorsBussiness.type_bussines && (
-                    <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.type_bussines}`}</p>
-                  )}
-              </div>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -131,16 +102,10 @@ export default function FormFiscal({
                 id="cif"
                 name="cif"
                 type="text"
-                onBlur={handleBlurBussiness}
                 onChange={handleChangeBussiness}
                 placeholder="RO12345678"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
               />
-              <div>
-                {touchedBussiness.cif && errorsBussiness.cif && (
-                  <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.cif}`}</p>
-                )}
-              </div>
             </div>
 
             <div className="space-y-4">
@@ -160,16 +125,10 @@ export default function FormFiscal({
                   id="address"
                   name="address"
                   type="text"
-                  onBlur={handleBlurBussiness}
                   onChange={handleChangeBussiness}
                   placeholder="Ex: Str. Exemplu nr. 10"
                   className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                 />
-                <div>
-                  {touchedBussiness.address && errorsBussiness.address && (
-                    <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.address}`}</p>
-                  )}
-                </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -185,16 +144,10 @@ export default function FormFiscal({
                     id="city"
                     name="city"
                     type="text"
-                    onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
                     placeholder="Ex: București"
                     className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                   />
-                  <div>
-                    {touchedBussiness.address && errorsBussiness.address && (
-                      <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.address}`}</p>
-                    )}
-                  </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -208,20 +161,16 @@ export default function FormFiscal({
                   <select
                     id="county"
                     name="county"
-                    value={valuesBussiness.county}
-                    onBlur={handleBlurBussiness}
+                    value={fiscalValues.county}
                     onChange={handleChangeBussiness}
                     className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                   >
                     {counties.nameCounties.map((c, idx) => (
-                      <option value={c} key = {idx}>{c}</option>
+                      <option value={c} key={idx}>
+                        {c}
+                      </option>
                     ))}
                   </select>
-                  <div>
-                    {touchedBussiness.address && errorsBussiness.address && (
-                      <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.address}`}</p>
-                    )}
-                  </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -235,7 +184,6 @@ export default function FormFiscal({
                   <input
                     id="postal_code"
                     name="postal_code"
-                    onBlur={handleBlurBussiness}
                     onChange={handleChangeBussiness}
                     type="text"
                     placeholder="010001"
@@ -254,18 +202,12 @@ export default function FormFiscal({
                   <select
                     id="country"
                     name="country"
-                    value={valuesBussiness.country}
-                    onBlur={handleBlurBussiness}
+                    value={fiscalValues.country}
                     onChange={handleChangeBussiness}
                     className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
                   >
                     <option value="ro">România</option>
                   </select>
-                  <div>
-                    {touchedBussiness.address && errorsBussiness.address && (
-                      <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.address}`}</p>
-                    )}
-                  </div>
                 </div>
               </div>
             </div>
@@ -285,20 +227,15 @@ export default function FormFiscal({
                   </span>
                 </div>
               </div>
-              <div className="absolute">
-                <input
-                  type="file"
-                  name="certificate_registration"
-                  id="certificate_registration"
-                  className="opacity-0"
-                  onBlur={handleBlurBussiness}
-                  onChange={handleChangeBussiness}
-                />
-                <div>
-                  {touchedBussiness.certificate_registration &&
-                    errorsBussiness.certificate_registration && (
-                      <p className="text-[#999AA9] font-bold font-nunito text-xs sm:text-sm">{`*${errorsBussiness.certificate_registration}`}</p>
-                    )}
+              <div className="relative">
+                <div className="absolute right-10 left-10 h-full">
+                  <input
+                    type="file"
+                    name="certificate_registration"
+                    id="certificate_registration"
+                    className="opacity-0 w-full"
+                    onChange={handleChangeBussiness}
+                  />
                 </div>
               </div>
               <div className="flex justify-center">
@@ -310,7 +247,6 @@ export default function FormFiscal({
                 <span className="font-bold font-nunito text-xs text-[#999AA9]">
                   Format acceptat: JPG, PNG - Max. 5MB{" "}
                 </span>
-                <span className="border-2 rounded-md px-5 bg-[#fafafa] border-[#eff1f5] font-bold font-nunito text-xs sm:text-sm  "></span>
               </div>
             </div>
             <div>

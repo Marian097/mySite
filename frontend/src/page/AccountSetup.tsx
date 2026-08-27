@@ -3,58 +3,46 @@ import HeaderVerified from "../components/HeaderVerified";
 import PageHeader from "../components/PageHeader";
 import ProgresBar from "../components/ProgresBar";
 import type { Identity } from "../types/AuthTypes/Identity";
-import type { Error } from "../hooks/useIdentityForm";
-import type { Touched } from "../hooks/useIdentityForm";
 import FormFiscal from "../components/FormFiscal";
-import type { Fiscal, Errors, TouchedBussines, Counties } from "../hooks/useBussinesForm";
-
+import type {
+  Fiscal,
+  Counties,
+} from "../hooks/useFiscalForm";
 
 type Props = {
-  values: Identity;
-  errors: Error;
-  touched: Touched;
+  personalValues: Identity;
   response: string;
   isSteps: string;
   updateStep: (step: string) => void;
   handleSubmitIdentity: (e: React.FormEvent<HTMLFormElement>) => void;
   setIsSteps: (step: string) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  valuesBussiness: Fiscal;
-  errorsBussiness: Errors;
-  touchedBussiness: TouchedBussines;
+  fiscalValues: Fiscal;
   handleChangeBussiness: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
-  handleBlurBussiness: (
-    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => void;
+
   handleSubmitFiscalData: (e: React.FormEvent<HTMLFormElement>) => void;
   counties: Counties;
   getCounties: () => void;
+  isSubmmitPersonalForm: boolean;
 };
 
 export default function verify_identity({
-  values,
-  valuesBussiness,
-  errorsBussiness,
-  errors,
-  touchedBussiness,
+  personalValues,
+  fiscalValues,
   handleChangeBussiness,
-  handleBlurBussiness,
   handleSubmitFiscalData,
   updateStep,
-  touched,
+  isSubmmitPersonalForm,
   isSteps,
   response,
   counties,
   getCounties,
   handleChange,
-  handleBlur,
   setIsSteps,
   handleSubmitIdentity,
 }: Props) {
-
   return (
     <div>
       <div className="grid">
@@ -74,12 +62,10 @@ export default function verify_identity({
             {isSteps === "1" && (
               <>
                 <FormIdentity
-                  values={values}
-                  errors={errors}
-                  touched={touched}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
+                  personalValues={personalValues}
+                  isSubmmitPersonalForm={isSubmmitPersonalForm}
                   setIsSteps={setIsSteps}
+                  handleChange={handleChange}
                   handleSubmitIdentity={handleSubmitIdentity}
                   response={response}
                 />
@@ -89,15 +75,12 @@ export default function verify_identity({
             {isSteps === "2" && (
               <>
                 <FormFiscal
-                  updateStep = {updateStep}
-                  isSteps = {isSteps}
-                  valuesBussiness={valuesBussiness}
-                  errorsBussiness={errorsBussiness}
-                  touchedBussiness={touchedBussiness}
-                  counties = {counties}
-                  getCounties = {getCounties}
+                  updateStep={updateStep}
+                  isSteps={isSteps}
+                  fiscalValues={fiscalValues}
+                  counties={counties}
+                  getCounties={getCounties}
                   handleChangeBussiness={handleChangeBussiness}
-                  handleBlurBussiness={handleBlurBussiness}
                   handleSubmitFiscalData={handleSubmitFiscalData}
                 />
               </>

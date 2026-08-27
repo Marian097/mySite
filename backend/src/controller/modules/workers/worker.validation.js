@@ -34,16 +34,12 @@ export const workerProfileSchema = yup.object({
 
 export const bussinesSchema = yup.object({
   name_bussines: yup.string().required("Va rog adaugati un nume"),
-  certificate_registration: yup
-    .string()
-    .required("Cerificatul de inegistrare este obligatoriu!"),
   type_bussines: yup
     .string()
     .required("Alege-ti forma de lucru."),
   cif: yup
   .string()
   .required("Codul fiscal este obligatoriu."),
-
   address: yup
   .string()
   .required("Va rugam introduceti sediului social")
