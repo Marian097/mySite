@@ -53,7 +53,7 @@ export default function FormFiscal({
                 htmlFor="name_bussines"
                 className="font-nunito text-sm font-semibold text-[#1D1F42]"
               >
-                Numele firmei
+                Numele firmei*
               </label>
 
               <input
@@ -71,7 +71,7 @@ export default function FormFiscal({
                 htmlFor="type_bussines"
                 className="font-nunito text-sm font-semibold text-[#1D1F42]"
               >
-                Formă juridică
+                Formă juridică*
               </label>
 
               <select
@@ -95,7 +95,7 @@ export default function FormFiscal({
                 htmlFor="cif"
                 className="font-nunito text-sm font-semibold text-[#1D1F42]"
               >
-                CIF
+                CIF*
               </label>
 
               <input
@@ -110,7 +110,7 @@ export default function FormFiscal({
 
             <div className="space-y-4">
               <h4 className="font-nunito text-sm font-bold text-[#1D1F42]">
-                Adresă sediu social
+                Adresă sediu social*
               </h4>
 
               <div className="flex flex-col gap-2">
@@ -118,7 +118,7 @@ export default function FormFiscal({
                   htmlFor="address"
                   className="font-nunito text-sm font-semibold text-[#1D1F42]"
                 >
-                  Stradă, număr
+                  Stradă, număr*
                 </label>
 
                 <input
@@ -137,7 +137,7 @@ export default function FormFiscal({
                     htmlFor="city"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
-                    Localitate
+                    Localitate*
                   </label>
 
                   <input
@@ -155,7 +155,7 @@ export default function FormFiscal({
                     htmlFor="county"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
-                    Județ
+                    Județ*
                   </label>
 
                   <select
@@ -178,7 +178,7 @@ export default function FormFiscal({
                     htmlFor="postal_code"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
-                    Cod poștal
+                    Cod poștal*
                   </label>
 
                   <input
@@ -196,7 +196,7 @@ export default function FormFiscal({
                     htmlFor="country"
                     className="font-nunito text-sm font-semibold text-[#1D1F42]"
                   >
-                    Țară
+                    Țară*
                   </label>
 
                   <select
