@@ -13,7 +13,7 @@ export default function Register() {
 
       const formData = new FormData(e.currentTarget);
 
-      const response = await fetch("/api/auth", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
          headers: {
         'Content-Type': 'application/json',
