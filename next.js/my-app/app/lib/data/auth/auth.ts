@@ -26,7 +26,7 @@ export async function createUser(data: User) {
 
 export async function findPasswordByEmail(email: string) {
   const password_hash = await sql`
-    SELECT password_hash
+    SELECT id, password_hash
     FROM users
     WHERE email = ${email}
   `;

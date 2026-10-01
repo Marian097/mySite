@@ -11,6 +11,7 @@
   "dependencies": {
     "@alpakaslab/nextjs-jwt-auth": "^0.2.2",
     "argon2": "^0.45.1",
+    "jose": "^6.2.12",
     "jsonwebtoken": "^9.0.3",
     "next": "16.3.3",
     "postgres": "^3.4.9",

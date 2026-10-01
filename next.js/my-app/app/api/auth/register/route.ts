@@ -1,5 +1,5 @@
-import { findUserByEmail, createUser, loginUser } from "@/app/lib/data/auth/auth";
-import { registerSchema, loginSchema } from "@/app/lib/validation";
+import { findUserByEmail, createUser, } from "@/app/lib/data/auth/auth";
+import { registerSchema,  } from "@/app/lib/validation";
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -13,6 +13,8 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const user = await createUser(validatedData);
+
+    
 
     return Response.json({ user }, { status: 201 });
   } catch (error) {

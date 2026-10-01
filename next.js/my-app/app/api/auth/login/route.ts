@@ -21,6 +21,7 @@ export async function POST(request: Request): Promise<Response> {
     if (!verifyPassword) throw new Error("Email sau parolă incorectă");
 
     const user = {
+      id: passwordRow.id,
       email: validatedData.email
     }
 

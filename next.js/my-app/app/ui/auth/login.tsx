@@ -1,3 +1,5 @@
+
+"use client";
 import React from "react";
 
 import Image from "next/image";
@@ -28,8 +30,10 @@ export default function Login() {
       if (!response.ok) throw new Error("Email sau parolă incorectă");
 
       const data = await response.json();
+    
 
       localStorage.setItem("token", data.token);
+      
     } catch (err) {
       if (err instanceof Error) setError(err.message)
     }
