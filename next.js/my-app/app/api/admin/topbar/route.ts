@@ -5,15 +5,16 @@ export async function POST(request: Request): Promise<Response | null> {
   try {
     const auth = request.headers.get("authorization");
 
-    if (!auth?.startsWith("Bearer ")) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    if (!auth?.startsWith)
+      return Response.json({ error: "Neautorizat" }, { status: 401 });
 
     const token = auth.split(" ")[1];
 
+    if (!process.env.JWT_SECRET)
+      return Response.json({ error: "JWT invalid" }, { status: 401 });
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const { payload } = await jwtVerify(token, secret);
 
+    const { payload } = await jwtVerify(token, secret);
     const id = payload.id;
 
     if (typeof id !== "string")

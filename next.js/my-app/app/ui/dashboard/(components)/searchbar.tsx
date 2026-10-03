@@ -3,10 +3,6 @@ export default function searchbar() {
     <div>
       <form
         className="col-span-12 md:col-span-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          getWorkersByEmail(e);
-        }}
       >
         <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">
           {" "}
@@ -34,8 +30,6 @@ export default function searchbar() {
               <input
                 type="search"
                 id="default-search"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 className="block py-0.5 pl-10 text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-xs"
                 placeholder="Search user by email"
               ></input>

@@ -25,13 +25,13 @@ export async function createUser(data: User) {
 
 
 export async function findPasswordByEmail(email: string) {
-  const password_hash = await sql`
-    SELECT id, password_hash
-    FROM users
+  const data = await sql`
+    SELECT u.id, u.password_hash, r.role_name as role
+    FROM users u JOIN user_roles ur ON u.id = ur.user_id JOIN roles r ON ur.role_id = r.id 
     WHERE email = ${email}
   `;
 
-  return password_hash[0] ?? null;
+  return data[0] ?? null;
 }
 
 export async function loginUser(password_hash: string, password:string){

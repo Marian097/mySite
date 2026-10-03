@@ -3,15 +3,15 @@ import type { StaticImageData } from "next/image";
 export type User = {
     name: string,
     email:string,
-    password: string;
+    password: string,
 }
 
 
 export type Count = {
-    total: number,
-    rejected: number,
-    approve: number,
-    pending: number;
+    total?: number,
+    rejected?: number,
+    approve?: number,
+    pending?: number;
 
 }
 
@@ -41,5 +41,6 @@ export type Table = {
     email: string,
     ci_image: StaticImageData,
     ci_expiration_date: string,
+    calification: string,
     status: string, 
 }

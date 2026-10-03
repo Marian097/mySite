@@ -27,7 +27,7 @@ export async function POST(request: Request):Promise<Response>{
             pending: total.total > 0 ? Math.floor((total.pending / total.total) * 1000) / 10 : 0,
             rejected: total.total > 0 ? Math.floor((total.rejected / total.total) * 1000) / 10 : 0,
         }
-
+        
         return Response.json(procent, {status: 200})
     }
     catch (error){

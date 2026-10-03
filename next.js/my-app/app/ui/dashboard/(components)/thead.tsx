@@ -19,6 +19,9 @@ export default function thead() {
         <span>data de expirare</span>
       </div>
       <div>
+        <span>calificare</span>
+      </div>
+      <div>
         <span>status</span>
       </div>
        <div>

@@ -8,21 +8,22 @@ export async function POST(request: Request): Promise<Response> {
     const body = await request.json();
     const validatedData =  await loginSchema.validate(body);
 
-    const passwordRow = await findPasswordByEmail(validatedData.email);
+    const data = await findPasswordByEmail(validatedData.email);
 
-    if (!passwordRow) {
+    if (!data) {
       return Response.json({ error: "Email sau parolă incorectă" }, { status: 404 });
     }
 
-    const password_hash = passwordRow.password ?? passwordRow["password"];
+    const password_hash = data.password ?? data["password"];
 
     const verifyPassword = await loginUser(password_hash, validatedData.password);
 
     if (!verifyPassword) throw new Error("Email sau parolă incorectă");
 
     const user = {
-      id: passwordRow.id,
-      email: validatedData.email
+      id: data.id,
+      email: data.email,
+      role: data.role,
     }
 
      if (!process.env.JWT_SECRET) {
